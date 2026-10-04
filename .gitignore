@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.sqlite
+*.sqlite-journal
+data/runtime/
+.env
+.DS_Store
+eval/cassettes/*.jsonl.tmp
+models/

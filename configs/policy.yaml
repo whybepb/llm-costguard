@@ -1,0 +1,65 @@
+# CostGuard policy: versioned in git. Its hash is logged on every request (config_hash), so every number traces to a config.
+# Thresholds below are starting points; the sweep scripts in eval/ produce the calibrated values (see docs/DESIGN_DECISIONS.md).
+version: 1
+default_mode: balanced
+kb_version: kb-v1                      # bump when the knowledge base changes -> new cache partition (invalidates semantic cache)
+system_prompt_file: configs/prompts/system_v1.txt
+default_max_tokens: 256
+
+# Which concrete model each tier maps to, per backend. Tiers ("strong"/"cheap") are what the pipeline reasons about.
+backends:
+  mock:   {strong: mock-strong, cheap: mock-cheap}
+  mlx:    {strong: mlx-community/Qwen2.5-7B-Instruct-4bit, cheap: mlx-community/Qwen2.5-1.5B-Instruct-4bit}
+  openai: {strong: gpt-5.4-mini, cheap: gpt-5-nano}
+  gemini: {strong: gemini/gemini-2.5-flash, cheap: gemini/gemini-2.5-flash-lite}
+
+# What each tier is billed as (list-price equivalent). Local/free models are priced as the API model they stand in for.
+billing:
+  strong: gpt-5.4-mini
+  cheap: gpt-5-nano
+
+cache:
+  max_temperature: 0.3          # don't cache creative/high-temperature requests
+  single_turn_only: true        # multi-turn answers depend on history -> bypass
+  ttl_seconds: 604800           # 7 days
+
+modes:
+  "off":
+    exact_cache: false
+    semantic_cache: false
+    context: false
+    compression: false
+    router: false
+  quality:
+    exact_cache: true
+    semantic_cache: true
+    tau: 0.95
+    context: true
+    context_budget_tokens: 2000
+    context_min_score: null
+    compression: false
+    router: false
+  balanced:
+    exact_cache: true
+    semantic_cache: true
+    tau: 0.90
+    context: true
+    context_budget_tokens: 1200
+    context_min_score: null
+    compression: true
+    compression_rate: 0.5        # keep ~50% of context tokens
+    compression_min_tokens: 400  # don't bother below this
+    router: true
+    router_policy: gated         # downshift only categories that passed the eval gate
+  economy:
+    exact_cache: true
+    semantic_cache: true
+    tau: 0.85
+    context: true
+    context_budget_tokens: 800
+    context_min_score: null
+    compression: true
+    compression_rate: 0.33
+    compression_min_tokens: 250
+    router: true
+    router_policy: aggressive    # downshift unless the request looks hard
