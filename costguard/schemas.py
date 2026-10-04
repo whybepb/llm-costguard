@@ -126,6 +126,7 @@ class TraceRecord(BaseModel):
     cache_similarity: Optional[float] = None
     cache_neighbor: Optional[str] = None
     cache_guard: Optional[str] = None
+    cache_entry_id: Optional[str] = None   # id of the served cache entry (on a hit)
     model_requested: str = "strong"
     model_used: str = "strong"             # tier alias actually used ("" on cache hit)
     model_id: str = ""                     # concrete model id called

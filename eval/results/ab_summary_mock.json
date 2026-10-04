@@ -1,0 +1,908 @@
+{
+  "meta": {
+    "generated_at": "2026-10-04T16:16:08+00:00",
+    "git_commit": "fca1374",
+    "backend": "mock",
+    "models": {
+      "strong": "mock-strong",
+      "cheap": "mock-cheap"
+    },
+    "billing": {
+      "strong": "gpt-5.4-mini",
+      "cheap": "gpt-5-nano"
+    },
+    "prices_checked_on": "2026-10-03",
+    "config_hash": "b4291e45d86e",
+    "overrides": {},
+    "trace": "eval/data/trace_v1.jsonl",
+    "trace_sha256": "19c0834c9442578bb414880b9902158a56f2cfa33fd055dc6b62b7ca24227e37",
+    "trace_rows_total": 600,
+    "rows_used": 600,
+    "limit": null,
+    "trace_stats": {
+      "n": 600,
+      "sources": {
+        "trap": 60,
+        "kb": 169,
+        "bitext": 371
+      },
+      "source_share": {
+        "trap": 0.1,
+        "kb": 0.282,
+        "bitext": 0.618
+      },
+      "categories": {
+        "account": 126,
+        "order": 271,
+        "refund": 54,
+        "payment": 37,
+        "shipping": 54,
+        "product": 24,
+        "other": 14,
+        "returns": 20
+      },
+      "dup_rate": 0.3017,
+      "dup_kinds": {
+        "paraphrase": 54,
+        "exact": 30,
+        "surface": 30,
+        "wrapped": 66,
+        "cross_source": 1
+      },
+      "clusters": 419,
+      "trap_pairs": 30,
+      "trap_gap_max": 4,
+      "with_context": 177
+    },
+    "cassette": null,
+    "components": {
+      "exact_cache": "InMemoryExactCache",
+      "semantic_cache": "SemanticCacheImpl",
+      "context_optimizer": "RerankContextOptimizer",
+      "compressor": "HeuristicCompressor",
+      "router": "GatedRouter"
+    },
+    "judge": {
+      "judge": "heuristic-mock",
+      "backend": "mock",
+      "stats": {
+        "grades": 914,
+        "pairwise": 325,
+        "position_inconsistent": 231
+      },
+      "cost_new_usd": 0.0,
+      "cost_all_usd": 0.0
+    },
+    "judge_mode": "both",
+    "pairwise_max": 150,
+    "correct_threshold": 0.75,
+    "savings_definition": "1 - sum(arm cost) / sum(A0 actual cost) on the same items (paired); est_savings_pct uses the record-level estimated baseline",
+    "preflight": null,
+    "runtime_s": 27.9
+  },
+  "arms": {
+    "A0": {
+      "arm": "A0",
+      "description": "baseline: all levers off, strong tier",
+      "n": 600,
+      "n_errors": 0,
+      "cost_usd": 0.43231,
+      "est_baseline_usd": 0.43231,
+      "est_savings_pct": 0.0,
+      "a0_cost_usd": 0.43231,
+      "n_paired": 600,
+      "savings_pct": 0.0,
+      "savings_ci": [
+        0.0,
+        0.0
+      ],
+      "saved_per_request_usd": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "savings_on_misses_pct": 0.0,
+      "tokens": {
+        "input_original": 382229,
+        "input_sent": 382229,
+        "output": 32364,
+        "cached_input": 0
+      },
+      "hit_rate": {
+        "exact": 0.0,
+        "semantic": 0.0,
+        "total": 0.0
+      },
+      "hits": {},
+      "false_hits": 0,
+      "false_hit_rate": 0.0,
+      "false_hit_ci": [
+        0.0,
+        0.64
+      ],
+      "false_hit_rate_intent": 0.0,
+      "trap_false_hits": 0,
+      "unattributed_hits": 0,
+      "guard_rejections": 0,
+      "route_mix": {
+        "strong": 600
+      },
+      "route_reasons": {
+        "router-off": 600
+      },
+      "compression": {
+        "n": 0,
+        "mean_ratio": null
+      },
+      "context": {
+        "n_with_docs": 177,
+        "mean_docs_in": 8.0,
+        "mean_docs_kept": 8.0
+      },
+      "latency_ms": {
+        "e2e": {
+          "p50": 0.06,
+          "p99": 0.47,
+          "n": 600
+        },
+        "e2e_hit": {
+          "p50": null,
+          "p99": null,
+          "n": 0
+        },
+        "e2e_miss": {
+          "p50": 0.06,
+          "p99": 0.47,
+          "n": 600
+        },
+        "overhead": {
+          "p50": 0.04,
+          "p99": 0.25,
+          "n": 600
+        },
+        "overhead_miss": {
+          "p50": 0.04,
+          "p99": 0.25,
+          "n": 600
+        },
+        "wall": {
+          "p50": 0.06,
+          "p99": 0.47,
+          "n": 600
+        },
+        "note": "e2e = CostGuard overhead + recorded upstream generation time (cassette replays are instant)"
+      },
+      "quality": {
+        "n_graded": 600,
+        "n_ungraded": 0,
+        "mean": 0.0463,
+        "n_correct": 0,
+        "correct_rate": 0.0,
+        "cost_per_correct_usd": null
+      },
+      "upstream": {
+        "replayed": null,
+        "new": null,
+        "seconds": 0.21
+      }
+    },
+    "A1": {
+      "arm": "A1",
+      "description": "+ exact cache",
+      "n": 600,
+      "n_errors": 0,
+      "cost_usd": 0.349446,
+      "est_baseline_usd": 0.43208,
+      "est_savings_pct": 19.12,
+      "a0_cost_usd": 0.43231,
+      "n_paired": 600,
+      "savings_pct": 19.17,
+      "savings_ci": [
+        10.24,
+        28.3
+      ],
+      "saved_per_request_usd": [
+        0.00013811,
+        6.391e-05,
+        0.00022785
+      ],
+      "savings_on_misses_pct": 0.0,
+      "tokens": {
+        "input_original": 382229,
+        "input_sent": 293482,
+        "output": 28741,
+        "cached_input": 0
+      },
+      "hit_rate": {
+        "exact": 11.33,
+        "semantic": 0.0,
+        "total": 11.33
+      },
+      "hits": {
+        "exact": 68
+      },
+      "false_hits": 0,
+      "false_hit_rate": 0.0,
+      "false_hit_ci": [
+        0.0,
+        0.64
+      ],
+      "false_hit_rate_intent": 0.0,
+      "trap_false_hits": 0,
+      "unattributed_hits": 0,
+      "guard_rejections": 0,
+      "route_mix": {
+        "strong": 532,
+        "cache": 68
+      },
+      "route_reasons": {
+        "router-off": 532,
+        "exact-cache-hit": 68
+      },
+      "compression": {
+        "n": 0,
+        "mean_ratio": null
+      },
+      "context": {
+        "n_with_docs": 177,
+        "mean_docs_in": 8.0,
+        "mean_docs_kept": 8.0
+      },
+      "latency_ms": {
+        "e2e": {
+          "p50": 0.07,
+          "p99": 0.49,
+          "n": 600
+        },
+        "e2e_hit": {
+          "p50": 0.19,
+          "p99": 0.23,
+          "n": 68
+        },
+        "e2e_miss": {
+          "p50": 0.07,
+          "p99": 0.5,
+          "n": 532
+        },
+        "overhead": {
+          "p50": 0.04,
+          "p99": 0.26,
+          "n": 600
+        },
+        "overhead_miss": {
+          "p50": 0.04,
+          "p99": 0.27,
+          "n": 532
+        },
+        "wall": {
+          "p50": 0.07,
+          "p99": 0.49,
+          "n": 600
+        },
+        "note": "e2e = CostGuard overhead + recorded upstream generation time (cassette replays are instant)"
+      },
+      "quality": {
+        "n_graded": 600,
+        "n_ungraded": 0,
+        "mean": 0.0461,
+        "n_correct": 0,
+        "correct_rate": 0.0,
+        "cost_per_correct_usd": null,
+        "a0_mean_paired": 0.0463,
+        "retained": 99.58,
+        "retained_ci": [
+          98.29,
+          100.74
+        ],
+        "score_diff": [
+          -0.0002,
+          -0.0008,
+          0.0003
+        ],
+        "pairwise": {
+          "identical": 570,
+          "judged": 30,
+          "win": 6,
+          "tie": 18,
+          "loss": 6,
+          "non_inferior_rate_judged": 80.0,
+          "non_inferior_ci": [
+            62.69,
+            90.49
+          ]
+        }
+      },
+      "upstream": {
+        "replayed": null,
+        "new": null,
+        "seconds": 0.11
+      }
+    },
+    "A2": {
+      "arm": "A2",
+      "description": "+ semantic cache (policy tau, guards)",
+      "n": 600,
+      "n_errors": 0,
+      "cost_usd": 0.253081,
+      "est_baseline_usd": 0.430127,
+      "est_savings_pct": 41.16,
+      "a0_cost_usd": 0.43231,
+      "n_paired": 600,
+      "savings_pct": 41.46,
+      "savings_ci": [
+        27.49,
+        52.87
+      ],
+      "saved_per_request_usd": [
+        0.00029872,
+        0.00017167,
+        0.00043227
+      ],
+      "savings_on_misses_pct": 0.0,
+      "tokens": {
+        "input_original": 382229,
+        "input_sent": 187237,
+        "output": 25034,
+        "cached_input": 0
+      },
+      "hit_rate": {
+        "exact": 7.83,
+        "semantic": 14.67,
+        "total": 22.5
+      },
+      "hits": {
+        "exact": 47,
+        "semantic": 88
+      },
+      "false_hits": 0,
+      "false_hit_rate": 0.0,
+      "false_hit_ci": [
+        0.0,
+        0.64
+      ],
+      "false_hit_rate_intent": 0.0,
+      "trap_false_hits": 0,
+      "unattributed_hits": 0,
+      "guard_rejections": 60,
+      "route_mix": {
+        "strong": 465,
+        "cache": 135
+      },
+      "route_reasons": {
+        "router-off": 465,
+        "semantic-cache-hit": 88,
+        "exact-cache-hit": 47
+      },
+      "compression": {
+        "n": 0,
+        "mean_ratio": null
+      },
+      "context": {
+        "n_with_docs": 177,
+        "mean_docs_in": 8.0,
+        "mean_docs_kept": 8.0
+      },
+      "latency_ms": {
+        "e2e": {
+          "p50": 2.41,
+          "p99": 4.92,
+          "n": 600
+        },
+        "e2e_hit": {
+          "p50": 2.1,
+          "p99": 5.05,
+          "n": 135
+        },
+        "e2e_miss": {
+          "p50": 2.42,
+          "p99": 4.32,
+          "n": 465
+        },
+        "overhead": {
+          "p50": 2.36,
+          "p99": 4.83,
+          "n": 600
+        },
+        "overhead_miss": {
+          "p50": 2.36,
+          "p99": 4.1,
+          "n": 465
+        },
+        "wall": {
+          "p50": 2.41,
+          "p99": 4.92,
+          "n": 600
+        },
+        "note": "e2e = CostGuard overhead + recorded upstream generation time (cassette replays are instant)"
+      },
+      "quality": {
+        "n_graded": 600,
+        "n_ungraded": 0,
+        "mean": 0.0459,
+        "n_correct": 0,
+        "correct_rate": 0.0,
+        "cost_per_correct_usd": null,
+        "a0_mean_paired": 0.0463,
+        "retained": 99.06,
+        "retained_ci": [
+          96.54,
+          101.55
+        ],
+        "score_diff": [
+          -0.0004,
+          -0.0016,
+          0.0007
+        ],
+        "pairwise": {
+          "identical": 490,
+          "judged": 110,
+          "win": 22,
+          "tie": 69,
+          "loss": 19,
+          "non_inferior_rate_judged": 82.73,
+          "non_inferior_ci": [
+            74.59,
+            88.65
+          ]
+        }
+      },
+      "upstream": {
+        "replayed": null,
+        "new": null,
+        "seconds": 1.43
+      }
+    },
+    "A3": {
+      "arm": "A3",
+      "description": "+ context rerank / dynamic-k",
+      "n": 600,
+      "n_errors": 0,
+      "cost_usd": 0.195505,
+      "est_baseline_usd": 0.435401,
+      "est_savings_pct": 55.1,
+      "a0_cost_usd": 0.43231,
+      "n_paired": 600,
+      "savings_pct": 54.78,
+      "savings_ci": [
+        43.32,
+        64.01
+      ],
+      "saved_per_request_usd": [
+        0.00039467,
+        0.00026835,
+        0.00052831
+      ],
+      "savings_on_misses_pct": 22.75,
+      "tokens": {
+        "input_original": 382229,
+        "input_sent": 109317,
+        "output": 25226,
+        "cached_input": 0
+      },
+      "hit_rate": {
+        "exact": 7.83,
+        "semantic": 14.67,
+        "total": 22.5
+      },
+      "hits": {
+        "exact": 47,
+        "semantic": 88
+      },
+      "false_hits": 0,
+      "false_hit_rate": 0.0,
+      "false_hit_ci": [
+        0.0,
+        0.64
+      ],
+      "false_hit_rate_intent": 0.0,
+      "trap_false_hits": 0,
+      "unattributed_hits": 0,
+      "guard_rejections": 60,
+      "route_mix": {
+        "strong": 465,
+        "cache": 135
+      },
+      "route_reasons": {
+        "router-off": 465,
+        "semantic-cache-hit": 88,
+        "exact-cache-hit": 47
+      },
+      "compression": {
+        "n": 0,
+        "mean_ratio": null
+      },
+      "context": {
+        "n_with_docs": 177,
+        "mean_docs_in": 8.0,
+        "mean_docs_kept": 3.04
+      },
+      "latency_ms": {
+        "e2e": {
+          "p50": 2.8,
+          "p99": 112.16,
+          "n": 600
+        },
+        "e2e_hit": {
+          "p50": 2.66,
+          "p99": 13.04,
+          "n": 135
+        },
+        "e2e_miss": {
+          "p50": 2.82,
+          "p99": 117.15,
+          "n": 465
+        },
+        "overhead": {
+          "p50": 2.75,
+          "p99": 112.06,
+          "n": 600
+        },
+        "overhead_miss": {
+          "p50": 2.77,
+          "p99": 116.93,
+          "n": 465
+        },
+        "wall": {
+          "p50": 2.8,
+          "p99": 112.16,
+          "n": 600
+        },
+        "note": "e2e = CostGuard overhead + recorded upstream generation time (cassette replays are instant)"
+      },
+      "quality": {
+        "n_graded": 600,
+        "n_ungraded": 0,
+        "mean": 0.0456,
+        "n_correct": 0,
+        "correct_rate": 0.0,
+        "cost_per_correct_usd": null,
+        "a0_mean_paired": 0.0463,
+        "retained": 98.39,
+        "retained_ci": [
+          94.8,
+          101.96
+        ],
+        "score_diff": [
+          -0.0007,
+          -0.0024,
+          0.0009
+        ],
+        "pairwise": {
+          "identical": 408,
+          "judged": 150,
+          "win": 19,
+          "tie": 101,
+          "loss": 30,
+          "non_inferior_rate_judged": 80.0,
+          "non_inferior_ci": [
+            72.89,
+            85.62
+          ]
+        }
+      },
+      "upstream": {
+        "replayed": null,
+        "new": null,
+        "seconds": 7.14
+      }
+    },
+    "A4": {
+      "arm": "A4",
+      "description": "+ compression",
+      "n": 600,
+      "n_errors": 0,
+      "cost_usd": 0.17889,
+      "est_baseline_usd": 0.437233,
+      "est_savings_pct": 59.09,
+      "a0_cost_usd": 0.43231,
+      "n_paired": 600,
+      "savings_pct": 58.62,
+      "savings_ci": [
+        47.72,
+        67.16
+      ],
+      "saved_per_request_usd": [
+        0.00042237,
+        0.00029594,
+        0.00055658
+      ],
+      "savings_on_misses_pct": 29.32,
+      "tokens": {
+        "input_original": 382229,
+        "input_sent": 86444,
+        "output": 25346,
+        "cached_input": 0
+      },
+      "hit_rate": {
+        "exact": 7.83,
+        "semantic": 14.67,
+        "total": 22.5
+      },
+      "hits": {
+        "exact": 47,
+        "semantic": 88
+      },
+      "false_hits": 0,
+      "false_hit_rate": 0.0,
+      "false_hit_ci": [
+        0.0,
+        0.64
+      ],
+      "false_hit_rate_intent": 0.0,
+      "trap_false_hits": 0,
+      "unattributed_hits": 0,
+      "guard_rejections": 60,
+      "route_mix": {
+        "strong": 465,
+        "cache": 135
+      },
+      "route_reasons": {
+        "router-off": 465,
+        "semantic-cache-hit": 88,
+        "exact-cache-hit": 47
+      },
+      "compression": {
+        "n": 53,
+        "mean_ratio": 2.096
+      },
+      "context": {
+        "n_with_docs": 177,
+        "mean_docs_in": 8.0,
+        "mean_docs_kept": 3.04
+      },
+      "latency_ms": {
+        "e2e": {
+          "p50": 4.73,
+          "p99": 159.19,
+          "n": 600
+        },
+        "e2e_hit": {
+          "p50": 3.57,
+          "p99": 13.66,
+          "n": 135
+        },
+        "e2e_miss": {
+          "p50": 4.96,
+          "p99": 162.91,
+          "n": 465
+        },
+        "overhead": {
+          "p50": 4.64,
+          "p99": 158.89,
+          "n": 600
+        },
+        "overhead_miss": {
+          "p50": 4.82,
+          "p99": 162.48,
+          "n": 465
+        },
+        "wall": {
+          "p50": 4.73,
+          "p99": 159.19,
+          "n": 600
+        },
+        "note": "e2e = CostGuard overhead + recorded upstream generation time (cassette replays are instant)"
+      },
+      "quality": {
+        "n_graded": 600,
+        "n_ungraded": 0,
+        "mean": 0.0458,
+        "n_correct": 0,
+        "correct_rate": 0.0,
+        "cost_per_correct_usd": null,
+        "a0_mean_paired": 0.0463,
+        "retained": 98.9,
+        "retained_ci": [
+          95.21,
+          102.77
+        ],
+        "score_diff": [
+          -0.0005,
+          -0.0022,
+          0.0012
+        ],
+        "pairwise": {
+          "identical": 408,
+          "judged": 150,
+          "win": 16,
+          "tie": 107,
+          "loss": 27,
+          "non_inferior_rate_judged": 82.0,
+          "non_inferior_ci": [
+            75.08,
+            87.32
+          ]
+        }
+      },
+      "upstream": {
+        "replayed": null,
+        "new": null,
+        "seconds": 11.87
+      }
+    },
+    "A5": {
+      "arm": "A5",
+      "description": "+ router (gated) = full balanced mode",
+      "n": 600,
+      "n_errors": 0,
+      "cost_usd": 0.17889,
+      "est_baseline_usd": 0.437233,
+      "est_savings_pct": 59.09,
+      "a0_cost_usd": 0.43231,
+      "n_paired": 600,
+      "savings_pct": 58.62,
+      "savings_ci": [
+        47.72,
+        67.16
+      ],
+      "saved_per_request_usd": [
+        0.00042237,
+        0.00029594,
+        0.00055658
+      ],
+      "savings_on_misses_pct": 29.32,
+      "tokens": {
+        "input_original": 382229,
+        "input_sent": 86444,
+        "output": 25346,
+        "cached_input": 0
+      },
+      "hit_rate": {
+        "exact": 7.83,
+        "semantic": 14.67,
+        "total": 22.5
+      },
+      "hits": {
+        "exact": 47,
+        "semantic": 88
+      },
+      "false_hits": 0,
+      "false_hit_rate": 0.0,
+      "false_hit_ci": [
+        0.0,
+        0.64
+      ],
+      "false_hit_rate_intent": 0.0,
+      "trap_false_hits": 0,
+      "unattributed_hits": 0,
+      "guard_rejections": 60,
+      "route_mix": {
+        "strong": 465,
+        "cache": 135
+      },
+      "route_reasons": {
+        "gated:dry-run-gate": 447,
+        "semantic-cache-hit": 88,
+        "exact-cache-hit": 47,
+        "hard:escalation": 15,
+        "hard:multi-question": 2,
+        "hard:reasoning-keywords": 1
+      },
+      "compression": {
+        "n": 53,
+        "mean_ratio": 2.096
+      },
+      "context": {
+        "n_with_docs": 177,
+        "mean_docs_in": 8.0,
+        "mean_docs_kept": 3.04
+      },
+      "latency_ms": {
+        "e2e": {
+          "p50": 2.74,
+          "p99": 91.5,
+          "n": 600
+        },
+        "e2e_hit": {
+          "p50": 2.44,
+          "p99": 5.55,
+          "n": 135
+        },
+        "e2e_miss": {
+          "p50": 2.77,
+          "p99": 91.94,
+          "n": 465
+        },
+        "overhead": {
+          "p50": 2.7,
+          "p99": 91.33,
+          "n": 600
+        },
+        "overhead_miss": {
+          "p50": 2.71,
+          "p99": 91.8,
+          "n": 465
+        },
+        "wall": {
+          "p50": 2.74,
+          "p99": 91.51,
+          "n": 600
+        },
+        "note": "e2e = CostGuard overhead + recorded upstream generation time (cassette replays are instant)"
+      },
+      "quality": {
+        "n_graded": 600,
+        "n_ungraded": 0,
+        "mean": 0.0458,
+        "n_correct": 0,
+        "correct_rate": 0.0,
+        "cost_per_correct_usd": null,
+        "a0_mean_paired": 0.0463,
+        "retained": 98.9,
+        "retained_ci": [
+          95.21,
+          102.77
+        ],
+        "score_diff": [
+          -0.0005,
+          -0.0022,
+          0.0012
+        ],
+        "pairwise": {
+          "identical": 408,
+          "judged": 150,
+          "win": 20,
+          "tie": 103,
+          "loss": 27,
+          "non_inferior_rate_judged": 82.0,
+          "non_inferior_ci": [
+            75.08,
+            87.32
+          ]
+        }
+      },
+      "upstream": {
+        "replayed": null,
+        "new": null,
+        "seconds": 6.74
+      }
+    }
+  },
+  "waterfall": [
+    {
+      "from": "A0",
+      "to": "A1",
+      "lever": "exact cache",
+      "saved_usd": 0.082864,
+      "saved_pct_of_a0": 19.17,
+      "saved_input_tokens": 88747,
+      "saved_output_tokens": 3623
+    },
+    {
+      "from": "A1",
+      "to": "A2",
+      "lever": "semantic cache",
+      "saved_usd": 0.096365,
+      "saved_pct_of_a0": 22.29,
+      "saved_input_tokens": 106245,
+      "saved_output_tokens": 3707
+    },
+    {
+      "from": "A2",
+      "to": "A3",
+      "lever": "context trim",
+      "saved_usd": 0.057576,
+      "saved_pct_of_a0": 13.32,
+      "saved_input_tokens": 77920,
+      "saved_output_tokens": -192
+    },
+    {
+      "from": "A3",
+      "to": "A4",
+      "lever": "compression",
+      "saved_usd": 0.016615,
+      "saved_pct_of_a0": 3.84,
+      "saved_input_tokens": 22873,
+      "saved_output_tokens": -120
+    },
+    {
+      "from": "A4",
+      "to": "A5",
+      "lever": "router",
+      "saved_usd": 0.0,
+      "saved_pct_of_a0": 0.0,
+      "saved_input_tokens": 0,
+      "saved_output_tokens": 0
+    }
+  ]
+}

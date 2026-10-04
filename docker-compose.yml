@@ -11,7 +11,7 @@ name: costguard
 
 services:
   qdrant:
-    image: qdrant/qdrant:v1.15.4
+    image: qdrant/qdrant:v1.19.1   # open source (Apache-2.0); matches qdrant-client 1.19.1
     ports:
       - "6333:6333"
     volumes:

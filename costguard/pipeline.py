@@ -131,6 +131,8 @@ class CostGuard:
                 rec.cache_similarity, rec.cache_neighbor, rec.cache_guard = hit.similarity, hit.neighbor_query, hit.guard_rejected
                 if hit.entry is not None:
                     if self._entry_ok(hit.entry, mode_name):
+                        if mp.exact_cache:  # promote: later verbatim repeats become cheap exact hits
+                            timed("exact_promote", lambda: self.exact.put(exact_key, hit.entry))
                         return self._serve_cached(rec, hit.entry, "semantic", t0)
                     rec.cache_guard = "tier_mismatch"
 
@@ -213,7 +215,7 @@ class CostGuard:
 
     def _serve_cached(self, rec: TraceRecord, entry: CacheEntry, kind: str, t0: float) -> tuple[Completion, TraceRecord]:
         from .schemas import Usage
-        rec.cache_status = kind
+        rec.cache_status, rec.cache_entry_id = kind, entry.entry_id
         rec.model_used, rec.model_id, rec.route_reason = "", "", f"{kind}-cache-hit"
         rec.cache_neighbor = rec.cache_neighbor or entry.query_text
         rec.input_tokens_sent = rec.output_tokens = 0

@@ -9,3 +9,5 @@ data/runtime/
 .DS_Store
 eval/cassettes/*.jsonl.tmp
 models/
+eval/data/raw/
+eval/results/*.sqlite

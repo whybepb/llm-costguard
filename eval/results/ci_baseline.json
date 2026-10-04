@@ -1,0 +1,37 @@
+{
+  "backend": "mock",
+  "judge": "heuristic-mock",
+  "subset": "ci_subset.jsonl",
+  "subset_sha256": "2f5d554bb85a6e79f6e4ac6bebdbf4a55d9a8d145fe857198f050985405816d4",
+  "generated_at": "2026-10-04T16:15:21+00:00",
+  "metrics": {
+    "n": 78,
+    "n_ok": 78,
+    "errors": 0,
+    "error_samples": [],
+    "hits": {
+      "exact": 8,
+      "semantic": 0
+    },
+    "hit_rate_pct": 10.26,
+    "false_hits": 0,
+    "trap_false_hits": 0,
+    "false_hit_examples": [],
+    "savings_pct": 60.49,
+    "savings_ci": [
+      53.32,
+      65.82
+    ],
+    "cost_usd": 0.034466,
+    "a0_cost_usd": 0.087245,
+    "quality_mean": 0.0485,
+    "ungraded": 0,
+    "quality_retained_pct": 110.46,
+    "n_correct": 0,
+    "tau": 0.93,
+    "config_hash": "b4291e45d86e",
+    "overrides": {}
+  },
+  "quality_margin": 0.03,
+  "savings_margin": 2.0
+}
