@@ -102,6 +102,24 @@ Every upstream call goes through `CassetteProvider`, keyed on `sha256(model, mes
 Replayed completions keep their recorded usage and generation latency, so cost and latency figures are identical on
 replay.
 
+**Provider prompt caching is off for eval runs.** When `run_ab`, `gate_router` or `ci_gate` record or replay on
+`anthropic`, they set `COSTGUARD_ANTHROPIC_PROMPT_CACHE=0` before the provider is built, unless
+`--provider-prompt-cache` is passed. Why:
+- **A cassette stores one usage per call key.** With caching on, the first call of a prefix records a cache *write*
+  (1.25×), and every identical call would replay that write instead of the cache *read* (0.1×) it would really get.
+- **Cache warmth depends on call order.** Which call warms the prefix depends on parallel prefetch, on which arm runs
+  first and on how long ago the prefix was last used (the cache expires). A0's cost, and so every paired saving,
+  would depend on recording conditions.
+- **So prompt-cache savings are reported separately**, as a provider-side and order-dependent effect, and are not
+  mixed into the paired A/B.
+- **Today it changes nothing anyway.** The system prompt is about 110 tokens, below Anthropic's minimum cacheable
+  prefix (512 tokens on Sonnet 5.5 and 4,096 on Haiku 4.5; see `docs/components/router_and_gate.md` §3).
+
+The setting is recorded as `provider_prompt_cache` in the A/B summary `meta`, in the CI gate `meta` and in the router
+gate files. It is `null` on mlx and mock, which never report cached tokens. If a run with caching off still replays
+cache-read or cache-write tokens, the cassette was recorded with caching on: `run_ab` prints a warning and records
+`meta.prompt_cache_warning`, and the cassette must be re-recorded before quoting headline numbers.
+
 ## 3. The A/B: cumulative ablation
 
 The arms are ordered by quality risk; each arm adds one lever to the previous arm.
@@ -149,9 +167,10 @@ These are used exactly as written. The contract definitions are in `docs/CONTRAC
 **Estimated savings (secondary).** Uses each record's `baseline_cost_usd`: the strong tier, the full prompt, the
 pre-call token estimate and this arm's output tokens.
 
-**Hit rate.** Cache hits ÷ all requests, split into exact and semantic.
+**Hit rate.** Cache hits ÷ all **attempted** requests (failed requests included), split into exact and semantic.
 
-**False-hit rate.** Wrong cache hits ÷ **all requests**, not ÷ hits; per-hit precision flatters loose thresholds.
+**False-hit rate.** Wrong cache hits ÷ **all attempted requests**, not ÷ hits; per-hit precision flatters loose
+thresholds.
 - A hit is wrong when the served entry was created by a request in a different trace cluster. It is attributed
   through the entry id, falling back to the neighbour text. The Wilson 95% CI is reported.
 - `trap_false_hits` counts the false hits that involve a trap row.
@@ -164,7 +183,18 @@ paired score difference is reported too.
 **Win/tie/loss.** `judge.pairwise(A0 answer, arm answer)` on up to `--pairwise-max` differing items per arm (default
 150), sampled deterministically.
 - Identical answers are not judged and count as ties.
-- The non-inferior rate (win + tie) has a Wilson CI.
+- A failed judgment (see §5) is an `error`: it is counted in `pairwise.errors` and left out of win/tie/loss, never
+  counted as a tie.
+- The non-inferior rate (win + tie, over valid judgments) has a Wilson CI.
+
+**Completeness.** Every arm summary carries `complete` and `coverage` (`attempted`, `failed`, `ungraded`,
+`pairwise_errors`).
+- An arm is incomplete if any request failed or, when grading was requested, any answer has no grade or any pairwise
+  judgment failed. Missing grades silently drop possibly bad answers from quality retained and its CI, so they are
+  never ignored.
+- `eval.report` prints **INCOMPLETE: n failed / n ungraded** next to that arm, in RESULTS.md and in the README block.
+- An incomplete arm is never the headline, and nothing is when A0 is incomplete, because every paired number is
+  measured against A0.
 
 **Correct answer and cost per correct answer.**
 - An answer is correct when its grade is ≥ 4 out of 5 (≥ 0.75).
@@ -177,8 +207,10 @@ paired score difference is reported too.
 - Overhead = `overhead_ms` from the record.
 
 **Waterfall.** Each arm's increment over the previous arm, in dollars, % of A0 cost, and input and output tokens
-saved. Tokens overstate compression's dollar value because output tokens cost 5× input tokens on the Anthropic pair
-(6× for gpt-5.4-mini and 8× for gpt-5-nano, the prices mlx and mock are billed at), so both are reported.
+saved. Every step uses the **same items**: those that succeeded in every arm (`n_items`, `n_excluded` on each step;
+the report says so), so the increments add up. Tokens overstate compression's dollar value because output tokens cost
+5× input tokens on the Anthropic pair (6× for gpt-5.4-mini and 8× for gpt-5-nano, the prices mlx and mock are billed
+at), so both are reported.
 
 ## 5. The judge
 
@@ -196,6 +228,9 @@ saved. Tokens overstate compression's dollar value because output tokens cost 5�
   Correctness against the reference comes first; length, tone and position are to be ignored.
 - It runs in **both orders**, and the swapped verdict is mapped back.
 - If the two orders disagree, the result is a tie (the MT-Bench protocol).
+- If either order fails (cassette miss, API error) or stays unparseable after one retry, the result is `"error"`:
+  a missing judgment, never a tie. The router gate treats it as missing evidence
+  (`docs/components/router_and_gate.md` §4), and the A/B marks the arm incomplete.
 
 **`grade`.**
 - A 1–5 rubric:
@@ -292,7 +327,7 @@ eval set, the rest Bitext near-misses) and 8 legitimate repeats.
 
 | Check | Rule |
 |---|---|
-| replay complete | no cassette misses (a miss means the cassette is stale: re-record) |
+| replay complete | no cassette misses (a miss means the cassette is stale: re-record), including a cheap-tier miss that the pipeline papered over by falling back to strong (`CassetteMiss` in any `stage_errors` entry) |
 | (a) trap false hits | must be 0 |
 | (a′) false hits, all rows | ≤ baseline |
 | (b) mean quality | ≥ baseline − 0.03 |
@@ -323,8 +358,9 @@ depends only on the queries.
 
 - **Prices.** Dollars are list-price costs computed from token usage, using `configs/prices.yaml` (`checked_on` is
   recorded in every summary).
-  - On `anthropic`, they are the real Sonnet 5.5 / Haiku 4.5 prices, including prompt-cache reads at 0.1× and writes
-    at 1.25×.
+  - On `anthropic`, they are the real Sonnet 5.5 / Haiku 4.5 prices. Prompt-cache reads (0.1×) and writes (1.25×)
+    are billed when present, but eval runs turn provider prompt caching off unless `--provider-prompt-cache` is
+    passed (§2).
   - **Local models (mlx) and mock are billed at the list price of the API model each tier stands in for**
     (`policy.billing`: strong = gpt-5.4-mini, cheap = gpt-5-nano). Their dollar figures are what the same token
     counts *would* cost, not money spent. Local token counts come from the local model's tokenizer, which differs

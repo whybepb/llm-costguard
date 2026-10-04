@@ -40,17 +40,27 @@ class CassetteProvider:
         return self.inner.count_tokens(messages, model)
 
     def complete(self, messages, model, max_tokens, temperature) -> Completion:
+        """The returned completion's raw["cassette"] says "replay" or "new" for THIS call; callers running in threads
+        must use it rather than diffing the shared hits/misses counters."""
         key = call_key(messages, model, max_tokens, temperature)
-        if self.mode != "record" and key in self._store:
-            self.hits += 1
-            return Completion(**self._store[key])
+        with self._lock:
+            rec = self._store.get(key) if self.mode != "record" else None
+            if rec is not None:
+                self.hits += 1
+            else:
+                self.misses += 1
+        if rec is not None:
+            return _tagged(Completion(**rec), "replay")
         if self.mode == "replay":
-            self.misses += 1
             raise CassetteMiss(f"no cassette entry for model={model} (key {key[:12]}) in {self.path}")
-        self.misses += 1
         comp = self.inner.complete(messages, model, max_tokens, temperature)
         with self._lock:
             self._store[key] = comp.model_dump()
             with self.path.open("a") as f:
                 f.write(json.dumps({"key": key, "model": model, "completion": comp.model_dump()}, ensure_ascii=False) + "\n")
-        return comp
+        return _tagged(comp, "new")
+
+
+def _tagged(comp: Completion, status: str) -> Completion:
+    """Copy with the per-call replay status in raw (never written to the cassette file)."""
+    return comp.model_copy(update={"raw": {**(comp.raw or {}), "cassette": status}})

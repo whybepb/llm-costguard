@@ -16,7 +16,8 @@ Checks (all deterministic):
   (a') false hits over all rows do not increase vs the baseline
   (b)  mean quality of the gate arm >= baseline - quality margin
   (c)  savings vs A0 (paired, %) >= baseline - savings margin
-  plus: replay complete (no cassette misses) and the baseline matches this backend/judge/subset.
+  plus: replay complete (no cassette misses, including a cheap-tier miss the pipeline papered over by falling back
+  to strong) and the baseline matches this backend/judge/subset.
 Writes eval/results/ci_gate.json and, if $GITHUB_STEP_SUMMARY is set, a markdown table to it.
 """
 from __future__ import annotations
@@ -33,7 +34,8 @@ from costguard.config import ROOT, Settings, load_policy
 
 from .build_trace import CI_SUBSET, file_sha256
 from .judge import LOCAL_BACKENDS, HeuristicJudge, get_judge
-from .run_ab import (CASSETTES, HIT, apply_overrides, arm_policy, keyless_provider, make_engine, run_rows)
+from .run_ab import (CASSETTES, HIT, apply_overrides, arm_policy, keyless_provider, make_engine, run_rows,
+                     set_provider_prompt_cache)
 from .stats import ratio_bootstrap
 
 RESULTS = ROOT / "eval" / "results"
@@ -62,6 +64,12 @@ def _load(path: Path) -> list[dict]:
     return [json.loads(x) for x in Path(path).read_text().splitlines() if x.strip()]
 
 
+def _stage_cassette_misses(r: dict) -> list[str]:
+    """Cassette misses swallowed by a fail-open stage, e.g. a cheap-tier miss that fell back to strong
+    (stage_errors["upstream_cheap"]): the request succeeded, but not with the recorded calls."""
+    return [f"{k}: {v}" for k, v in (r.get("stage_errors") or {}).items() if "CassetteMiss" in str(v)]
+
+
 def evaluate(engine, rows: list[dict], judge) -> dict:
     """Run A0 and the gate arm (balanced as configured + overrides) and compute the gate metrics."""
     if getattr(engine, "_ci_base_policy", None) is None:     # run_rows swaps engine.policy; keep the original
@@ -74,6 +82,7 @@ def evaluate(engine, rows: list[dict], judge) -> dict:
     ok = [r for r in gate if not r.get("error")]
     a0_ok = {r["pos"]: r for r in a0 if not r.get("error")}
     errors = [r for r in a0 + gate if r.get("error")]
+    stage_misses = [r for r in a0 + gate if not r.get("error") and _stage_cassette_misses(r)]
     hits = [r for r in ok if r["cache_status"] in HIT]
     false_hits = [r for r in hits if r.get("false_hit")]
     trap_fh = [r for r in false_hits if r.get("trap_false_hit")]
@@ -88,11 +97,12 @@ def evaluate(engine, rows: list[dict], judge) -> dict:
     both = [(grades[p], grades0[p]) for p in grades if grades[p] is not None and grades0.get(p) is not None]
     tau = base.modes["balanced"].tau
     return {
-        "n": len(rows), "n_ok": len(ok), "errors": len(errors),
-        "error_samples": [f"{r['pos']}: {r['error']}" for r in errors[:3]],
+        "n": len(rows), "n_ok": len(ok), "errors": len(errors), "stage_cassette_misses": len(stage_misses),
+        "error_samples": ([f"{r['pos']}: {r['error']}" for r in errors[:3]]
+                          + [f"{r['pos']}: {_stage_cassette_misses(r)[0]}" for r in stage_misses[:3]]),
         "hits": {"exact": sum(1 for r in hits if r["cache_status"] == "exact"),
                  "semantic": sum(1 for r in hits if r["cache_status"] == "semantic")},
-        "hit_rate_pct": round(100 * len(hits) / len(ok), 2) if ok else 0.0,
+        "hit_rate_pct": round(100 * len(hits) / len(gate), 2) if gate else 0.0,     # ÷ attempted requests
         "false_hits": len(false_hits), "trap_false_hits": len(trap_fh),
         "false_hit_examples": [{"pos": r["pos"], "query": r["query"], "served_answer_of": r.get("hit_from_query"),
                                 "similarity": r.get("cache_similarity"), "kind": r["cache_status"],
@@ -117,8 +127,9 @@ def compare(cur: dict, base: Optional[dict], q_margin: float, s_margin: float, m
         checks.append({"check": name, "value": value, "baseline": baseline, "limit": limit,
                        "status": "PASS" if ok else "FAIL", "note": note})
 
-    add("replay complete (no upstream/cassette errors)", cur["errors"], 0, "== 0", cur["errors"] == 0,
-        "; ".join(cur["error_samples"]) + (" -> re-record the CI cassette" if cur["errors"] else ""))
+    incomplete = cur["errors"] + cur.get("stage_cassette_misses", 0)     # failed requests + swallowed misses
+    add("replay complete (no upstream/cassette errors)", incomplete, 0, "== 0", incomplete == 0,
+        "; ".join(cur["error_samples"]) + (" -> re-record the CI cassette" if incomplete else ""))
     add("(a) trap false hits", cur["trap_false_hits"], 0, "== 0", cur["trap_false_hits"] == 0)
     if base is None:
         add("baseline present", "missing", "-", "exists", False, "run: python -m eval.ci_gate --update-baseline")
@@ -173,19 +184,25 @@ def render(cur: dict, checks: list[dict], meta: dict, markdown: bool = False) ->
 def run_gate(subset: Path = CI_SUBSET, baseline: Path = CI_BASELINE, out: Optional[Path] = CI_RESULT,
              backend: str = "auto", judge_kind: str = "auto", engine=None, update_baseline: bool = False,
              quality_margin: float = QUALITY_MARGIN, savings_margin: float = SAVINGS_MARGIN,
-             record: bool = False, step_summary: Optional[str] = None) -> tuple[int, dict]:
+             record: bool = False, step_summary: Optional[str] = None,
+             provider_prompt_cache: bool = False) -> tuple[int, dict]:
     rows = _load(subset)
     settings = Settings.from_env()
+    prompt_cache = None                 # provider prompt caching: only the anthropic adapter has it
     if engine is None:
         if record:
             if backend in ("auto", "mock"):
                 raise SystemExit("--record needs a real --backend (e.g. anthropic or mlx)")
             b, cassette = backend, CASSETTES / f"{backend}_ci.jsonl"
-            settings.backend, settings.cassette, settings.cassette_mode = b, cassette, "auto"
-            engine = make_engine(settings)
         else:
             b, cassette = resolve_backend(backend)
-            settings.backend = b
+        if "anthropic" in (b, os.environ.get("COSTGUARD_JUDGE_BACKEND") or b):
+            prompt_cache = set_provider_prompt_cache(provider_prompt_cache)    # before any provider is built
+        settings.backend = b
+        if record:
+            settings.cassette, settings.cassette_mode = cassette, "auto"
+            engine = make_engine(settings)
+        else:
             engine = (make_engine(settings) if b == "mock"
                       else make_engine(settings, provider=keyless_provider(b, cassette, "replay")))
     else:
@@ -199,7 +216,7 @@ def run_gate(subset: Path = CI_SUBSET, baseline: Path = CI_BASELINE, out: Option
         base, _ = apply_overrides(engine._ci_base_policy)
         run_rows(engine, base, "balanced", "ci-record-nocache", rows, no_cache=True)
     meta = {"backend": b, "judge": judge.label, "subset": str(Path(subset).name),
-            "subset_sha256": file_sha256(Path(subset)),
+            "subset_sha256": file_sha256(Path(subset)), "provider_prompt_cache": prompt_cache,
             "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")}
     if update_baseline:
         Path(baseline).parent.mkdir(parents=True, exist_ok=True)
@@ -238,6 +255,8 @@ def main(argv: Optional[list[str]] = None) -> int:
     ap.add_argument("--yes", action="store_true", help="allow --record on a paid backend")
     ap.add_argument("--quality-margin", type=float, default=QUALITY_MARGIN)
     ap.add_argument("--savings-margin", type=float, default=SAVINGS_MARGIN)
+    ap.add_argument("--provider-prompt-cache", action="store_true",
+                    help="keep Anthropic prompt caching on when recording (default off; docs/EVALUATION.md section 2)")
     args = ap.parse_args(argv)
     if args.record and args.backend not in LOCAL_BACKENDS and not args.yes:
         print(f"--record on paid backend {args.backend!r} costs roughly $0.2-0.5 for the subset; add --yes",
@@ -245,7 +264,8 @@ def main(argv: Optional[list[str]] = None) -> int:
         return 2
     code, _ = run_gate(Path(args.subset), Path(args.baseline), Path(args.out) if args.out else None, args.backend,
                        args.judge, update_baseline=args.update_baseline or args.record,
-                       quality_margin=args.quality_margin, savings_margin=args.savings_margin, record=args.record)
+                       quality_margin=args.quality_margin, savings_margin=args.savings_margin, record=args.record,
+                       provider_prompt_cache=args.provider_prompt_cache)
     return code
 
 

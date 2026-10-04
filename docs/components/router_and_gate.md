@@ -131,6 +131,7 @@ The gate prints this on every run (`price_gap` in the results JSON). Prices come
   - **Today:** the system prompt is about 110 tokens, below both minimums, and retrieved context sits after the cache breakpoint. So neither tier caches, and the 2× gap holds.
   - **The risk:** if the team grows the shared prefix into the 512–4,095-token band (for example, by moving policy text into the system prompt), the router could lose money while appearing to save it.
   - **How the gate catches it:** it bills each tier from its returned `usage` (cache reads and writes included). So `savings_if_allowed` is measured, not assumed, and a category is blocked unless that measured saving exceeds `--min-saving`.
+  - **Provider prompt caching is off in the gate by default** (`COSTGUARD_ANTHROPIC_PROMPT_CACHE=0`, recorded as `provider_prompt_cache` in the gate and results files). A cassette stores one usage per call, so replay would repeat the first call's cache-write usage, and cache warmth depends on call order (`docs/EVALUATION.md` §2). To measure the cached economics once the prefix grows past the minimums, run with `--provider-prompt-cache` on a fresh cassette, sequentially, and report it separately.
   - **Tokenizers too:** Sonnet 5.5's newer tokenizer (about 30% more tokens than older Claude models) is measured the same way rather than assumed.
 
 **A design input, not a failure.** The 2× gap doesn't make routing wrong; it changes the trade. Each downshift buys at most 50% on that request, while the quality risk is the same as on a 12× pair. The gate makes that trade explicit per category:
@@ -158,9 +159,11 @@ For category c, keep the **routable** items, R_c: those with no hardness signal,
 
 - Per item: d_i = 100 · (grade_cheap,i − grade_strong,i), in quality points from −100 to +100.
 - d̄ = mean(d_i). Its 95% CI is a paired percentile bootstrap (`eval.stats.paired_bootstrap`, 2,000 resamples) that resamples whole `pair_id` clusters, so the two halves of a trap pair are not counted as independent evidence (Miller, [arXiv 2411.00640](https://arxiv.org/abs/2411.00640)).
-- **ALLOW** iff n_c ≥ `min_n` (30) **and** CI_lo ≥ −margin (−5 points) **and** measured saving > `min_saving` (0). This is a non-inferiority test, decided before any data is seen. Otherwise the category stays on strong.
+- **ALLOW** iff judge coverage ≥ 95% **and** n_c ≥ `min_n` (30) **and** CI_lo ≥ −margin (−5 points) **and** measured saving > `min_saving` (0). This is a non-inferiority test, decided before any data is seen. Otherwise the category stays on strong.
+- **Failed judgments are missing evidence, never ties.** A grade that fails or stays unparseable is `None`; a pairwise verdict with either order failed or unparseable is `"error"`. Neither counts as a zero difference. Judge coverage = items with a valid judgment on the decision metric ÷ the category's routable items, and it must be at least `MIN_JUDGE_COVERAGE` (0.95, in `eval/gate_router.py`); otherwise the reason is `judge-coverage <x>% < 95%`. Before this rule, 30 failed pairwise comparisons scored as ties (difference 0, CI [0, 0]) could open a category.
 - Also reported:
-  - pairwise wins, ties and losses, with the non-inferior rate (cheap wins or ties) and its Wilson CI;
+  - `judge_coverage`, `n_routable` and `n_unjudged` per category (coverage is also written to the gate file);
+  - pairwise wins, ties, losses and `errors`, with the non-inferior rate (cheap wins or ties, over valid judgments) and its Wilson CI;
   - `n_needed` = ⌈(1.96 · sd / (d̄ + margin))²⌉, the number of items at which the observed spread would clear the margin;
   - measured `savings_if_allowed` and traffic share;
   - expected overall routing savings if deployed.
@@ -217,7 +220,7 @@ The gate is offline evidence. Production still earns trust in stages, and every 
 
 | Stage | Gate entry for the category | What happens | Move on when |
 |---|---|---|---|
-| 0. Offline gate | written by `eval.gate_router` | `allow` is decided on the eval set | CI_lo ≥ −margin and n ≥ 30 |
+| 0. Offline gate | written by `eval.gate_router` | `allow` is decided on the eval set | CI_lo ≥ −margin, n ≥ 30 and judge coverage ≥ 95% |
 | 1. Shadow | `"allow": true, "rollout": "shadow"` | Users get strong; logs show `gated:<cat>-shadow` (would have downshifted). A daily sample is answered by cheap offline and judged against the served strong answer. | About a week, with a sampled-judge CI inside the margin and route mix as expected |
 | 2. Canary | `"rollout": "canary:0.05"` | A stable 5% of queries (hashed, so the same question always lands in the same arm, which keeps caches coherent) get cheap (`-canary`); the rest are `-holdout` | The monitors below hold for the canary arm versus holdout; then try 25% |
 | 3. Full | `"rollout"` removed (or `"full"`) | `gated:<cat>-allowed` | Keep monitoring |

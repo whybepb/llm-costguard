@@ -34,6 +34,7 @@ import os
 import random
 import subprocess
 import sys
+import threading
 import time
 from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
@@ -74,6 +75,17 @@ ARMS: dict[str, tuple[str, str, dict]] = {      # arm -> (description, mode slot
     "Q": ("quality mode (as configured)", "quality", {}),
 }
 LEVER = {"A1": "exact cache", "A2": "semantic cache", "A3": "context trim", "A4": "compression", "A5": "router"}
+PROMPT_CACHE_ENV = "COSTGUARD_ANTHROPIC_PROMPT_CACHE"
+
+
+def set_provider_prompt_cache(enabled: bool) -> bool:
+    """Turn the Anthropic adapter's prompt caching on/off for this process; call before any provider is built.
+
+    Eval runs default to off: a cassette stores one usage per call key, so replay would repeat the first call's
+    cache-write usage for every identical call, and cache warmth depends on call order (parallel prefetch, which
+    arm ran first). Provider prompt-cache savings are reported separately, not mixed into the paired A/B."""
+    os.environ[PROMPT_CACHE_ENV] = "1" if enabled else "0"
+    return enabled
 
 
 # ------------------------------------------------------------------------------------------- policy + engine
@@ -150,6 +162,7 @@ def run_rows(engine, policy: Policy, mode: str, arm: str, rows: list[dict],
                "model_used": rec.model_used or "cache", "route_reason": rec.route_reason, "cost": rec.cost_usd,
                "est_baseline": rec.baseline_cost_usd, "in_orig": rec.input_tokens_original,
                "in_sent": rec.input_tokens_sent, "out_tokens": rec.output_tokens, "cached_in": rec.cached_input_tokens,
+               "cache_write": rec.cache_write_tokens,
                "compression_ratio": rec.compression_ratio, "docs_in": rec.context_docs_in,
                "docs_kept": rec.context_docs_kept, "latency_ms": rec.latency_ms, "overhead_ms": rec.overhead_ms,
                "upstream_ms": rec.upstream_latency_ms, "stage_errors": dict(rec.stage_errors), "error": rec.error,
@@ -288,7 +301,8 @@ def print_preflight(p: dict) -> None:
 # ------------------------------------------------------------------------------------------- judging
 def judge_results(judge: Judge, results: dict[str, list[dict]], mode: str, pairwise_max: int, workers: int,
                   seed: int = 0) -> dict:
-    """Grades (pos -> score) per arm and pairwise verdicts vs A0 (pos -> 'win'|'tie'|'loss'), judged in parallel."""
+    """Grades (pos -> score) per arm and pairwise verdicts vs A0 (pos -> 'win'|'tie'|'loss'|'error'), judged in
+    parallel. 'error' = the judgment failed (either order unparseable or the call failed): missing, never a tie."""
     grades: dict[str, dict[int, Optional[float]]] = {a: {} for a in results}
     pair: dict[str, dict[int, str]] = {a: {} for a in results if a != "A0"}
     identical: dict[str, int] = {a: 0 for a in results if a != "A0"}
@@ -321,7 +335,7 @@ def judge_results(judge: Judge, results: dict[str, list[dict]], mode: str, pairw
         if t[0] == "g":
             return t, judge.grade(t[3], t[4], t[5])
         v = judge.pairwise(t[3], t[4], t[5], t[6])            # A = A0 answer, B = arm answer
-        return t, {"A": "loss", "B": "win"}.get(v, "tie")
+        return t, {"A": "loss", "B": "win", "tie": "tie"}.get(v, "error")
 
     if workers > 1 and not isinstance(judge, HeuristicJudge):
         with ThreadPoolExecutor(workers) as ex:
@@ -333,7 +347,7 @@ def judge_results(judge: Judge, results: dict[str, list[dict]], mode: str, pairw
             grades[t[1]][t[2]] = v
         else:
             pair[t[1]][t[2]] = v
-    return {"grades": grades, "pairwise": pair, "identical": identical}
+    return {"grades": grades, "pairwise": pair, "identical": identical, "mode": mode}
 
 
 # ------------------------------------------------------------------------------------------- summary
@@ -349,9 +363,11 @@ def _lat(xs: list[float]) -> dict:
 def summarize_arm(arm: str, res: list[dict], a0: Optional[list[dict]], q: Optional[dict], n_boot: int = 2000) -> dict:
     ok = [r for r in res if not r.get("error")]
     n = len(ok)
+    n_all = len(res)       # attempted requests, failed ones included: the denominator of every per-request rate
     hits = Counter(r["cache_status"] for r in ok if r["cache_status"] in HIT)
     fh = sum(1 for r in ok if r.get("false_hit"))
-    out: dict = {"arm": arm, "description": ARMS.get(arm, ("",))[0], "n": n, "n_errors": len(res) - n,
+    out: dict = {"arm": arm, "description": ARMS.get(arm, ("",))[0], "n": n, "n_attempted": n_all,
+                 "n_errors": n_all - n,
                  "cost_usd": round(sum(r["cost"] for r in ok), 6),
                  "est_baseline_usd": round(sum(r["est_baseline"] for r in ok), 6)}
     eb = out["est_baseline_usd"]
@@ -372,13 +388,15 @@ def summarize_arm(arm: str, res: list[dict], a0: Optional[list[dict]], q: Option
                    saved_per_request_usd=[round(m, 8), round(mlo, 8), round(mhi, 8)],
                    savings_on_misses_pct=_pct(1 - sum(r["cost"] for r, _ in miss) / s0m) if s0m else None)
     out["tokens"] = {"input_original": sum(r["in_orig"] for r in ok), "input_sent": sum(r["in_sent"] for r in ok),
-                     "output": sum(r["out_tokens"] for r in ok), "cached_input": sum(r["cached_in"] for r in ok)}
-    p, lo, hi = proportion_ci(fh, n) if n else (float("nan"), 0, 1)
+                     "output": sum(r["out_tokens"] for r in ok), "cached_input": sum(r["cached_in"] for r in ok),
+                     "cache_write": sum(r.get("cache_write", 0) for r in ok)}
+    p, lo, hi = proportion_ci(fh, n_all) if n_all else (float("nan"), 0, 1)
     out.update(
-        hit_rate={"exact": _pct(hits["exact"] / n) if n else None, "semantic": _pct(hits["semantic"] / n) if n else None,
-                  "total": _pct(sum(hits.values()) / n) if n else None},
+        hit_rate={"exact": _pct(hits["exact"] / n_all) if n_all else None,
+                  "semantic": _pct(hits["semantic"] / n_all) if n_all else None,
+                  "total": _pct(sum(hits.values()) / n_all) if n_all else None},
         hits=dict(hits), false_hits=fh, false_hit_rate=_pct(p), false_hit_ci=[_pct(lo), _pct(hi)],
-        false_hit_rate_intent=_pct(sum(1 for r in ok if r.get("false_hit_intent")) / n) if n else None,
+        false_hit_rate_intent=_pct(sum(1 for r in ok if r.get("false_hit_intent")) / n_all) if n_all else None,
         trap_false_hits=sum(1 for r in ok if r.get("trap_false_hit")),
         unattributed_hits=sum(1 for r in ok if r.get("hit_unattributed")),
         guard_rejections=sum(1 for r in ok if r.get("cache_guard") and r["cache_status"] not in HIT),
@@ -406,6 +424,14 @@ def summarize_arm(arm: str, res: list[dict], a0: Optional[list[dict]], q: Option
         out["stage_errors"] = dict(errs)
     if q is not None:
         out["quality"] = quality_block(arm, ok, a0, q, n_boot)
+    # complete = every request succeeded and, when grading was requested, every answer has a grade and every
+    # pairwise judgment is valid. Incomplete arms are flagged by eval.report and never used as the headline.
+    qb = out.get("quality") or {}
+    graded = q is not None and q.get("mode", "both") in ("grade", "both")
+    out["coverage"] = {"attempted": n_all, "failed": n_all - n, "ungraded": qb.get("n_ungraded", 0) if graded else None,
+                       "pairwise_errors": (qb.get("pairwise") or {}).get("errors", 0)}
+    out["complete"] = not (out["coverage"]["failed"] or out["coverage"]["ungraded"]
+                           or out["coverage"]["pairwise_errors"])
     return out
 
 
@@ -432,30 +458,45 @@ def quality_block(arm: str, ok: list[dict], a0: Optional[list[dict]], q: dict, n
         pw = q["pairwise"].get(arm, {})
         if pw:
             ident = q["identical"].get(arm, 0)
-            judged = [v for v in pw.values()]
-            c = Counter(judged)
-            n_j = len(judged) - ident
+            c = Counter(pw.values())
             w, t, l = c["win"], c["tie"] - ident, c["loss"]
+            n_j = w + t + l                    # valid judgments only: a failed judgment is missing, not a tie
             ni, nlo, nhi = proportion_ci(w + t, n_j) if n_j else (float("nan"), 0.0, 1.0)
-            blk["pairwise"] = {"identical": ident, "judged": n_j, "win": w, "tie": t, "loss": l,
+            blk["pairwise"] = {"identical": ident, "judged": n_j, "win": w, "tie": t, "loss": l, "errors": c["error"],
                                "non_inferior_rate_judged": _pct(ni), "non_inferior_ci": [_pct(nlo), _pct(nhi)]}
     return blk
 
 
-def waterfall(summary: dict[str, dict]) -> list[dict]:
+def waterfall(summary: dict[str, dict], results: Optional[dict[str, list[dict]]] = None) -> list[dict]:
+    """Each lever's increment over the previous arm. With `results`, every step is computed on the SAME item set:
+    the items that succeeded in every cumulative arm (n_items / n_excluded on each step say so)."""
+    arms = [a for a in CUMULATIVE if a in summary]
+    common: Optional[set] = None
+    if results is not None and arms:
+        common = set.intersection(*({r["pos"] for r in results[a] if not r.get("error")} for a in arms))
+
+    def tot(arm: str) -> tuple[float, int, int]:
+        if common is None:
+            s = summary[arm]
+            return s["cost_usd"], s["tokens"]["input_sent"], s["tokens"]["output"]
+        rs = [r for r in results[arm] if r["pos"] in common]
+        return round(sum(r["cost"] for r in rs), 6), sum(r["in_sent"] for r in rs), sum(r["out_tokens"] for r in rs)
+
     steps, prev = [], None
-    for arm in CUMULATIVE:
-        if arm not in summary:
-            continue
-        s = summary[arm]
+    for arm in arms:
         if prev is not None:
-            p = summary[prev]
-            a0c = s.get("a0_cost_usd") or summary.get("A0", {}).get("cost_usd") or 0
-            dc = p["cost_usd"] - s["cost_usd"]
-            steps.append({"from": prev, "to": arm, "lever": LEVER.get(arm, arm), "saved_usd": round(dc, 6),
-                          "saved_pct_of_a0": _pct(dc / a0c) if a0c else None,
-                          "saved_input_tokens": p["tokens"]["input_sent"] - s["tokens"]["input_sent"],
-                          "saved_output_tokens": p["tokens"]["output"] - s["tokens"]["output"]})
+            (pc, pin, pout), (sc, sin, sout) = tot(prev), tot(arm)
+            if common is not None and "A0" in arms:
+                a0c = tot("A0")[0]
+            else:
+                a0c = summary[arm].get("a0_cost_usd") or summary.get("A0", {}).get("cost_usd") or 0
+            dc = pc - sc
+            step = {"from": prev, "to": arm, "lever": LEVER.get(arm, arm), "saved_usd": round(dc, 6),
+                    "saved_pct_of_a0": _pct(dc / a0c) if a0c else None,
+                    "saved_input_tokens": pin - sin, "saved_output_tokens": pout - sout}
+            if common is not None:
+                step.update(n_items=len(common), n_excluded=max(len(results[a]) for a in arms) - len(common))
+            steps.append(step)
         prev = arm
     return steps
 
@@ -512,6 +553,9 @@ def main(argv: Optional[list[str]] = None) -> int:
     ap.add_argument("--yes", action="store_true", help="allow spending on a paid backend")
     ap.add_argument("--no-prefetch", action="store_true", help="don't pre-generate known upstream calls in parallel")
     ap.add_argument("--agreement", action="store_true", help="also report judge-vs-human agreement (human_labels.jsonl)")
+    ap.add_argument("--provider-prompt-cache", action="store_true",
+                    help="keep Anthropic prompt caching on (default off for headline numbers: replay would freeze "
+                         "the first call's cache-write usage; see docs/EVALUATION.md section 2)")
     ap.add_argument("--bootstrap", type=int, default=2000)
     args = ap.parse_args(argv)
 
@@ -563,17 +607,21 @@ def main(argv: Optional[list[str]] = None) -> int:
     # ---- engine (real upstream, cassette-wrapped) + logger
     if db_path.exists():
         db_path.unlink()
+    prompt_cache = None                 # provider prompt caching: only the anthropic adapter has it
+    if "anthropic" in (backend, os.environ.get("COSTGUARD_JUDGE_BACKEND") or backend):
+        prompt_cache = set_provider_prompt_cache(args.provider_prompt_cache)
     engine = make_engine(settings, with_logger=True)
     if pre and pre["new_calls"] and not args.no_prefetch and workers > 1:
         calls = pre["new_calls"]
         print(f"prefetching {len(calls)} upstream generations with {workers} workers ...", flush=True)
-        errors = Counter()
+        errors, lock = Counter(), threading.Lock()
 
         def gen(c):
             try:
                 engine.provider.complete(c[0], c[1], c[2], c[3])
             except Exception as e:
-                errors[type(e).__name__] += 1
+                with lock:              # updated from worker threads
+                    errors[type(e).__name__] += 1
         with ThreadPoolExecutor(workers) as ex:
             list(ex.map(gen, calls))
         if errors:
@@ -634,19 +682,32 @@ def main(argv: Optional[list[str]] = None) -> int:
                  "components": getattr(engine, "component_status", {}),
                  "judge": judge.describe() if judge else None, "judge_mode": args.judge_mode,
                  "pairwise_max": args.pairwise_max, "correct_threshold": CORRECT_AT,
+                 "provider_prompt_cache": prompt_cache,
                  "savings_definition": "1 - sum(arm cost) / sum(A0 actual cost) on the same items (paired); "
                                        "est_savings_pct uses the record-level estimated baseline",
                  "preflight": {k: v for k, v in pre.items() if k != "new_calls"} if pre else None,
                  "runtime_s": round(time.time() - t_start, 1)},
         "arms": per_arm,
-        "waterfall": waterfall(per_arm),
+        "waterfall": waterfall(per_arm, results),
     }
+    cache_tok = sum(a["tokens"]["cached_input"] + a["tokens"]["cache_write"] for a in per_arm.values())
+    if prompt_cache is False and cache_tok:
+        summary["meta"]["prompt_cache_warning"] = (
+            f"{cache_tok} prompt-cache read/write tokens replayed although provider prompt caching is off: the "
+            "cassette was recorded with caching on; re-record it for headline numbers")
+        print("WARNING: " + summary["meta"]["prompt_cache_warning"], file=sys.stderr)
     if args.agreement and judge is not None:
         summary["judge_human_agreement"] = human_agreement(judge=judge)
     summary_path.parent.mkdir(parents=True, exist_ok=True)
     summary_path.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n")
     print()
     print_table(summary)
+    for arm, a in per_arm.items():
+        if not a["complete"]:
+            c = a["coverage"]
+            print(f"WARNING: {arm} INCOMPLETE: {c['failed']} failed / {c['ungraded'] or 0} ungraded / "
+                  f"{c['pairwise_errors']} pairwise judge errors of {c['attempted']} requests "
+                  "(eval.report will not use it as the headline)", file=sys.stderr)
     print(f"\nwaterfall: " + "; ".join(f"{w['lever']} -${w['saved_usd']:.4f} ({w['saved_pct_of_a0']}% of A0)"
                                       for w in summary["waterfall"]))
     print(f"wrote {summary_path.relative_to(ROOT) if summary_path.is_relative_to(ROOT) else summary_path} "

@@ -2,6 +2,7 @@
 
     judge = get_judge()                      # backend strong tier, temperature 0, cassette-backed
     judge.pairwise(q, a, b, reference)       # "A" | "B" | "tie"   (both orders; disagreement -> "tie")
+                                             # or "error" if either order failed / was unparseable (never a tie)
     judge.grade(q, answer, reference)        # 0..1 (1-5 rubric scaled), or None if unparseable twice
 
 Judge model: COSTGUARD_JUDGE_BACKEND / COSTGUARD_JUDGE_MODEL if set, else the engine backend's strong tier.
@@ -26,6 +27,7 @@ import os
 import random
 import re
 import sqlite3
+import threading
 from collections import Counter
 from pathlib import Path
 from typing import Optional
@@ -44,6 +46,7 @@ JUDGE_CASSETTE = ROOT / "eval" / "cassettes" / "judge.jsonl"
 HUMAN_LABELS = ROOT / "eval" / "data" / "human_labels.jsonl"
 HEURISTIC_LABEL = "heuristic-mock"
 LOCAL_BACKENDS = ("mock", "mlx")          # everything else is a paid API
+JUDGE_ERROR = "error"   # pairwise outcome when a judgment is missing: never a tie, never evidence of non-inferiority
 
 SYSTEM = ("You are an impartial expert evaluator of customer-support answers for ShopNest, an online store selling "
           "electronics, home goods and apparel. Follow the instructions exactly.")
@@ -106,7 +109,7 @@ def _flip(v: Optional[str]) -> Optional[str]:
 
 class ReplayOnlyProvider:
     """Stand-in upstream when the real one can't be built (no key, no MLX). Cassette hits still work;
-    a miss raises, and the judge turns that into None / "tie" and counts it as an error."""
+    a miss raises, and the judge turns that into None (grade) / "error" (pairwise) and counts it as an error."""
 
     def __init__(self, name: str, reason: str = "", ratio: float = 1.0):
         self.name, self.reason, self.ratio = name, reason, ratio
@@ -129,6 +132,11 @@ class Judge:
         self.cost_new_usd = 0.0       # spend on calls that were not already in the cassette
         self.cost_all_usd = 0.0       # list-price value of every judge call, replayed or not
         self._memo: dict[str, object] = {}
+        self._lock = threading.Lock()   # judging runs in threads (run_ab --workers): keep the accounting exact
+
+    def _count(self, key: str, n: int = 1) -> None:
+        with self._lock:
+            self.stats[key] += n
 
     @property
     def label(self) -> str:
@@ -137,20 +145,21 @@ class Judge:
     # ---------------------------------------------------------------- one model call
     def _call(self, prompt: str) -> Optional[str]:
         msgs = [ChatMessage(role="system", content=SYSTEM), ChatMessage(role="user", content=prompt)]
-        hits0 = getattr(self.provider, "hits", None)
         try:
             comp = self.provider.complete(msgs, self.model, self.max_tokens, 0.0)
         except Exception as e:  # cassette miss in replay mode, API error, ...
-            self.stats["errors"] += 1
+            self._count("errors")
             log.warning("judge call failed: %s: %s", type(e).__name__, str(e)[:200])
             return None
-        self.stats["calls"] += 1
-        replayed = hits0 is not None and getattr(self.provider, "hits", 0) > hits0
+        # per-call status from the cassette; a shared hit counter races when judging runs in threads
+        replayed = (comp.raw or {}).get("cassette") == "replay"
         cost = self._price(comp)
-        self.cost_all_usd += cost
-        if not replayed:
-            self.stats["new_calls"] += 1
-            self.cost_new_usd += cost
+        with self._lock:
+            self.stats["calls"] += 1
+            self.cost_all_usd += cost
+            if not replayed:
+                self.stats["new_calls"] += 1
+                self.cost_new_usd += cost
         return comp.text
 
     def _price(self, comp: Completion) -> float:
@@ -176,7 +185,7 @@ class Judge:
             v = parse_verdict(text)
             if v:
                 return v
-            self.stats["parse_failures"] += 1
+            self._count("parse_failures")
         return None
 
     def pairwise_detail(self, question: str, answer_a: str, answer_b: str, reference: Optional[str] = None) -> dict:
@@ -189,10 +198,14 @@ class Judge:
         v1 = self._verdict(question, answer_a, answer_b, reference)            # A = answer_a
         v2 = _flip(self._verdict(question, answer_b, answer_a, reference))     # mapped back: A = answer_a
         consistent = v1 is not None and v1 == v2
-        verdict = v1 if consistent and v1 in ("A", "B") else "tie"
-        self.stats["pairwise"] += 1
+        if v1 is None or v2 is None:          # a missing order is a failed judgment, not a position-swap tie
+            verdict = JUDGE_ERROR
+            self._count("pairwise_errors")
+        else:
+            verdict = v1 if consistent and v1 in ("A", "B") else "tie"
+        self._count("pairwise")
         if v1 is not None and v2 is not None and v1 != v2:
-            self.stats["position_inconsistent"] += 1
+            self._count("position_inconsistent")
         out = {"verdict": verdict, "order1": v1, "order2": v2, "consistent": consistent, "judge": self.label}
         self._memo[key] = out
         return dict(out)
@@ -212,13 +225,13 @@ class Judge:
             g = parse_grade(text)
             if g is not None:
                 return (g - 1) / 4.0
-            self.stats["parse_failures"] += 1
+            self._count("parse_failures")
         return None
 
     def grade(self, question: str, answer: str, reference: Optional[str] = None) -> Optional[float]:
         key = "g:" + hashlib.sha256(json.dumps([question, answer, reference]).encode()).hexdigest()
         if key not in self._memo:
-            self.stats["grades"] += 1
+            self._count("grades")
             self._memo[key] = self._grade_once(question, answer, reference)
         return self._memo[key]  # type: ignore[return-value]
 
@@ -326,7 +339,7 @@ def human_agreement(path: Path = HUMAN_LABELS, judge: Optional[Judge] = None) ->
     for r in pw:
         j = (judge.pairwise(r["question"], r["answer_a"], r["answer_b"], r.get("reference")) if judge
              else r.get("judge"))
-        if j is None:
+        if j is None or j == JUDGE_ERROR:
             continue
         hum.append(str(r["human"]).lower() if str(r["human"]).upper() == "TIE" else str(r["human"]))
         jud.append(str(j).lower() if str(j).upper() == "TIE" else str(j))

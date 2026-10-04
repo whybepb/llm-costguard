@@ -82,6 +82,27 @@ def safe(fn: Callable[..., str], *args, title: str) -> str:
 
 
 # ------------------------------------------------------------------------------------------- A/B
+def incomplete(a: dict) -> str:
+    """'' for a complete arm (or a summary written before the flag existed), else a visible warning."""
+    if a.get("complete", True):
+        return ""
+    c = a.get("coverage") or {}
+    pw = f" / {c['pairwise_errors']} pairwise judge errors" if c.get("pairwise_errors") else ""
+    return f" **INCOMPLETE: {c.get('failed', 0)} failed / {c.get('ungraded') or 0} ungraded{pw}**"
+
+
+def headline_arm(arms: dict) -> tuple[Optional[str], list[str]]:
+    """(the furthest cumulative arm that is complete, the later arms skipped because they are incomplete).
+    Nothing qualifies when A0 is incomplete: every paired number is measured against it."""
+    cands = [a for a in ("A5", "A4", "A3", "A2", "A1") if a in arms]
+    if incomplete(arms.get("A0", {})):
+        return None, cands
+    for i, a in enumerate(cands):
+        if not incomplete(arms[a]):
+            return a, cands[:i]
+    return None, cands
+
+
 def pick_ab() -> tuple[Optional[dict], str]:
     for name in ("ab_summary.json", "ab_summary_mlx.json"):
         d = load(name)
@@ -103,7 +124,12 @@ def render_ab(s: dict, name: str) -> str:
                      "counts. Re-run `python -m eval.run_ab --backend anthropic --yes` for real results.")
     if m.get("limit"):
         parts.append(f"> Partial run: first {m['limit']} of {m.get('trace_rows_total')} trace rows.")
-    last = next((a for a in ("A5", "A4", "A3", "A2", "A1") if a in arms), None)
+    last, skipped = headline_arm(arms)
+    if skipped or incomplete(arms.get("A0", {})):
+        bad = [a for a in ["A0", *skipped] if a in arms and incomplete(arms[a])]
+        parts.append("> " + "; ".join(f"**{a}**{incomplete(arms[a])}" for a in bad)
+                     + (". Not used as the headline (failed requests and missing grades bias rates and quality)."
+                        if last else ". No headline: re-run the missing requests and judgments."))
     if last and arms[last].get("savings_pct") is not None:
         a, q = arms[last], arms[last].get("quality", {})
         parts.append(
@@ -116,7 +142,7 @@ def render_ab(s: dict, name: str) -> str:
     for arm, a in arms.items():
         q = a.get("quality", {})
         pw = q.get("pairwise")
-        rows.append([f"**{arm}**", a["description"], a["n"], usd(a["cost_usd"]),
+        rows.append([f"**{arm}**{incomplete(a)}", a["description"], a["n"], usd(a["cost_usd"]),
                      f(a.get("savings_pct"), 1) + ci(a.get("savings_ci"), 1), f(a.get("est_savings_pct"), 1),
                      f"{f(a['hit_rate']['exact'], 1)} / {f(a['hit_rate']['semantic'], 1)}",
                      f(a["false_hit_rate"], 2), f(q.get("mean"), 3),
@@ -131,10 +157,13 @@ def render_ab(s: dict, name: str) -> str:
                  "*est. savings* uses the per-request estimated baseline (strong tier, full prompt). False-hit rate is "
                  "wrong cache hits ÷ all requests. W/T/L counts identical answers as ties.")
     if s.get("waterfall"):
+        w0 = s["waterfall"][0]
+        same = (f"\n\nEvery step is computed on the same {w0['n_items']} items: those that succeeded in every arm"
+                + (f" ({w0['n_excluded']} excluded)." if w0.get("n_excluded") else ".")) if "n_items" in w0 else ""
         parts.append("### Savings waterfall (each lever's increment)\n\n" + table(
             ["step", "lever", "saved $", "% of A0 cost", "input tokens saved", "output tokens saved"],
             [[f"{w['from']} → {w['to']}", w["lever"], usd(w["saved_usd"]), f(w["saved_pct_of_a0"], 1),
-              f(w["saved_input_tokens"]), f(w["saved_output_tokens"])] for w in s["waterfall"]]))
+              f(w["saved_input_tokens"]), f(w["saved_output_tokens"])] for w in s["waterfall"]]) + same)
     lat_rows = []
     for arm, a in arms.items():
         L = a["latency_ms"]
@@ -186,9 +215,9 @@ def render_sensitivity() -> Optional[str]:
             continue
         a = arms[last]
         miss = a.get("savings_on_misses_pct")
-        rows.append([f(100 * s["meta"]["trace_stats"]["dup_rate"], 0) + "%", last, f(a.get("savings_pct"), 1)
-                     + ci(a.get("savings_ci"), 1), f(miss, 1), f(a["hit_rate"]["total"], 1), f(a["false_hit_rate"], 2),
-                     f(a.get("quality", {}).get("retained"), 1), f"`{name}`"])
+        rows.append([f(100 * s["meta"]["trace_stats"]["dup_rate"], 0) + "%", last + incomplete(a),
+                     f(a.get("savings_pct"), 1) + ci(a.get("savings_ci"), 1), f(miss, 1), f(a["hit_rate"]["total"], 1),
+                     f(a["false_hit_rate"], 2), f(a.get("quality", {}).get("retained"), 1), f"`{name}`"])
     return "### Sensitivity to the duplicate rate\n\n" + table(
         ["dup rate", "arm", "savings % [CI]", "savings on cache misses %", "hit %", "false-hit %",
          "quality retained %", "source"], rows) + ("\n\nAt 0% duplicates every saving must come from context trimming, "
@@ -326,7 +355,8 @@ def readme_block() -> str:
     rows = []
     for arm, a in arms.items():
         q = a.get("quality", {})
-        rows.append([f"**{arm}**", a["description"], f(a.get("savings_pct"), 1) + ci(a.get("savings_ci"), 1),
+        rows.append([f"**{arm}**{incomplete(a)}", a["description"],
+                     f(a.get("savings_pct"), 1) + ci(a.get("savings_ci"), 1),
                      f(a["hit_rate"]["total"], 1), f(a["false_hit_rate"], 2),
                      "100 (ref)" if arm == "A0" and q else f(q.get("retained"), 1) + ci(q.get("retained_ci"), 1)])
     parts.append(table(["arm", "levers on (cumulative)", "cost saved % vs A0 [95% CI]", "cache hit %",

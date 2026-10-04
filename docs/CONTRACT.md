@@ -59,7 +59,8 @@ Each stage module exposes a builder that `costguard/factory.py` imports by name,
 ```python
 class Judge:  # wraps a provider + model; default = the engine's backend, strong tier, temperature 0
     def pairwise(self, question: str, answer_a: str, answer_b: str, reference: str | None = None) -> str: ...
-        # returns "A" | "B" | "tie"; internally runs both orders (position swap); disagreement -> "tie"
+        # returns "A" | "B" | "tie" | "error"; runs both orders (position swap); disagreement -> "tie"; a failed or
+        # unparseable call -> "error", which is never counted as a tie
     def grade(self, question: str, answer: str, reference: str | None = None) -> float: ...
         # 0..1 absolute correctness/helpfulness against the reference (rubric in the prompt)
 def get_judge(settings=None) -> Judge: ...

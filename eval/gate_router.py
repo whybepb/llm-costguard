@@ -12,7 +12,9 @@ Method (per category, decided in advance, see docs/components/router_and_gate.md
   3. Score both answers with the shared judge (eval.judge): absolute grade 0..1 against the reference, and a
      position-swapped pairwise verdict. Per-item quality difference d = 100 * (grade_cheap - grade_strong) points.
   4. Paired (cluster) bootstrap 95% CI of mean(d). ALLOW the category only if
-        n >= min_n (30)  and  CI lower bound >= -margin (5 points)  and  measured saving > min_saving.
+        judge coverage >= 95% of its routable items  and  n >= min_n (30)  and
+        CI lower bound >= -margin (5 points)  and  measured saving > min_saving.
+     A failed or unparseable judgment is missing evidence (pairwise "error"), never a tie or a zero difference.
      Everything else, including categories with no or too little data, stays on strong.
   5. Write configs/router_gate.json (read live by the router) and eval/results/router_gate*.json.
 
@@ -55,6 +57,7 @@ SKIP = ("exact_cache", "semantic_cache", "context_optimizer", "compressor", "rou
 CACHE_MIN_PREFIX = {"claude-sonnet-5.5": 512, "claude-haiku-4.5": 4096, "gpt-5.4-mini": 1024, "gpt-5-nano": 1024,
                     "gemini-2.5-flash": 2048, "gemini-2.5-flash-lite": 2048}
 TOKEN_RATIO = {"anthropic": 1.15}       # backend tokens per o200k token, for pre-run estimates only
+MIN_JUDGE_COVERAGE = 0.95               # share of a category's routable items that must carry a valid judgment
 
 
 def _rel(p: Path) -> str:
@@ -494,6 +497,10 @@ def run(args) -> dict:
         return {"status": "needs_confirmation", "estimate": est}
 
     # ---------------------------------------------------------------- generate + judge (sequential)
+    prompt_cache = None                 # provider prompt caching: only the anthropic adapter has it
+    if "anthropic" in (backend, judge_backend):
+        from eval.run_ab import set_provider_prompt_cache
+        prompt_cache = set_provider_prompt_cache(args.provider_prompt_cache)
     engine = make_engine(settings, args.replay)
     judge, judge_label = make_judge(args.judge, settings, engine)
     log(f"judge: {judge_label}", args.quiet)
@@ -523,8 +530,10 @@ def run(args) -> dict:
                 errors["grade_missing"] += 1
         if args.scorer in ("pairwise", "both"):
             v = judge.pairwise(it["query"], st["text"], ch["text"], ref)       # A = strong, B = cheap
-            row["pairwise"] = {"A": "strong", "B": "cheap"}.get(v, "tie")
-            row["diff_pairwise"] = {"cheap": 100.0, "strong": -100.0}.get(row["pairwise"], 0.0)
+            row["pairwise"] = {"A": "strong", "B": "cheap", "tie": "tie"}.get(v, "error")
+            row["diff_pairwise"] = {"cheap": 100.0, "strong": -100.0, "tie": 0.0}.get(row["pairwise"])
+            if row["diff_pairwise"] is None:                 # failed judgment: missing, never a tie
+                errors["pairwise_missing"] += 1
         rows.append(row)
         log(f"[{k}/{len(items)}] {it['category']:<8} {it['id']:<22} {'HARD:' + h.primary if h.hard else 'easy':<26} "
             f"grade s/c={row.get('grade_strong')}/{row.get('grade_cheap')} pw={row.get('pairwise', '-')} "
@@ -547,10 +556,13 @@ def run(args) -> dict:
         served = sum(r["cheap"]["cost_usd"] if (not r["hard"]) else r["strong"]["cost_usd"] for r in all_c)
         saving = (1 - served / base) if base > 0 else 0.0
         n = len(d)
+        coverage = n / len(rt) if rt else math.nan
         if dry_run:
             allow, why = False, "dry-run"
-        elif n == 0:
+        elif not rt:
             allow, why = False, "no data"
+        elif coverage < MIN_JUDGE_COVERAGE:
+            allow, why = False, f"judge-coverage {100 * coverage:.1f}% < {100 * MIN_JUDGE_COVERAGE:.0f}%"
         elif n < args.min_n:
             allow, why = False, f"n={n} < min_n={args.min_n}"
         elif not (lo >= -args.margin):
@@ -562,15 +574,22 @@ def run(args) -> dict:
         if 0 < n < args.min_n or (n == 0 and cats_present.get(cat)):
             warnings.append(f"WARN: {cat}: n={n} routable+scored items < {args.min_n}: the 95% CI is too wide to allow "
                             f"a downshift; it stays on strong.")
-        entry = {"allow": allow, "n": n, "n_items": len(all_c), "hard_share": round(1 - len(rt) / len(all_c), 3) if all_c and args.subset == "routable" else 0.0,
+        if rt and coverage < MIN_JUDGE_COVERAGE:
+            warnings.append(f"WARN: {cat}: {len(rt) - n} of {len(rt)} routable items have no valid judgment "
+                            f"(failed or unparseable): judge-coverage {100 * coverage:.1f}% < "
+                            f"{100 * MIN_JUDGE_COVERAGE:.0f}%, so it stays on strong.")
+        entry = {"allow": allow, "n": n, "n_items": len(all_c), "n_routable": len(rt),
+                 "judge_coverage": _r(coverage, 4), "n_unjudged": len(rt) - n,
+                 "hard_share": round(1 - len(rt) / len(all_c), 3) if all_c and args.subset == "routable" else 0.0,
                  "diff": _r(mean), "ci": [_r(lo), _r(hi)], "sd": _r(sd), "reason": why,
                  "n_needed": n_needed(sd, mean, args.margin) if n > 1 else None,
                  "savings_if_allowed": round(saving, 4), "traffic_share": round(traffic.get(cat, 0.0), 4)}
         if args.scorer == "both" or args.scorer == "pairwise":
             pw = Counter(r.get("pairwise") for r in rt if r.get("pairwise"))
-            npw = sum(pw.values())
+            npw = pw["cheap"] + pw["tie"] + pw["strong"]           # valid judgments only; errors are missing
             nir = wilson(pw["cheap"] + pw["tie"], npw) if npw else (math.nan, 0.0, 1.0)
             entry["pairwise"] = {"cheap_wins": pw["cheap"], "ties": pw["tie"], "strong_wins": pw["strong"],
+                                 "errors": pw["error"], "coverage": _r(npw / len(rt), 4) if rt else None,
                                  "non_inferior_rate": _r(nir[0], 4), "non_inferior_ci": [_r(nir[1], 4), _r(nir[2], 4)]}
         if args.scorer == "both":
             alt = "pairwise" if decision_metric == "grade" else "grade"
@@ -610,9 +629,10 @@ def run(args) -> dict:
         "dry_run": dry_run, "partial": partial, "backend": backend,
         "models": {a: policy.model_id(backend, a) for a in ("strong", "cheap")},
         "billing": {a: prices.billing.get(a) for a in ("strong", "cheap")},
-        "data_source": source, "policy_hash": policy.config_hash,
-        "categories": {c: {k: cats[c][k] for k in ("allow", "n", "diff", "ci", "reason", "savings_if_allowed")}
-                       for c in CATEGORIES},
+        "data_source": source, "policy_hash": policy.config_hash, "provider_prompt_cache": prompt_cache,
+        "min_judge_coverage": MIN_JUDGE_COVERAGE,
+        "categories": {c: {k: cats[c][k] for k in ("allow", "n", "judge_coverage", "diff", "ci", "reason",
+                                                   "savings_if_allowed")} for c in CATEGORIES},
     }
     results = {
         **{k: v for k, v in gate.items() if k != "categories"},
@@ -646,11 +666,12 @@ def run(args) -> dict:
     _write(res_out, results)
 
     log("", args.quiet)
-    log(f"{'category':<9} {'n':>4} {'diff':>7} {'95% CI':>17} {'save':>6}  decision", args.quiet)
+    log(f"{'category':<9} {'n':>4} {'judged':>7} {'diff':>7} {'95% CI':>17} {'save':>6}  decision", args.quiet)
     for c in CATEGORIES:
         e = cats[c]
         ci = f"[{_fmt(e['ci'][0])}, {_fmt(e['ci'][1])}]"
-        log(f"{c:<9} {e['n']:>4} {_fmt(e['diff']):>7} {ci:>17} {e['savings_if_allowed']:>6.0%}  "
+        cov = "-" if e["judge_coverage"] is None else f"{e['judge_coverage']:.0%}"
+        log(f"{c:<9} {e['n']:>4} {cov:>7} {_fmt(e['diff']):>7} {ci:>17} {e['savings_if_allowed']:>6.0%}  "
             f"{'ALLOW' if e['allow'] else 'strong'} ({e['reason']})", args.quiet)
     log(f"allowed: {allowed or 'none'}; expected routing savings if deployed: {expected:.1%}; judge {judge_label}; "
         f"{'DRY RUN; ' if dry_run else ''}{'PARTIAL; ' if partial else ''}gate -> {wrote_gate or '(unchanged)'}; "
@@ -697,6 +718,9 @@ def parse_args(argv: Optional[list[str]] = None):
     ap.add_argument("--min-saving", type=float, default=0.0, help="required measured saving on the category's traffic")
     ap.add_argument("--bootstrap", type=int, default=2000)
     ap.add_argument("--cassette", help="generation cassette (default eval/cassettes/gate.jsonl on real backends)")
+    ap.add_argument("--provider-prompt-cache", action="store_true",
+                    help="keep Anthropic prompt caching on (default off: cassette replay would freeze the first "
+                         "call's cache-write usage; see docs/EVALUATION.md section 2)")
     ap.add_argument("--gate-out", help=f"gate file (default {_rel(GATE_PATH)})")
     ap.add_argument("--results-out", help="results json (default eval/results/router_gate[_dryrun|_partial].json)")
     ap.add_argument("--force", action="store_true", help="let a dry/partial run replace a full gate file")
