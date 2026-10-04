@@ -146,7 +146,7 @@ Each speaker also owns the Q&A questions about their slides (see the end of this
 
 The rest are in DESIGN_DECISIONS §1; keep them as backup slides.
 
-1. Exact cache in front of the semantic cache: zero false-hit risk.
+1. Exact cache in front of the semantic cache: near-zero false-hit risk at ~1 µs.
 2. τ from a per-request false-hit budget, not the hit-rate maximum.
 3. Compress volatile context only, which keeps prefix caching.
 4. Downshift only behind a per-category CI gate, Sonnet → Haiku: with a 2× gap, caching matters more.
@@ -193,7 +193,7 @@ Each question has an owner and a short answer, with the file that proves it.
    - Recovered by evicting the entry or bumping `kb_version`, adding the pair to the traps, and raising τ for that mode.
    - The fail-safe is `mode: "off"` per tenant.
 5. **"Could a cache leak one customer's answer to another?"** (S2)
-   - The partition is tenant | system-prompt hash | kb_version | ctx.
+   - The partition is tenant | sha256(system prompt) | kb_version | max_tokens | digest of the retrieved context.
    - The tenant comes from the caller's API key, never the body.
    - Single-turn only: anything with history bypasses the cache.
 6. **"Shadow mode?"** (S4)

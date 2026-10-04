@@ -2,7 +2,8 @@
 
     lookup(query, partition, tau)
       1. embed the query locally (bge-small, ~2-5 ms on CPU, $0)
-      2. top-k cosine neighbours *inside this partition only* (tenant | system-prompt hash | kb_version | ctx)
+      2. top-k cosine neighbours *inside this partition only* (tenant | sha256(system prompt) | kb_version |
+         mt<max_tokens> | ctx:<context digest> or noctx; built by costguard.pipeline)
       3. walk candidates with similarity >= tau, best first; serve the first one every guard accepts
       4. otherwise a miss; `similarity` / `neighbor_query` always describe the best neighbour (also on a miss)
          and `guard_rejected` says why a near-hit was refused

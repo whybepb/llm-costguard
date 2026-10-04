@@ -18,7 +18,7 @@ Related documents:
 
 **1. Exact cache in front of the semantic cache.** We chose an exact-match tier before the semantic tier over a semantic-only cache.
 
-- **Why:** an exact hit is the same normalised question in the same partition, so it carries **zero false-hit risk**. It costs a ~1 µs dict lookup instead of a 2–5 ms embedding.
+- **Why:** an exact hit is the same normalised question (case, whitespace and trailing punctuation folded) in the same partition, which pins tenant, system prompt, KB version, `max_tokens` and the retrieved context. It carries **near-zero false-hit risk**. The one exception is a promoted semantic hit, which is re-checked against the current mode's τ. It costs a ~1 µs dict lookup instead of a 2–5 ms embedding.
 - **Cost:** one extra lookup per miss, and duplicate storage of popular answers.
 
 **2. τ chosen from a per-request false-hit budget.** We chose the threshold from a curve of false hits over **all requests**, with a budget per mode (0.5% / 1% / 3% for quality / balanced / economy, see `eval/results/threshold_sweep.json`). We rejected a single eyeballed or hit-rate-maximising τ.
