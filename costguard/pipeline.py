@@ -188,7 +188,8 @@ class CostGuard:
         # 8. cost + record
         u = comp.usage
         rec.input_tokens_sent, rec.output_tokens, rec.cached_input_tokens = u.input_tokens, u.output_tokens, u.cached_input_tokens
-        rec.cost_usd = self.prices.cost(rec.model_used, u.input_tokens, u.output_tokens, u.cached_input_tokens) + rec.overhead_cost_usd
+        rec.cost_usd = (self.prices.cost(rec.model_used, u.input_tokens, u.output_tokens, u.cached_input_tokens,
+                                       u.cache_write_tokens) + rec.overhead_cost_usd)
         rec.baseline_cost_usd = self.prices.cost("strong", rec.input_tokens_original or u.input_tokens, u.output_tokens)
         rec.saved_usd = rec.baseline_cost_usd - rec.cost_usd
         rec.response_text = comp.text

@@ -43,7 +43,8 @@ class ChatRequest(BaseModel):
 class Usage(BaseModel):
     input_tokens: int = 0
     output_tokens: int = 0
-    cached_input_tokens: int = 0
+    cached_input_tokens: int = 0     # prompt-cache reads (billed at the cached price)
+    cache_write_tokens: int = 0      # prompt-cache writes (billed at the cache-write price; Anthropic)
 
 
 class Completion(BaseModel):

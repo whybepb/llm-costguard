@@ -42,7 +42,7 @@ def build_engine(settings: Optional[Settings] = None, *, with_logger: bool = Tru
                  skip: tuple[str, ...] = ()) -> CostGuard:
     settings = settings or Settings.from_env()
     policy = load_policy(settings.policy_path)
-    prices = PriceBook(settings.prices_path, policy.billing)
+    prices = PriceBook(settings.prices_path, policy.billing_for(settings.backend))
     provider = make_provider(settings)
     built, status = {}, {}
     for name in COMPONENTS:

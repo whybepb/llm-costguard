@@ -28,6 +28,11 @@ class Settings:
 
     @classmethod
     def from_env(cls) -> "Settings":
+        try:  # repo-local .env (gitignored) for keys; never overrides real env vars
+            from dotenv import load_dotenv
+            load_dotenv(ROOT / ".env", override=False)
+        except ImportError:
+            pass
         e = os.environ.get
         s = cls()
         s.backend = e("COSTGUARD_BACKEND", s.backend)
@@ -81,6 +86,10 @@ class Policy:
 
     def model_id(self, backend: str, alias: str) -> str:
         return self.backends[backend][alias]
+
+    def billing_for(self, backend: str) -> dict[str, str]:
+        """Real APIs bill at their own prices; local/mock backends at the list price of the model they stand in for."""
+        return {**self.billing, **self.raw.get("billing_by_backend", {}).get(backend, {})}
 
 
 def load_policy(path: Path) -> Policy:

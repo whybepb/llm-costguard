@@ -12,7 +12,10 @@ def make_provider(settings: Settings):
     elif b == "mlx":
         from .mlx_local import MLXProvider
         p = MLXProvider()
-    elif b in ("openai", "gemini", "anthropic", "groq", "litellm"):
+    elif b == "anthropic":
+        from .anthropic_provider import AnthropicProvider
+        p = AnthropicProvider()
+    elif b in ("openai", "gemini", "groq", "litellm"):
         from .litellm_provider import LiteLLMProvider
         p = LiteLLMProvider(name=b)
     else:

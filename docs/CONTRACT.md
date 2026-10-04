@@ -5,11 +5,11 @@
 - Workload trace: public customer-support data (Bitext) plus questions about the store-policy knowledge base, which carry retrieved context.
 - Eval set: hand-written by the team.
 
-**Research brief:** `(local path) CostGuard project research.md`. Read the sections for your component; it has the published numbers, pitfalls and evaluation method.
+**Research brief:** `docs/research/LLM CostGuard project research.md` (detailed notes in `../research/notes/`). Read the sections for your component; it has the published numbers, pitfalls and evaluation method.
 
 ## Environment rules
-- **Python:** use `./.venv/bin/python` (3.12).
-  - Add packages with `./.venv/bin/pip install …`.
+- **Python:** always run tools as `./.venv/bin/python -m <tool>` (3.12), e.g. `-m pip install …` or `-m pytest`.
+  - The venv was moved, so its console-script shebangs are stale; `-m` always works.
   - **Don't edit `pyproject.toml`.** List new dependencies in your final report instead.
 - **API keys:** none are available. Tests must run with `COSTGUARD_BACKEND=mock` (the default).
   - Never call MLX models from tests; they're slow, and the coordinator runs the real experiments.
