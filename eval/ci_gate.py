@@ -96,7 +96,9 @@ def evaluate(engine, rows: list[dict], judge) -> dict:
         "false_hits": len(false_hits), "trap_false_hits": len(trap_fh),
         "false_hit_examples": [{"pos": r["pos"], "query": r["query"], "served_answer_of": r.get("hit_from_query"),
                                 "similarity": r.get("cache_similarity"), "kind": r["cache_status"],
-                                "trap": bool(r.get("trap_false_hit"))} for r in false_hits[:10]],
+                                "trap": bool(r.get("trap_false_hit"))}
+                               # every trap false hit is named first (they are what fails check (a)), then the rest
+                               for r in sorted(false_hits, key=lambda r: not r.get("trap_false_hit"))[:25]],
         "savings_pct": round(100 * (1 - ratio), 2) if paired else None,
         "savings_ci": [round(100 * (1 - hi), 2), round(100 * (1 - lo), 2)] if paired else None,
         "cost_usd": round(sum(p[0] for p in paired), 6), "a0_cost_usd": round(sum(p[1] for p in paired), 6),

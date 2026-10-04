@@ -3,7 +3,7 @@
 # throughput, not provider latency. See loadtest/README.md.
 #
 #   bash loadtest/run.sh             # 50 users, 60 s
-#   bash loadtest/run.sh --quick     # 20 users, 20 s
+#   bash loadtest/run.sh --quick     # 20 users, 20 s -> eval/results/loadtest_quick.json
 #   bash loadtest/run.sh --users 100 --duration 120s --latency-ms 800 --mode economy --out eval/results/loadtest_economy.json
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -11,10 +11,10 @@ ROOT="$PWD"
 PY="${PY:-$ROOT/.venv/bin/python}"
 [ -x "$PY" ] || PY="$(command -v python3)"
 
-USERS=50; SPAWN=10; DURATION=60s; LATENCY_MS=300; MODE=balanced; OUT="eval/results/loadtest.json"; PROFILE=full
+USERS=50; SPAWN=10; DURATION=60s; LATENCY_MS=300; MODE=balanced; OUT=""; PROFILE=full
 while [ $# -gt 0 ]; do
   case "$1" in
-    --quick) USERS=20; SPAWN=10; DURATION=20s; PROFILE=quick ;;
+    --quick) USERS=20; SPAWN=10; DURATION=20s; PROFILE=quick ;;   # writes loadtest_quick.json unless --out is given
     --users) USERS="$2"; shift ;;
     --spawn-rate) SPAWN="$2"; shift ;;
     --duration) DURATION="$2"; shift ;;
@@ -26,6 +26,8 @@ while [ $# -gt 0 ]; do
   esac
   shift
 done
+# the quick smoke profile must never overwrite the headline 50-user result that the docs and dashboard cite
+[ -n "$OUT" ] || { [ "$PROFILE" = quick ] && OUT="eval/results/loadtest_quick.json" || OUT="eval/results/loadtest.json"; }
 
 PORT="$("$PY" -c 'import socket; s=socket.socket(); s.bind(("127.0.0.1", 0)); print(s.getsockname()[1])')"
 RUN_DIR="$(mktemp -d "${TMPDIR:-/tmp}/costguard-loadtest.XXXXXX")"
@@ -63,6 +65,9 @@ COSTGUARD_LOADTEST_SAMPLES="$RUN_DIR/samples.json" COSTGUARD_LOADTEST_MODE="$MOD
   --host "http://127.0.0.1:$PORT" --csv "$RUN_DIR/locust" --only-summary --stop-timeout 5 --loglevel WARNING \
   --exit-code-on-error 0 2>&1 | tail -n 30
 
+# Drain the async request log first (GET /v1/stats flushes it). uvicorn re-raises SIGTERM after a graceful shutdown,
+# so the logger's atexit flush never runs and rows still queued at the kill would be missing from server_log.
+curl -fsS "http://127.0.0.1:$PORT/v1/stats?since_s=1" -o /dev/null || true
 cleanup   # stop the proxy before reading its SQLite log
 trap - EXIT
 
@@ -151,7 +156,7 @@ res = {
     "note": ("Mock upstream (fixed %d ms sleep): measures CostGuard's own overhead and throughput, not provider "
              "latency. overhead_ms = CostGuard stage time from the x-costguard-overhead-ms header (total - upstream). "
              "miss_path.client_added_ms = client-observed latency minus the mock sleep, so it also includes HTTP, "
-             "JSON, threadpool queueing and the synchronous request-log write." % lat),
+             "JSON, threadpool queueing and the observability hooks (the request log only enqueues)." % lat),
 }
 out.write_text(json.dumps(res, indent=2))
 print(json.dumps({k: res[k] for k in ("requests", "failure_rate", "throughput_rps", "end_to_end_ms",

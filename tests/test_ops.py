@@ -249,6 +249,22 @@ def test_drift_endpoint_and_gauges(tmp_path):
     assert client.post("/v1/drift/baseline").json()["baseline_source"] == "window"
 
 
+def test_drift_rebaseline_auth(tmp_path, monkeypatch):
+    """POST /v1/drift/baseline: open in keyless dev mode, token-checked when a token is set, closed when caller keys
+    are configured without an admin token (a shared deployment must not let any caller mask a drift alert)."""
+    eng = _engine(tmp_path, [DriftHook(DriftMonitor(window=50, baseline_size=10, min_samples=5))])
+    client = TestClient(create_app(eng))
+    monkeypatch.delenv("COSTGUARD_ADMIN_TOKEN", raising=False)
+    monkeypatch.delenv("COSTGUARD_API_KEYS", raising=False)
+    assert client.post("/v1/drift/baseline").status_code == 200
+    monkeypatch.setenv("COSTGUARD_API_KEYS", "k1:shopnest-support")
+    assert client.post("/v1/drift/baseline").status_code == 403
+    monkeypatch.setenv("COSTGUARD_ADMIN_TOKEN", "s3cret")
+    assert client.post("/v1/drift/baseline").status_code == 403
+    assert client.post("/v1/drift/baseline", headers={"x-costguard-admin-token": "wrong"}).status_code == 403
+    assert client.post("/v1/drift/baseline", headers={"x-costguard-admin-token": "s3cret"}).status_code == 200
+
+
 # ---------------------------------------------------------------- dashboard
 def _load_dashboard():
     spec = importlib.util.spec_from_file_location("costguard_dashboard_app", ROOT / "dashboard" / "app.py")

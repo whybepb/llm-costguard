@@ -12,6 +12,7 @@ Useful PromQL (also in docs/RUNBOOK.md):
 """
 from __future__ import annotations
 
+import hmac
 import logging
 import os
 import re
@@ -288,8 +289,13 @@ def mount(app) -> None:
     def drift_rebaseline(x_costguard_admin_token: Optional[str] = Header(default=None)) -> dict[str, Any]:
         """Freeze the current window as the new baseline (after an intended change, e.g. a kb_version bump)."""
         token = os.environ.get("COSTGUARD_ADMIN_TOKEN")
-        if token and x_costguard_admin_token != token:
-            raise HTTPException(status_code=403, detail="admin token required")
+        if token:
+            if not hmac.compare_digest((x_costguard_admin_token or "").encode(), token.encode()):
+                raise HTTPException(status_code=403, detail="admin token required")
+        elif os.environ.get("COSTGUARD_API_KEYS", "").strip():
+            # caller keys configured = a shared deployment: without an admin token this state-changing endpoint stays
+            # closed, otherwise anyone who can reach the URL could re-baseline drift and mask an alert
+            raise HTTPException(status_code=403, detail="set COSTGUARD_ADMIN_TOKEN to enable drift re-baselining")
         if dh is None:
             raise HTTPException(status_code=404, detail="drift monitoring disabled")
         dh.monitor.freeze_baseline(from_window=True)

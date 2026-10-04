@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-10-04T21:35:19+0530",
-  "git_sha": "ff78999",
+  "generated_at": "2026-10-04T22:11:50+0530",
+  "git_sha": "db5e5b2",
   "profile": "quick",
-  "config_hash": "b4291e45d86e",
+  "config_hash": "b9bbbd4ee512",
   "components": {
     "exact_cache": "InMemoryExactCache",
     "semantic_cache": "SemanticCacheImpl",
@@ -21,293 +21,301 @@
     "client": "locust, same host",
     "machine": "Darwin arm64, Python 3.12.13"
   },
-  "requests": 987,
+  "requests": 1028,
   "failures": 0,
   "failure_rate": 0.0,
-  "throughput_rps": 49.37,
+  "throughput_rps": 51.5,
   "end_to_end_ms": {
-    "p50": 6.88,
-    "p95": 362.67,
-    "p99": 405.87,
-    "n": 988,
-    "mean": 92.49,
-    "max": 461.44
+    "p50": 1.69,
+    "p95": 320.0,
+    "p99": 327.34,
+    "n": 1032,
+    "mean": 78.49,
+    "max": 389.32
   },
   "end_to_end_ms_locust": {
-    "p50": 7.0,
-    "p95": 360.0,
-    "p99": 410.0
+    "p50": 2.0,
+    "p95": 320.0,
+    "p99": 330.0
   },
   "hit_path": {
-    "requests": 740,
+    "requests": 779,
     "client_ms": {
-      "p50": 5.09,
-      "p95": 33.87,
-      "p99": 58.08,
-      "n": 740,
-      "mean": 9.58,
-      "max": 72.29
+      "p50": 1.47,
+      "p95": 3.07,
+      "p99": 8.81,
+      "n": 779,
+      "mean": 1.82,
+      "max": 24.82
     },
     "overhead_ms": {
-      "p50": 0.3,
-      "p95": 1.0,
-      "p99": 6.76,
-      "n": 740,
-      "mean": 0.56,
-      "max": 27.9
+      "p50": 0.1,
+      "p95": 0.5,
+      "p99": 2.71,
+      "n": 779,
+      "mean": 0.23,
+      "max": 6.3
     }
   },
   "miss_path": {
-    "requests": 248,
+    "requests": 253,
     "client_ms": {
-      "p50": 328.65,
-      "p95": 397.85,
-      "p99": 440.26,
-      "n": 248,
-      "mean": 339.87,
-      "max": 461.44
+      "p50": 311.13,
+      "p95": 326.5,
+      "p99": 346.57,
+      "n": 253,
+      "mean": 314.53,
+      "max": 389.32
     },
     "overhead_ms": {
-      "p50": 13.3,
-      "p95": 70.12,
-      "p99": 102.81,
-      "n": 248,
-      "mean": 23.24,
-      "max": 129.5
+      "p50": 4.5,
+      "p95": 19.26,
+      "p99": 33.79,
+      "n": 253,
+      "mean": 8.15,
+      "max": 76.9
     },
     "client_added_ms": {
-      "p50": 28.65,
-      "p95": 97.85,
-      "p99": 140.26,
-      "n": 248,
-      "mean": 39.87,
-      "max": 161.44
+      "p50": 11.13,
+      "p95": 26.5,
+      "p99": 46.57,
+      "n": 253,
+      "mean": 14.53,
+      "max": 89.32
     }
   },
   "overhead_ms_header": {
-    "p50": 0.4,
-    "p95": 37.26,
-    "p99": 73.34,
-    "n": 988,
-    "mean": 6.25,
-    "max": 129.5
+    "p50": 0.2,
+    "p95": 12.8,
+    "p99": 20.38,
+    "n": 1032,
+    "mean": 2.17,
+    "max": 76.9
   },
   "cache_status_mix": {
-    "miss": 155,
-    "bypass": 93,
-    "exact": 536,
-    "semantic": 204
+    "miss": 164,
+    "exact": 677,
+    "bypass": 89,
+    "semantic": 102
   },
   "by_kind": {
     "context": {
-      "requests": 199,
-      "hit_rate": 0.4975,
+      "requests": 193,
+      "hit_rate": 0.4922,
       "client_ms": {
-        "p50": 322.32,
-        "p95": 405.82,
-        "p99": 441.48,
-        "n": 199,
-        "mean": 185.6,
-        "max": 461.44
+        "p50": 311.88,
+        "p95": 324.28,
+        "p99": 330.19,
+        "n": 193,
+        "mean": 163.24,
+        "max": 389.32
       },
       "overhead_ms": {
-        "p50": 13.5,
-        "p95": 73.33,
-        "p99": 107.14,
-        "n": 199,
-        "mean": 22.43,
-        "max": 129.5
+        "p50": 7.9,
+        "p95": 18.56,
+        "p99": 22.34,
+        "n": 193,
+        "mean": 7.18,
+        "max": 76.9
       }
     },
     "novel": {
-      "requests": 115,
+      "requests": 117,
       "hit_rate": 0.0,
       "client_ms": {
-        "p50": 319.57,
-        "p95": 339.62,
-        "p99": 376.96,
-        "n": 115,
-        "mean": 322.34,
-        "max": 395.64
+        "p50": 309.28,
+        "p95": 314.53,
+        "p99": 326.91,
+        "n": 117,
+        "mean": 309.78,
+        "max": 336.33
       },
       "overhead_ms": {
-        "p50": 7.7,
-        "p95": 20.5,
-        "p99": 24.25,
-        "n": 115,
-        "mean": 8.93,
-        "max": 26.3
+        "p50": 3.0,
+        "p95": 5.36,
+        "p99": 11.6,
+        "n": 117,
+        "mean": 3.54,
+        "max": 27.3
       }
     },
     "paraphrase": {
-      "requests": 270,
-      "hit_rate": 0.9074,
+      "requests": 282,
+      "hit_rate": 0.9078,
       "client_ms": {
-        "p50": 5.48,
-        "p95": 320.52,
-        "p99": 385.18,
-        "n": 270,
-        "mean": 39.45,
-        "max": 399.04
+        "p50": 1.48,
+        "p95": 309.27,
+        "p99": 315.52,
+        "n": 282,
+        "mean": 30.41,
+        "max": 326.37
       },
       "overhead_ms": {
-        "p50": 0.3,
-        "p95": 8.9,
-        "p99": 22.22,
-        "n": 270,
-        "mean": 1.6,
-        "max": 28.1
+        "p50": 0.15,
+        "p95": 3.6,
+        "p99": 6.68,
+        "n": 282,
+        "mean": 0.67,
+        "max": 17.2
       }
     },
     "repeat": {
-      "requests": 404,
-      "hit_rate": 0.9802,
+      "requests": 440,
+      "hit_rate": 0.9727,
       "client_ms": {
-        "p50": 5.17,
-        "p95": 45.83,
-        "p99": 320.62,
-        "n": 404,
-        "mean": 16.64,
-        "max": 386.59
+        "p50": 1.46,
+        "p95": 4.43,
+        "p99": 326.76,
+        "n": 440,
+        "mean": 10.62,
+        "max": 358.9
       },
       "overhead_ms": {
-        "p50": 0.3,
-        "p95": 1.18,
-        "p99": 9.95,
-        "n": 404,
-        "mean": 0.63,
-        "max": 20.7
+        "p50": 0.1,
+        "p95": 0.4,
+        "p99": 10.11,
+        "n": 440,
+        "mean": 0.58,
+        "max": 44.5
       }
     }
   },
   "server_log": {
-    "requests": 988,
+    "requests": 1032,
     "latency_ms": {
-      "p50": 0.39,
-      "p95": 346.46,
-      "p99": 379.36,
-      "n": 988,
-      "mean": 82.85,
-      "max": 436.67
+      "p50": 0.19,
+      "p95": 318.01,
+      "p99": 324.3,
+      "n": 1032,
+      "mean": 76.79,
+      "max": 382.12
     },
     "overhead_ms": {
-      "p50": 0.39,
-      "p95": 37.29,
-      "p99": 73.34,
-      "n": 988,
-      "mean": 6.25,
-      "max": 129.55
+      "p50": 0.19,
+      "p95": 12.83,
+      "p99": 20.34,
+      "n": 1032,
+      "mean": 2.17,
+      "max": 76.9
     },
     "overhead_ms_by_cache_status": {
       "bypass": {
-        "p50": 36.03,
-        "p95": 85.43,
-        "p99": 119.7,
-        "n": 93,
-        "mean": 42.3,
-        "max": 129.55
+        "p50": 12.4,
+        "p95": 19.18,
+        "p99": 22.43,
+        "n": 89,
+        "mean": 12.78,
+        "max": 24.05
       },
       "exact": {
-        "p50": 0.26,
-        "p95": 0.8,
-        "p99": 2.39,
-        "n": 536,
-        "mean": 0.36,
-        "max": 8.17
+        "p50": 0.14,
+        "p95": 0.35,
+        "p99": 0.69,
+        "n": 677,
+        "mean": 0.18,
+        "max": 6.34
       },
       "miss": {
-        "p50": 7.86,
-        "p95": 26.82,
-        "p99": 81.76,
-        "n": 155,
-        "mean": 11.8,
-        "max": 98.2
+        "p50": 3.16,
+        "p95": 18.9,
+        "p99": 39.53,
+        "n": 164,
+        "mean": 5.63,
+        "max": 76.9
       },
       "semantic": {
-        "p50": 0.48,
-        "p95": 3.49,
-        "p99": 12.65,
-        "n": 204,
-        "mean": 1.07,
-        "max": 27.92
+        "p50": 0.36,
+        "p95": 3.04,
+        "p99": 3.76,
+        "n": 102,
+        "mean": 0.59,
+        "max": 4.23
       }
     },
     "stage_ms": {
       "compression": {
-        "p50": 1.8,
-        "p95": 1.8,
-        "p99": 1.8,
-        "n": 1,
-        "mean": 1.8,
-        "max": 1.8
+        "p50": 0.79,
+        "p95": 1.53,
+        "p99": 1.62,
+        "n": 5,
+        "mean": 1.01,
+        "max": 1.64
       },
       "context": {
-        "p50": 35.48,
-        "p95": 85.47,
-        "p99": 118.42,
-        "n": 100,
-        "mean": 42.15,
-        "max": 128.82
+        "p50": 12.3,
+        "p95": 19.05,
+        "p99": 23.95,
+        "n": 98,
+        "mean": 12.64,
+        "max": 41.42
       },
       "count": {
-        "p50": 0.14,
-        "p95": 0.51,
-        "p99": 1.41,
-        "n": 988,
-        "mean": 0.21,
-        "max": 7.91
+        "p50": 0.08,
+        "p95": 0.3,
+        "p99": 0.5,
+        "n": 1032,
+        "mean": 0.13,
+        "max": 6.07
       },
       "exact_cache": {
         "p50": 0.0,
-        "p95": 0.01,
+        "p95": 0.0,
         "p99": 0.01,
-        "n": 895,
+        "n": 943,
         "mean": 0.0,
-        "max": 0.08
+        "max": 0.01
+      },
+      "exact_promote": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.01,
+        "n": 102,
+        "mean": 0.0,
+        "max": 0.01
       },
       "exact_write": {
-        "p50": 0.01,
+        "p50": 0.0,
         "p95": 0.01,
-        "p99": 0.02,
-        "n": 155,
-        "mean": 0.01,
-        "max": 0.04
+        "p99": 0.01,
+        "n": 164,
+        "mean": 0.0,
+        "max": 0.02
       },
       "router": {
-        "p50": 0.16,
-        "p95": 0.4,
-        "p99": 1.23,
-        "n": 248,
-        "mean": 0.22,
-        "max": 2.49
+        "p50": 0.14,
+        "p95": 0.28,
+        "p99": 1.68,
+        "n": 253,
+        "mean": 0.2,
+        "max": 5.06
       },
       "semantic_cache": {
-        "p50": 0.21,
-        "p95": 16.01,
-        "p99": 24.32,
-        "n": 359,
-        "mean": 4.08,
-        "max": 33.65
+        "p50": 2.23,
+        "p95": 5.61,
+        "p99": 31.58,
+        "n": 266,
+        "mean": 2.65,
+        "max": 43.66
       },
       "semantic_write": {
-        "p50": 0.15,
-        "p95": 0.3,
-        "p99": 0.65,
-        "n": 155,
-        "mean": 0.19,
-        "max": 4.36
+        "p50": 0.1,
+        "p95": 0.18,
+        "p99": 0.2,
+        "n": 164,
+        "mean": 0.1,
+        "max": 0.2
       },
       "upstream": {
-        "p50": 305.23,
-        "p95": 308.09,
-        "p99": 318.52,
-        "n": 248,
-        "mean": 305.17,
-        "max": 355.89
+        "p50": 305.13,
+        "p95": 305.27,
+        "p99": 305.64,
+        "n": 253,
+        "mean": 304.37,
+        "max": 318.41
       }
     },
     "stage_errors": {},
-    "saved_pct": 75.94
+    "saved_pct": 76.3
   },
-  "note": "Mock upstream (fixed 300 ms sleep): measures CostGuard's own overhead and throughput, not provider latency. overhead_ms = CostGuard stage time from the x-costguard-overhead-ms header (total - upstream). miss_path.client_added_ms = client-observed latency minus the mock sleep, so it also includes HTTP, JSON, threadpool queueing and the synchronous request-log write."
+  "note": "Mock upstream (fixed 300 ms sleep): measures CostGuard's own overhead and throughput, not provider latency. overhead_ms = CostGuard stage time from the x-costguard-overhead-ms header (total - upstream). miss_path.client_added_ms = client-observed latency minus the mock sleep, so it also includes HTTP, JSON, threadpool queueing and the observability hooks (the request log only enqueues)."
 }

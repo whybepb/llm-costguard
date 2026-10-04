@@ -2,7 +2,7 @@
 
 ```bash
 make loadtest                      # = bash loadtest/run.sh        (50 users, 60 s)
-bash loadtest/run.sh --quick       # 20 users, 20 s
+bash loadtest/run.sh --quick       # 20 users, 20 s  (writes eval/results/loadtest_quick.json)
 bash loadtest/run.sh --users 100 --duration 120s --latency-ms 800 --out eval/results/loadtest_800ms.json
 ```
 
@@ -31,7 +31,7 @@ Never point this at Render. The free host is a single instance and can be suspen
 | `end_to_end_ms` | Client-observed latency, exact percentiles over every request. |
 | `overhead_ms_header` | `x-costguard-overhead-ms`: time spent in CostGuard stages, i.e. total minus upstream, as measured inside the engine. |
 | `hit_path` / `miss_path` | The same numbers split by `x-costguard-cache`. A blended p50 hides that hits never touch the provider. |
-| `miss_path.client_added_ms` | Client latency minus the 300 ms mock sleep. Adds HTTP, JSON, threadpool queueing and the synchronous request-log write on top of `overhead_ms`. |
+| `miss_path.client_added_ms` | Client latency minus the 300 ms mock sleep. Adds HTTP, JSON, threadpool queueing and the hook fan-out (metrics, drift, request-log enqueue) on top of `overhead_ms`. |
 | `server_log.stage_ms` | Per-stage p50/p95/p99 from the request log. This is the measured column of the latency budget in `docs/ARCHITECTURE.md`. |
 | `components` | `/health` component status at run time, so every number traces to the stages that were live. |
 
@@ -70,4 +70,4 @@ All five stages were live; `components` in the JSON records them.
 
 - **Throughput vs threads.** The chat endpoint is a sync `def`, so it runs in AnyIO's threadpool (40 threads) on one uvicorn worker. With a 300 ms upstream, pure-miss traffic tops out near 40 / 0.3 s ≈ 133 req/s per worker, whatever the CPU. Cache hits release the thread in a few ms. To scale out, add workers (`--workers N`) or replicas behind a shared Redis/Qdrant cache.
 - **CPU-bound stages.** On the miss path, the stages that burn CPU are the ONNX embedder and the cross-encoder. They are the first to degrade under concurrency: watch `costguard_stage_ms{stage="context"}`.
-- **What sits outside `overhead_ms`.** The core `RequestLogger` writes one SQLite row synchronously after the response is computed, about 0.5 ms per call in a micro-benchmark. That time sits outside `overhead_ms`, but it is included in `client_added_ms`.
+- **What sits outside `overhead_ms`.** The hooks run after the record is complete: Prometheus, drift, and the core `RequestLogger`, which only enqueues the row (a background thread batches the SQLite inserts). That time sits outside `overhead_ms`, but it is included in `client_added_ms`. Rows reach SQLite within ~0.25 s of a pause in traffic; see docs/VERIFICATION.md for the shutdown caveat.

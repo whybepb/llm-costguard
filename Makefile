@@ -1,4 +1,5 @@
 PY ?= ./.venv/bin/python
+PORT ?= 8000
 export PYTHONPATH := $(CURDIR)
 
 .PHONY: test serve serve-mlx dashboard trace ab sweep gate loadtest ci-gate report
@@ -6,11 +7,11 @@ export PYTHONPATH := $(CURDIR)
 test:            ## unit + integration tests (mock backend, no keys)
 	$(PY) -m pytest -q
 
-serve:           ## OpenAI-compatible proxy on :8000 (mock backend)
-	COSTGUARD_BACKEND=mock $(PY) -m uvicorn costguard.server:get_app --factory --port 8000
+serve:           ## OpenAI-compatible proxy on :$(PORT) (mock backend unless COSTGUARD_BACKEND is set)
+	COSTGUARD_BACKEND=$${COSTGUARD_BACKEND:-mock} $(PY) -m uvicorn costguard.server:get_app --factory --port $(PORT)
 
 serve-mlx:       ## same, with real local models (Apple silicon)
-	COSTGUARD_BACKEND=mlx $(PY) -m uvicorn costguard.server:get_app --factory --port 8000
+	COSTGUARD_BACKEND=mlx $(PY) -m uvicorn costguard.server:get_app --factory --port $(PORT)
 
 dashboard:       ## savings dashboard
 	$(PY) -m streamlit run dashboard/app.py
@@ -33,5 +34,5 @@ ci-gate:         ## CI eval gate (replay mode, no keys)
 loadtest:        ## proxy overhead + throughput against the mock upstream
 	bash loadtest/run.sh
 
-report:          ## regenerate README result tables from eval/results/*.json
+report:          ## regenerate docs/RESULTS.md (README tables are pasted from it) from eval/results/*.json
 	$(PY) -m eval.report

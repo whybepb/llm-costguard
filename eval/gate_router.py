@@ -640,7 +640,9 @@ def run(args) -> dict:
     else:
         _write(gate_out, gate)
         wrote_gate = gate_out
-    results["written"] = {"gate": str(wrote_gate) if wrote_gate else None, "results": str(res_out), "items": str(items_out)}
+    # repo-relative, so committed results never carry a local absolute path (/Users/<name>/...)
+    results["written"] = {"gate": _rel(wrote_gate) if wrote_gate else None, "results": _rel(res_out),
+                          "items": _rel(items_out)}
     _write(res_out, results)
 
     log("", args.quiet)
