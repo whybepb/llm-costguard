@@ -5,7 +5,9 @@ yet the two need different answers. Each guard below compares the incoming query
 it matched and returns a rejection reason (a short string) or None. They run only on candidates that
 already cleared the similarity threshold, so their cost (~tens of microseconds) is paid on near-hits only.
 
-  numbers   digits, order/invoice IDs, amounts, dates and number words must match exactly
+  numbers   digits, order/invoice IDs, amounts, dates and number words must match exactly. Currencies are part
+            of an amount ($10 != ₹10), alphanumeric IDs compare whole (AB12345 != CD12345), and the same numbers in
+            different roles are rejected ("from 111 to 222" vs "from 222 to 111")
   negation  a word negated in one query ("don't cancel") appears un-negated in the other ("cancel"),
             or an "un-" antonym pair (subscribe / unsubscribe)
   entities  a small ShopNest lexicon (products, actions, payment methods, account tiers, shipping speeds,
@@ -16,6 +18,8 @@ already cleared the similarity threshold, so their cost (~tens of microseconds) 
 
 These guards are an engineering heuristic of this project, not a published method; the research
 notes found no benchmark for entity/number guards. Their effect is measured in eval/sweep_threshold.py.
+
+`dedup_veto` reuses them, more strictly, for the context stages' near-duplicate removal (docs and sentences).
 """
 from __future__ import annotations
 
@@ -77,9 +81,23 @@ _NUMBER_WORDS = {
     "forty": "40", "fifty": "50", "sixty": "60", "ninety": "90", "hundred": "100", "thousand": "1000",
     "twice": "2x", "half": "0.5", "dozen": "12",
 }
-_NUM_RE = re.compile(r"(?<![a-z])[#$€£₹]?\d[\d,]*(?:[./:-]\d+)*(?:\.\d+)?")
+_NUM_BODY = r"\d[\d,]*(?:[./:-]\d+)*(?:\.\d+)?"
+_NUM_RE = re.compile(r"(?<![a-z])#?" + _NUM_BODY)
 _CODE_RE = re.compile(r"\b(?:[a-z]+-?\d[a-z0-9]*|\d+[a-z]+[a-z0-9]*)\b")
 _WORD_RE = re.compile(r"<[a-z_]+>|[a-z][a-z'-]*[a-z]|[a-z]")
+# an amount keeps its currency: "$10" / "usd 10" / "10 dollars" -> "$10"; "rs. 2,499" / "₹2499" -> "₹2499"
+_CURRENCY = {"$": "$", "us$": "$", "usd": "$", "dollar": "$", "dollars": "$", "bucks": "$",
+             "₹": "₹", "inr": "₹", "rs": "₹", "rs.": "₹", "rupee": "₹", "rupees": "₹",
+             "€": "€", "eur": "€", "euro": "€", "euros": "€", "£": "£", "gbp": "£",
+             "¥": "¥", "jpy": "¥", "yen": "¥"}
+_CUR_CODES = r"usd|inr|eur|gbp|jpy|aud|cad|sgd|aed"
+_CUR_RE = re.compile(
+    r"(?<![a-z0-9])(?P<pre>[$€£₹¥]|(?:us\$|rs\.?|" + _CUR_CODES + r"))\s?(?P<a>" + _NUM_BODY + r")"
+    r"|(?<![a-z0-9#-])(?P<b>" + _NUM_BODY + r")\s?"
+    r"(?P<post>[$€£₹¥]|(?:rs|dollars?|bucks|rupees?|euros?|yen|" + _CUR_CODES + r")\b)")
+# a cue right before a number gives it a role: "from account 111 to account 222" -> 111 is "from", 222 is "to"
+_ROLE_CUES = {"from": "from", "to": "to", "into": "to", "onto": "to", "than": "than"}
+_ROLE_WINDOW = 3                          # at most 2 words between the cue and the number ("from my account 111")
 
 
 def _stem(w: str) -> str:
@@ -393,6 +411,7 @@ class _Analysis:
     un_words: frozenset           # stems of "un-" words (unsubscribe)
     content: frozenset            # stems of uncommon words (candidates for the content guard)
     bag: frozenset                # stems of all non-stopwords (for the lookalike test)
+    num_seq: tuple = ()           # (value, role) for each literal number in text order; role is a cue or ""
 
 
 def _normalise(text: str) -> str:
@@ -400,6 +419,32 @@ def _normalise(text: str) -> str:
     for pat, rep in _CONTRACTIONS:
         t = pat.sub(rep, t)
     return t
+
+
+def _blank(m: re.Match) -> str:
+    return " " * len(m.group(0))
+
+
+_INFINITIVE_TO = _VOLITION | {"how", "able", "me"}      # "want to move 111": an infinitive, not a destination
+
+
+def _number_roles(found: list[tuple[int, str]], text: str) -> tuple:
+    """(value, role) per number, in text order. The role is the nearest cue among the few words before the number."""
+    words = [(m.start(), m.group(0), False) for m in _WORD_RE.finditer(text) if m.group(0) not in _NUMBER_WORDS]
+    seq, back = [], []
+    for _, v, is_num in sorted([(p, v, True) for p, v in found] + words):
+        if not is_num:
+            back.append(v)
+            continue
+        role = ""
+        for k in range(len(back) - 1, max(len(back) - _ROLE_WINDOW, 0) - 1, -1):
+            w = back[k]
+            if w in _ROLE_CUES and not (w == "to" and k and back[k - 1] in _INFINITIVE_TO):
+                role = _ROLE_CUES[w]
+                break
+        seq.append((v, role))
+        back = []
+    return tuple(seq)
 
 
 @lru_cache(maxsize=65536)
@@ -423,31 +468,39 @@ def analyse(text: str) -> _Analysis:
         return " <" + re.sub(r"\W+", "_", name) + "> "
     t = _PLACEHOLDER.sub(_ph, raw)
 
+    # numbers are blanked out with equal-length spaces, so match offsets stay comparable (for num_seq)
+    found: list[tuple[int, str]] = []
+    for m in _CUR_RE.finditer(t):          # the currency is part of the value: $10 != ₹10
+        sym = m.group("pre") or m.group("post")
+        found.append((m.start(), _CURRENCY.get(sym, sym) + (m.group("a") or m.group("b")).replace(",", "").rstrip(".")))
+    t = _CUR_RE.sub(_blank, t)
     for m in _CODE_RE.finditer(t):        # model numbers / SKUs / order codes: ps5, xps13, sn-48213, 5pm
-        code = m.group(0).replace("-", "")
-        digits = re.sub(r"\D", "", code)
-        numbers.add(digits if len(digits) >= 4 else code)   # long IDs compare by digits, short codes as a whole
-    t = _CODE_RE.sub(" ", t)
+        found.append((m.start(), m.group(0).replace("-", "")))   # whole: AB12345 != CD12345
+    t = _CODE_RE.sub(_blank, t)
     for m in _NUM_RE.finditer(t):
-        v = m.group(0).lstrip("#$€£₹").replace(",", "")
+        v = m.group(0).lstrip("#").replace(",", "")
         if v:
-            numbers.add(v.rstrip("."))
-    t_nonum = _NUM_RE.sub(" ", t)
+            found.append((m.start(), v.rstrip(".")))
+    t_nonum = _NUM_RE.sub(_blank, t)
+    numbers.update(v for _, v in found)
 
     # lexicon phrases first (so "credit card" is not also read as bare "card"), then single words
     t_lex = t_nonum
     for pat, group, canon in _LEX_PHRASES:
         if pat.search(t_lex):
             entities.setdefault(group, set()).add(canon)
-            t_lex = pat.sub(" ", t_lex)
+            t_lex = pat.sub(_blank, t_lex)
     words = _WORD_RE.findall(t_nonum)
-    for w in _WORD_RE.findall(t_lex):
+    for m in _WORD_RE.finditer(t_lex):
+        w = m.group(0)
         if w in _NUMBER_WORDS:
             numbers.add(_NUMBER_WORDS[w])
+            found.append((m.start(), _NUMBER_WORDS[w]))
             continue
         for group, canon in _lex_lookup(w):
             entities.setdefault(group, set()).add(canon)
     _context_rules(entities)
+    num_seq = _number_roles(found, t_nonum)
 
     # negation scope (after removing hedges like "I don't know how to")
     t_neg = t_nonum
@@ -479,7 +532,7 @@ def analyse(text: str) -> _Analysis:
                         and w not in _NEG_CUES and w not in _NUMBER_WORDS)
     bag = frozenset(_stem(w) for w in words if w not in _STOP and not w.startswith("<"))
     return _Analysis(frozenset(numbers), {g: frozenset(c) for g, c in entities.items()}, frozenset(negated),
-                     frozenset(plain), un_words, content, bag)
+                     frozenset(plain), un_words, content, bag, num_seq=num_seq)
 
 
 # --------------------------------------------------------------------------------------------- the guards
@@ -488,6 +541,30 @@ def analyse(text: str) -> _Analysis:
 def numbers_guard(a: _Analysis, b: _Analysis) -> Optional[str]:
     if a.numbers != b.numbers:
         return "number_mismatch"
+    return _number_order(a.num_seq, b.num_seq)
+
+
+def _number_order(sa: tuple, sb: tuple) -> Optional[str]:
+    """The same >= 2 numbers in different roles: "from 111 to 222" vs "from 222 to 111".
+
+    A value with a role cue (from / to / into / than) on both sides must have the same cue there. Values without a
+    cue on both sides must keep their relative order, because position is the only evidence of their role. So
+    "to 222 from 111" still matches "from 111 to 222", but "orders 4821 and 4822" vs "orders 4822 and 4821" does not.
+    """
+    va, vb = [v for v, _ in sa], [v for v, _ in sb]
+    if len(va) < 2 or sorted(va) != sorted(vb):
+        return None
+    ra: dict[str, str] = {}
+    rb: dict[str, str] = {}
+    for v, r in sa:
+        ra.setdefault(v, r)
+    for v, r in sb:
+        rb.setdefault(v, r)
+    if any(ra[v] and rb[v] and ra[v] != rb[v] for v in ra):
+        return "number_order_mismatch"
+    loose = {v for v in ra if not (ra[v] and rb[v])}
+    if [v for v in va if v in loose] != [v for v in vb if v in loose]:
+        return "number_order_mismatch"
     return None
 
 
@@ -558,3 +635,33 @@ def check_all(query: str, cached_query: str) -> dict[str, Optional[str]]:
     """Every guard's verdict (for diagnostics and the per-guard breakdown in the sweep)."""
     a, b = analyse(query), analyse(cached_query)
     return {name: fn(a, b) for name, fn in _ORDER}
+
+
+_NEG_TOKEN = re.compile(r"\b(?:" + "|".join(sorted(_NEG_CUES | {"non"})) + r")\b")
+
+
+def dedup_veto(text: str, kept: str) -> Optional[str]:
+    """Why two near-duplicate *statements* (KB sentences, retrieved docs) must both be kept, or None.
+
+    The context stages call this before dropping a lookalike. "You can return electronics within 30 days of delivery
+    for a full refund" and "You cannot return ..." share 12 of 14 words but state opposite policies. It is stricter
+    than `check`, because a dropped fact costs more than a few extra tokens:
+      - polarity compares the count of negation cues with no hedge stripping. The cache treats "I can't log in" as
+        the same question as "log me in", but in policy text "cannot" is the fact;
+      - entities must match exactly within each lexicon group, not just overlap.
+    Not lru-cached: documents are long and arbitrary, unlike queries.
+    """
+    if len(_NEG_TOKEN.findall(_normalise(text))) != len(_NEG_TOKEN.findall(_normalise(kept))):
+        return "negation_mismatch"
+    a, b = _analyse_uncached(text), _analyse_uncached(kept)
+    for group in LEXICON:
+        if a.entities.get(group, frozenset()) != b.entities.get(group, frozenset()):
+            return f"entity_mismatch:{group}"
+    for _, fn in _ORDER:
+        r = fn(a, b)
+        if r:
+            return r
+    return None
+
+
+_analyse_uncached = analyse.__wrapped__

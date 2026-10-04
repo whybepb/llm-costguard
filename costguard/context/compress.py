@@ -9,7 +9,8 @@ is the fraction of tokens to KEEP (0.5 -> about 2x). Two real compressors and a 
   1. Split each `[n]` doc into units: sentences, list items (tied to their "...:" lead-in line) and table rows (tied
      to their header row). Markdown table separator rows are dropped as formatting.
   2. Drop exact and near-duplicate units (word Jaccard >= 0.8 *and* the same numbers, so "1-3 days" never
-     dedups against "3-5 days") and boilerplate ("For more information...", "We value your business...").
+     dedups against "3-5 days", *and* no `guards.dedup_veto`: "can" vs "cannot return" or "Return" vs "Exchange"
+     are different facts) and boilerplate ("For more information...", "We value your business...").
   3. Score the rest by similarity to the query: IDF-weighted term overlap (`lexical`, default), bge-small cosine
      (`embed`) or both (`hybrid`); set `COSTGUARD_HEURISTIC_SCORER`.
   4. Protect any unit that contains a number and matches the query's terms (or repeats a number from the query). It
@@ -43,6 +44,7 @@ from typing import Optional
 
 import numpy as np
 
+from ..cache.guards import dedup_veto
 from ..schemas import CompressResult
 from ..tokens import count_text
 from .optimizer import content_terms, lexical_scores
@@ -232,7 +234,7 @@ class HeuristicCompressor:
 
     def _dedup_and_strip(self, units: list[_Unit]) -> None:
         seen_exact: set = set()
-        kept_sets: list[tuple[frozenset, frozenset]] = []
+        kept_sets: list[tuple[frozenset, frozenset, str]] = []
         for u in units:
             if u.kind in ("title", "verbatim"):
                 continue
@@ -245,11 +247,12 @@ class HeuristicCompressor:
                 continue
             seen_exact.add(key)
             words, nums = frozenset(key.split()), _numbers(u.text)
+            # a lookalike that differs in a number, negation or entity is a different fact, not a duplicate
             if len(words) >= 5 and any(n == nums and len(words & w) / len(words | w) >= self.near_dup
-                                       for w, n in kept_sets):
+                                       and dedup_veto(u.text, t) is None for w, n, t in kept_sets):
                 u.dropped = "near-duplicate"
                 continue
-            kept_sets.append((words, nums))
+            kept_sets.append((words, nums, u.text))
 
     # -- main
     def compress(self, text: str, rate: float, query: Optional[str] = None) -> CompressResult:

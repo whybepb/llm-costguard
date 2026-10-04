@@ -51,7 +51,8 @@ Both stages fail open. If either raises, the pipeline logs `stage_errors[...]` a
    - Otherwise keep docs within `gap` of the best score (default 6.0 logits; `COSTGUARD_RERANK_GAP`).
    - The top-1 doc is always kept.
 3. **Near-duplicate docs** (word-trigram Jaccard >= 0.8 with a better-scored kept doc) are dropped. Overlapping
-   chunkers produce these all the time.
+   chunkers produce these all the time. A lookalike that states a different fact is kept: `guards.dedup_veto`
+   rejects the merge when the two docs differ in a number ("30 days" vs "7 days"), negation or entity (see below).
 4. **Budget.** Whole docs are added in score order while `count_text(format_docs(kept))` (o200k) stays
    <= `context_budget_tokens`. A doc that does not fit is skipped and the next smaller one is tried. Nothing is cut
    mid-sentence. The top-1 doc stays even if it alone exceeds the budget.
@@ -78,7 +79,8 @@ Both stages fail open. If either raises, the pipeline logs `stage_errors[...]` a
    to the header row). Markdown separator rows are dropped as formatting.
 2. Drop exact and near-duplicate units (word Jaccard >= 0.8 **and the same numbers**, so "UPI 1-3 days" is never
    merged with "UPI 3-5 days") and boilerplate patterns ("For more information...", "We value your business...",
-   "reserves the right to modify...").
+   "reserves the right to modify..."). A near-duplicate is also kept when `guards.dedup_veto` finds a different
+   fact (see "Deduplication veto" below).
 3. Score each unit by IDF-weighted overlap with the query's stemmed content terms. A sentence passes half its score
    to the next sentence of the same paragraph, because answers often follow the sentence that matches the question:
    "Once an order has shipped, it cannot be cancelled. **You can either refuse the delivery...**"
@@ -103,6 +105,28 @@ is the default.
   `[1]` (measured: `[1]` becomes `[ ]`).
 - It is lazy-loaded; `load_ms` and `last_ms` are recorded.
 - If llmlingua or torch is missing, it degrades to the heuristic and says so in `method`.
+
+### Deduplication veto (`costguard/cache/guards.py: dedup_veto`)
+
+Word overlap alone cannot tell a duplicate from a contradiction. "You can return electronics within 30 days of
+delivery for a full refund" and "You cannot return ..." share 12 of 14 distinct words (Jaccard 0.86), so the
+compressor dropped the prohibition. The optimiser likewise dropped one of two otherwise identical policies that differed only in "30 days"
+vs "7 days" (review finding #16). Both dedup steps now call `dedup_veto(a, b)` on every pair that clears the
+Jaccard threshold, and keep both units when it returns a reason:
+
+- **Negation:** the count of negation cues differs (`not`, `no`, `never`, `without`, `non-`, ...; `cannot`/`n't` are
+  expanded first). This deliberately skips the semantic cache's hedge rule, which reads "I can't log in" as "help me
+  log in". In a question that is right; in policy text "cannot" is the fact.
+- **Entities:** each lexicon group (product, action, payment, tier, shipping, time, ...) must match exactly. The cache
+  guard only requires the two sets to overlap, but "laptops and phones" vs "laptops and tablets" is a different fact.
+- **Numbers, negation scope and content:** the cache guards, unchanged. This covers currencies, whole IDs and number
+  roles, `un-` antonyms, and a swapped uncommon word such as a city.
+
+Cost and effect: it runs only on pairs that already look like duplicates. It takes about 2 ms per 240-word doc
+(uncached, because documents are long and arbitrary). Over the whole KB (61 chunks, 892 units), the old rule found
+9 near-duplicate units. The veto keeps 2 of them: "tap Return" vs "tap Exchange" (a real fact the old rule erased)
+and two headings. No KB doc pair reaches trigram Jaccard 0.8, so the optimiser's output on the KB is unchanged.
+The trade-off is a few extra tokens whenever near-duplicates differ in wording that the lexicon knows.
 
 ### Only the volatile block, and only above `compression_min_tokens`
 

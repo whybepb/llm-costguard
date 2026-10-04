@@ -7,7 +7,8 @@ This stage re-scores every (query, doc) pair with a local cross-encoder and keep
    If it cannot load, fall back to bge-small bi-encoder cosine, then to lexical overlap, and say so in `note`.
 2. **Dynamic-k.** If the policy gives `min_score`, keep docs scoring >= it (in the active scorer's units). Otherwise
    apply a relative rule: keep docs within `gap` of the best score. The top-1 doc is always kept.
-3. **Near-duplicate docs** (word-shingle Jaccard >= 0.8 with a better-scored kept doc) are dropped.
+3. **Near-duplicate docs** (word-shingle Jaccard >= 0.8 with a better-scored kept doc) are dropped, unless
+   `guards.dedup_veto` finds a different number, negation or entity (a 30-day vs a 7-day policy: keep both).
 4. **Budget.** Fit into `budget_tokens` (o200k count of the formatted `[n] doc` block) by dropping *whole* docs,
    lowest score first. Never truncates mid-sentence. The top-1 doc stays even if it alone exceeds the budget.
 5. **Order.** Best doc first, second-best last, the rest in between ("lost in the middle": models use the start and
@@ -27,6 +28,7 @@ from typing import Callable, Optional, Sequence
 
 import numpy as np
 
+from ..cache.guards import dedup_veto
 from ..config import ROOT
 from ..pipeline import format_docs
 from ..schemas import ContextResult
@@ -293,11 +295,12 @@ class RerankContextOptimizer:
             cand = cand[: self.max_docs]
         n_rule = len(cand)
 
-        # 2. near-duplicate docs: keep the better-scored copy
+        # 2. near-duplicate docs: keep the better-scored copy, unless they differ in a number, negation or entity
         kept, shingles, n_dup = [], [], 0
         for i in cand:
             sh = _shingles(docs[i])
-            if any(jaccard(sh, s) >= self.dedup_threshold for s in shingles):
+            if any(jaccard(sh, s) >= self.dedup_threshold and dedup_veto(docs[i], docs[j]) is None
+                   for j, s in zip(kept, shingles)):
                 n_dup += 1
                 continue
             kept.append(i)

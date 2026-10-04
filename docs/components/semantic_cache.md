@@ -49,7 +49,7 @@ The research brief's references put a deterministic tier first for the same reas
 
 ### Partitioning
 
-The pipeline builds the partition as `tenant | sha256(system prompt)[:8] | kb_version | ctx-or-noctx`. Both tiers only match inside one partition: the memory store keeps one matrix per partition, and Qdrant filters on a `partition` payload.
+The pipeline builds the partition as `tenant | sha256(system prompt) | kb_version | mt<max_tokens> | ctx:<digest of the retrieved docs> or noctx`. Both tiers only match inside one partition: the memory store keeps one matrix per partition, and Qdrant filters on a `partition` payload.
 
 | Part | Why it is in the key |
 |---|---|
@@ -85,7 +85,8 @@ Bi-encoder embeddings put "I want to cancel my order #4821" and "I don't want to
 
 | Guard | Rejects when | Example | Reason string |
 |---|---|---|---|
-| numbers | Digits, IDs (`SN-48213`), amounts, dates or number words differ, or only one side has them | order #4821 vs #4822; 30 vs 60 days | `number_mismatch` |
+| numbers | Digits, IDs (`SN-48213`), amounts, dates or number words differ, or only one side has them. A currency is part of its amount (`$10`, `10 dollars` and `USD 10` are one value; `₹10` and a bare `10` are others). Alphanumeric IDs compare whole. | order #4821 vs #4822; 30 vs 60 days; $10 vs ₹10; AB12345 vs CD12345 | `number_mismatch` |
+| numbers (roles) | Both sides carry the same ≥ 2 numbers, but in different roles. A number preceded by a cue (`from`, `to`/`into`, `than`) must keep that cue. Numbers without a cue on both sides must keep their relative order. | "from account 111 to 222" vs "from 222 to 111"; "move 111 to 222" vs "move 222 to 111" | `number_order_mismatch` |
 | negation | A word negated on one side appears un-negated on the other. Hedges such as "I don't know how to" and "I can't" are stripped first. An `un-` antonym also counts. | "cancel" vs "don't want to cancel"; "with" vs "without the receipt"; subscribe vs unsubscribe | `negation_mismatch` |
 | entities | Both queries name something from the same ShopNest lexicon group, and the two sets are disjoint. Groups: product, action, payment, tier, shipping, time, timing, place, object. | laptops vs phones; refund vs exchange; PayPal vs UPI; express vs standard | `entity_mismatch:<group>` |
 | content | Otherwise near-identical queries each carry a different uncommon word that the lexicon doesn't know | "ship to Nagpur" vs "ship to Indore" | `content_mismatch` |
@@ -93,6 +94,14 @@ Bi-encoder embeddings put "I want to cancel my order #4821" and "I don't want to
 **These guards are our own engineering heuristic, not a published method.** The research notes found no benchmark for entity or number guards. The rules were developed by reading Bitext false hits and false rejections, plus the 28 seed traps in `eval/cache_pairs.py` (`author: "seed"`, AI-written scaffolding, not team-written). Treat the trap pass rate as optimistic. The 6 trap pairs in `eval/data/evalset/seed.jsonl`, written separately by the eval workstream (also AI-written seed rows), are the cleaner held-out check, and all 6 are caught. The team's hand-written trap pairs are the real test once they land.
 
 If the best candidate is vetoed, the cache tries the next-best candidate above τ. A query about order #4822 can therefore still hit a cached #4822 answer when a cached #4821 answer scores slightly higher.
+
+**Currency, IDs and number roles (review finding #11).** Until this change the numbers guard compared a set of bare values. It stripped currency symbols, reduced long alphanumeric IDs to their digits, and ignored order. So `$10` vs `₹10`, `AB12345` vs `CD12345`, and "from account 111 to 222" vs "from 222 to 111" passed every guard. The trade-offs of the stricter rule:
+
+- **One-sided currency is a mismatch.** `$10` vs `10` is rejected. A currency word attaches only to the amount it touches, so "500 and 1000 rupee notes" (`500`, `₹1000`) does not match "500 and 1000 notes".
+- **IDs compare whole.** `SN-48213` and `sn48213` still match, but `SN-48213` vs a bare `48213` no longer does.
+- **Role cues decide reordering, not word order.** "to 222 from 111" still matches "from 111 to 222". Without cues, position is the only evidence of a role. So "orders 4821 and 4822" vs "orders 4822 and 4821", or "return 2 items after 30 days" vs "after 30 days, return 2 items", are rejected. That is a false rejection: one extra upstream call, never a wrong answer.
+
+Measured on `pairs_v1.jsonl` (`check_all`, pure Python, all 5,048 pairs, no similarity filter), the change adds 10 numbers-guard rejections, all on QQP true duplicates. Nine are one-sided rupee amounts in demonetisation questions, and one is the reordered "Galaxy S7 vs iPhone 6S". QQP rejections went from 168 / 83 (non-duplicate / duplicate) to 168 / 93. Bitext (325 / 1), trap (all 34 still caught, 7 by the numbers guard) and seed-paraphrase (0 of 14 blocked) verdicts are unchanged, because Bitext pairs keep `{{...}}` placeholders. Over all 155,961 query pairs of `eval/data/trace_v1.jsonl` (`₹` amounts and `SN-` IDs used consistently), no guard verdict changes, so trace hit rates are unaffected. The sweep tables below predate the change. In the *filled* rendering, the label (`eval/cache_pairs.specifics`) ignores the currency. A `$49.99` vs `₹49.99` veto there therefore counts as a "false reject" although it is correct. 372 of the 26,872 Bitext templates carry `{{Currency Symbol}}`.
 
 ### TTL and invalidation
 
