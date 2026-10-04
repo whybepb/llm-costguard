@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "created": "2026-10-04T22:29:34+0530",
+  "created": "2026-10-04T22:51:47+0530",
   "margin": 5.0,
   "min_n": 30,
   "min_saving": 0.0,
@@ -19,7 +19,9 @@
     "cheap": "gpt-5-nano"
   },
   "data_source": "bitext-sample:bitext/Bitext-customer-support-llm-chatbot-training-dataset+kb-seed",
-  "policy_hash": "b9bbbd4ee512",
+  "policy_hash": "87ebe8de0eea",
+  "provider_prompt_cache": null,
+  "min_judge_coverage": 0.95,
   "allowed": [],
   "expected_routing_savings_if_deployed": 0.0,
   "traffic_source": "trace_v1",
@@ -28,6 +30,9 @@
       "allow": false,
       "n": 44,
       "n_items": 47,
+      "n_routable": 44,
+      "judge_coverage": 1.0,
+      "n_unjudged": 0,
       "hard_share": 0.064,
       "diff": -15.34,
       "ci": [
@@ -43,6 +48,8 @@
         "cheap_wins": 3,
         "ties": 33,
         "strong_wins": 8,
+        "errors": 0,
+        "coverage": 1.0,
         "non_inferior_rate": 0.8182,
         "non_inferior_ci": [
           0.6804,
@@ -69,6 +76,9 @@
       "allow": false,
       "n": 49,
       "n_items": 51,
+      "n_routable": 49,
+      "judge_coverage": 1.0,
+      "n_unjudged": 0,
       "hard_share": 0.039,
       "diff": -16.33,
       "ci": [
@@ -84,6 +94,8 @@
         "cheap_wins": 3,
         "ties": 32,
         "strong_wins": 14,
+        "errors": 0,
+        "coverage": 1.0,
         "non_inferior_rate": 0.7143,
         "non_inferior_ci": [
           0.5759,
@@ -110,6 +122,9 @@
       "allow": false,
       "n": 11,
       "n_items": 11,
+      "n_routable": 11,
+      "judge_coverage": 1.0,
+      "n_unjudged": 0,
       "hard_share": 0.0,
       "diff": -13.64,
       "ci": [
@@ -125,6 +140,8 @@
         "cheap_wins": 0,
         "ties": 8,
         "strong_wins": 3,
+        "errors": 0,
+        "coverage": 1.0,
         "non_inferior_rate": 0.7273,
         "non_inferior_ci": [
           0.4344,
@@ -151,6 +168,9 @@
       "allow": false,
       "n": 48,
       "n_items": 49,
+      "n_routable": 48,
+      "judge_coverage": 1.0,
+      "n_unjudged": 0,
       "hard_share": 0.02,
       "diff": -9.38,
       "ci": [
@@ -166,6 +186,8 @@
         "cheap_wins": 1,
         "ties": 37,
         "strong_wins": 10,
+        "errors": 0,
+        "coverage": 1.0,
         "non_inferior_rate": 0.7917,
         "non_inferior_ci": [
           0.6574,
@@ -192,6 +214,9 @@
       "allow": false,
       "n": 47,
       "n_items": 49,
+      "n_routable": 47,
+      "judge_coverage": 1.0,
+      "n_unjudged": 0,
       "hard_share": 0.041,
       "diff": -24.47,
       "ci": [
@@ -207,6 +232,8 @@
         "cheap_wins": 1,
         "ties": 33,
         "strong_wins": 13,
+        "errors": 0,
+        "coverage": 1.0,
         "non_inferior_rate": 0.7234,
         "non_inferior_ci": [
           0.5824,
@@ -233,6 +260,9 @@
       "allow": false,
       "n": 41,
       "n_items": 44,
+      "n_routable": 41,
+      "judge_coverage": 1.0,
+      "n_unjudged": 0,
       "hard_share": 0.068,
       "diff": -17.07,
       "ci": [
@@ -248,6 +278,8 @@
         "cheap_wins": 1,
         "ties": 30,
         "strong_wins": 10,
+        "errors": 0,
+        "coverage": 1.0,
         "non_inferior_rate": 0.7561,
         "non_inferior_ci": [
           0.6066,
@@ -274,6 +306,9 @@
       "allow": false,
       "n": 9,
       "n_items": 9,
+      "n_routable": 9,
+      "judge_coverage": 1.0,
+      "n_unjudged": 0,
       "hard_share": 0.0,
       "diff": -8.33,
       "ci": [
@@ -289,6 +324,8 @@
         "cheap_wins": 0,
         "ties": 7,
         "strong_wins": 2,
+        "errors": 0,
+        "coverage": 1.0,
         "non_inferior_rate": 0.7778,
         "non_inferior_ci": [
           0.4526,
@@ -315,6 +352,9 @@
       "allow": false,
       "n": 38,
       "n_items": 44,
+      "n_routable": 38,
+      "judge_coverage": 1.0,
+      "n_unjudged": 0,
       "hard_share": 0.136,
       "diff": -30.26,
       "ci": [
@@ -330,6 +370,8 @@
         "cheap_wins": 3,
         "ties": 22,
         "strong_wins": 13,
+        "errors": 0,
+        "coverage": 1.0,
         "non_inferior_rate": 0.6579,
         "non_inferior_ci": [
           0.4989,
@@ -389,16 +431,13 @@
   "estimate": {
     "items": 304,
     "generations_total": 608,
-    "generations_new": {
-      "strong": 304,
-      "cheap": 304
-    },
-    "generations_cached": 0,
+    "generations_new": {},
+    "generations_cached": 608,
     "judge_calls_upper_bound": 1216,
-    "usd_generation_upper_bound": 0.5028,
-    "usd_generation_typical": 0.3122,
+    "usd_generation_upper_bound": 0.0,
+    "usd_generation_typical": 0.0,
     "usd_judge_upper_bound": 0.5323,
-    "usd_total_upper_bound": 1.0351
+    "usd_total_upper_bound": 0.5323
   },
   "spend": {
     "generation_usd_list_price": 0.19864,
@@ -408,11 +447,10 @@
       "stats": {
         "grades": 608,
         "calls": 1216,
-        "new_calls": 1216,
         "pairwise": 304,
         "position_inconsistent": 202
       },
-      "cost_new_usd": 0.332806,
+      "cost_new_usd": 0.0,
       "cost_all_usd": 0.332806
     }
   },
@@ -494,12 +532,12 @@
     "  Prompt caching: minimum cacheable prefix 1024 (strong) vs 1024 (cheap) tokens. With a 3,000-token cached prefix the saving per downshifted request drops to 92%. Today's system prompt is ~110 tokens, below both minimums, so neither tier caches it yet.",
     "  Other configured pairs: anthropic: claude-haiku-4.5/claude-sonnet-5.5 = 50% -> saves 50%; mock: gpt-5-nano/gpt-5.4-mini = 8% -> saves 92%; mlx: gpt-5-nano/gpt-5.4-mini = 8% -> saves 92%; openai: gpt-5-nano/gpt-5.4-mini = 8% -> saves 92%; gemini: gemini-2.5-flash-lite/gemini-2.5-flash = 21% -> saves 79%"
   ],
-  "seconds": 2374.5,
+  "seconds": 9.1,
   "args": {
     "backend": "mlx",
     "dry_run": false,
     "yes": false,
-    "replay": false,
+    "replay": true,
     "limit": null,
     "data": null,
     "source": "bitext+kb",
@@ -514,6 +552,7 @@
     "min_saving": 0.0,
     "bootstrap": 2000,
     "cassette": null,
+    "provider_prompt_cache": false,
     "gate_out": null,
     "results_out": null,
     "force": false,
