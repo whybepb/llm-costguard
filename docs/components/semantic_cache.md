@@ -41,7 +41,7 @@ Every lookup fills `SemanticHit.similarity` and `neighbor_query`, even on a miss
 
 ### Why the exact tier comes first
 
-- **It is lossless.** The key covers the partition, the normalised query and a hash of the retrieved context, so a hit can never be a different question.
+- **It is nearly lossless.** The key covers the partition (tenant, system prompt, KB version, `max_tokens`, retrieved context) and the normalised query, so a hit differs from the original question at most in case, whitespace or trailing punctuation. Entries promoted from a semantic hit are re-checked against the current mode's τ before being served as exact.
 - **It costs almost nothing.** One dict lookup takes about 1 µs; the semantic tier pays for an embedding (about 2–5 ms).
 - **It catches a real share of traffic.** In the Bitext cache simulation, 10–24% of requests (depending on τ and rendering) were served from a cached query with identical text. Like every Bitext hit rate, read this as an upper bound (section 3).
 
