@@ -3,7 +3,8 @@
   1 exact cache -> 2 semantic cache -> 3 context rerank/trim -> 4 compression -> 5 model router -> 6 upstream call
   -> 7 cache write-back -> 8 one TraceRecord (cost, baseline cost, savings, latency breakdown)
 
-Every optional stage fails open: if it raises, the request continues un-optimised and the error is logged.
+Every optional stage fails open: if it raises, its input passes through unchanged and the error is logged; after any
+stage error the router is skipped and the request goes to the strong tier.
 The system prompt is never modified (keeps provider prefix-caching intact); only retrieved context is trimmed/compressed.
 """
 from __future__ import annotations
@@ -21,10 +22,16 @@ from .schemas import (CacheEntry, ChatMessage, ChatRequest, Completion, RouteDec
 from .tokens import count_text
 
 TIERS = ("strong", "cheap")
+TRUNCATED = ("length", "max_tokens")   # finish reasons of a cut-off answer (OpenAI / Anthropic): never cached
 
 
 def _h(s: str, n: int = 12) -> str:
     return hashlib.sha256(s.encode()).hexdigest()[:n]
+
+
+def context_digest(docs: list[str]) -> str:
+    """Identity of the supplied context, independent of doc order: sha256 over the sorted per-doc sha256 digests."""
+    return _h("\n".join(sorted(_h(d.strip(), 64) for d in docs)), 64)
 
 
 def normalize_query(q: str) -> str:
@@ -77,9 +84,11 @@ class CostGuard:
         t0 = time.perf_counter()
         opts = req.costguard
         tcfg = self.policy.tenant(opts.tenant)
-        requested_mode = opts.mode if (opts.mode and tcfg.get("allow_mode_override", True)) else None
+        allow_override = tcfg.get("allow_mode_override", True)
+        requested_mode = opts.mode if (opts.mode and allow_override) else None
         mode_name, mp = self.policy.mode(requested_mode or tcfg.get("mode"))
-        requested = req.model if req.model in TIERS else "strong"
+        # asking for the cheap tier is an override too: a locked tenant is routed as if it asked for strong
+        requested = "cheap" if (req.model == "cheap" and allow_override) else "strong"
         max_tokens = req.max_tokens or self.policy.default_max_tokens
 
         sys_msgs = [m for m in req.messages if m.role == "system"]
@@ -113,7 +122,10 @@ class CostGuard:
         ccfg = self.policy.cache
         cacheable = (not opts.no_cache and req.temperature <= float(ccfg.get("max_temperature", 0.3))
                      and not (ccfg.get("single_turn_only", True) and history))
-        partition = f"{opts.tenant}|{_h(system, 8)}|{self.policy.kb_version}|{'ctx' if docs else 'noctx'}"
+        # full sha256 of the system prompt; max_tokens (a shorter limit gives a shorter answer); the context digest
+        # (the same question over different documents can need a different answer)
+        partition = (f"{opts.tenant}|{_h(system, 64)}|{self.policy.kb_version}|mt{max_tokens}|"
+                     f"{'ctx:' + context_digest(docs) if docs else 'noctx'}")
         exact_key = _h(partition + "\x00" + normalize_query(query) + "\x00" + _h(orig_block), 32)
         caching_on = mp.exact_cache or mp.semantic_cache
         rec.cache_status = "miss" if (caching_on and cacheable) else ("bypass" if caching_on else "disabled")
@@ -121,7 +133,7 @@ class CostGuard:
         # 1. exact cache
         if mp.exact_cache and cacheable:
             entry = timed("exact_cache", lambda: self.exact.get(exact_key))
-            if entry is not None and self._entry_ok(entry, mode_name):
+            if entry is not None and self._entry_ok(entry, mode_name) and self._promoted_ok(entry, mp):
                 return self._serve_cached(rec, entry, "exact", t0)
 
         # 2. semantic cache
@@ -131,8 +143,11 @@ class CostGuard:
                 rec.cache_similarity, rec.cache_neighbor, rec.cache_guard = hit.similarity, hit.neighbor_query, hit.guard_rejected
                 if hit.entry is not None:
                     if self._entry_ok(hit.entry, mode_name):
-                        if mp.exact_cache:  # promote: later verbatim repeats become cheap exact hits
-                            timed("exact_promote", lambda: self.exact.put(exact_key, hit.entry))
+                        if mp.exact_cache:  # promote: later verbatim repeats become cheap exact hits; the copy
+                            # keeps its similarity so a stricter mode re-checks it against its own tau (_promoted_ok)
+                            md = {**hit.entry.metadata, "promoted_similarity": float(hit.similarity or 0.0)}
+                            promoted = hit.entry.model_copy(update={"metadata": md})
+                            timed("exact_promote", lambda: self.exact.put(exact_key, promoted))
                         return self._serve_cached(rec, hit.entry, "semantic", t0)
                     rec.cache_guard = "tier_mismatch"
 
@@ -146,16 +161,19 @@ class CostGuard:
         block = format_docs(sent_docs)
 
         # 4. compression (retrieved context only; never the system prompt or the question)
-        if block and mp.compression and count_text(block) >= mp.compression_min_tokens:
-            cr = timed("compression", lambda: self.compressor.compress(block, mp.compression_rate, query))
+        if block and mp.compression:  # the eligibility count is inside timed() too: a tokenizer can raise
+            cr = timed("compression", lambda: self.compressor.compress(block, mp.compression_rate, query)
+                       if count_text(block) >= mp.compression_min_tokens else None)
             if cr is not None and cr.text.strip():
                 rec.compression_ratio = round(cr.tokens_before / max(1, cr.tokens_after), 3)
                 rec.compression_method = cr.method
                 block = cr.text
 
-        # 5. route
+        # 5. route (fail safe: after any stage error, don't add cheap-tier risk on top)
         decision = RouteDecision(alias=requested, reason="router-off")
-        if mp.router:
+        if rec.stage_errors:
+            decision = RouteDecision(alias="strong", reason="fail-safe:stage-error")
+        elif mp.router:
             rin = RouteInput(query=query, category=opts.category, input_tokens=rec.input_tokens_original,
                              has_context=bool(docs), context_docs=len(docs), history_turns=len(history),
                              requested_alias=requested)
@@ -190,10 +208,11 @@ class CostGuard:
         rec.upstream_latency_ms = comp.latency_ms
 
         # 7. write-back
-        if cacheable and caching_on and comp.text.strip() and comp.finish_reason != "error":
+        if cacheable and caching_on and comp.text.strip() and comp.finish_reason not in ("error", *TRUNCATED):
             entry = CacheEntry(entry_id=rec.request_id, query_text=query, response_text=comp.text,
                                model_alias=rec.model_used, input_tokens=rec.input_tokens_original,
-                               output_tokens=comp.usage.output_tokens, metadata={"partition": partition})
+                               output_tokens=comp.usage.output_tokens,
+                               metadata={"partition": partition, "finish_reason": comp.finish_reason})
             if mp.exact_cache:
                 timed("exact_write", lambda: self.exact.put(exact_key, entry))
             if mp.semantic_cache:
@@ -219,6 +238,13 @@ class CostGuard:
         # quality mode never serves an answer that a cheaper tier produced
         return not (mode_name == "quality" and entry.model_alias != "strong")
 
+    @staticmethod
+    def _promoted_ok(entry: CacheEntry, mp) -> bool:
+        # an exact entry promoted from a semantic hit is only as good as that hit: this mode must use semantic
+        # caching and its tau must accept the recorded similarity (else fall through to the semantic lookup)
+        sim = entry.metadata.get("promoted_similarity")
+        return sim is None or (mp.semantic_cache and sim >= mp.tau)
+
     def _serve_cached(self, rec: TraceRecord, entry: CacheEntry, kind: str, t0: float) -> tuple[Completion, TraceRecord]:
         from .schemas import Usage
         rec.cache_status, rec.cache_entry_id = kind, entry.entry_id
@@ -232,6 +258,7 @@ class CostGuard:
         rec.latency_ms = (time.perf_counter() - t0) * 1000
         rec.overhead_ms = rec.latency_ms
         comp = Completion(text=entry.response_text, model=f"cache:{entry.model_alias}", usage=Usage(),
-                          latency_ms=rec.latency_ms, raw={"cache": kind, "entry_id": entry.entry_id})
+                          latency_ms=rec.latency_ms, finish_reason=str(entry.metadata.get("finish_reason") or "stop"),
+                          raw={"cache": kind, "entry_id": entry.entry_id})
         self._emit(rec)
         return comp, rec

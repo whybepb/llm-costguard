@@ -41,7 +41,7 @@ def _build(name: str, settings: Settings, policy) -> tuple[Optional[Any], str]:
 def build_engine(settings: Optional[Settings] = None, *, with_logger: bool = True,
                  skip: tuple[str, ...] = ()) -> CostGuard:
     settings = settings or Settings.from_env()
-    policy = load_policy(settings.policy_path)
+    policy = load_policy(settings.policy_path, settings.prices_path)
     prices = PriceBook(settings.prices_path, policy.billing_for(settings.backend))
     provider = make_provider(settings)
     built, status = {}, {}

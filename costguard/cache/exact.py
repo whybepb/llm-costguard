@@ -1,9 +1,11 @@
 """Tier 1: exact-match response cache.
 
-The engine builds the key (pipeline.py): sha256 over partition (tenant | system-prompt hash | kb_version | ctx),
-the normalised query (lower-cased, whitespace collapsed, trailing punctuation dropped) and a hash of the
-retrieved context. So a hit here can never be a *different* question: it is lossless, costs one dict lookup
-(~1 µs) and runs before the semantic tier, which costs an embedding (~2-5 ms) and can be wrong.
+The engine builds the key (pipeline.py): sha256 over partition (tenant | system-prompt sha256 | kb_version |
+max_tokens | context digest), the normalised query (lower-cased, whitespace collapsed, trailing punctuation dropped)
+and a hash of the retrieved context. So a direct hit is the same question up to that normalisation (case-only
+differences share a key); semantic hits promoted here carry their similarity and the engine re-checks it against the
+current mode's tau. It costs one dict lookup (~1 µs) and runs before the semantic tier, which costs an embedding
+(~2-5 ms) and can be wrong.
 
 In-process, thread-safe, TTL + LRU bounded. A multi-replica deployment would swap this for Redis behind the
 same three-method interface (`ExactCache`).

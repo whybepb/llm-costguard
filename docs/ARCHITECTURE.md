@@ -87,8 +87,8 @@ flowchart LR
 |---|---|---|---|---|
 | — | **Gateway** | FastAPI + uvicorn; OpenAI-compatible `POST /v1/chat/completions`, `/health`, `/v1/stats` | A drop-in proxy is the most convincing "no code change" demo; FastAPI gives schema validation for free | `costguard/server.py` |
 | — | **Tenancy** | Caller API key → tenant + mode (`COSTGUARD_API_KEYS`, `policy.yaml: tenants`) | Body fields come from trusted internal callers; a key, not the body, decides policy | `costguard/server.py`, `configs/policy.yaml` |
-| 1 | **Exact cache** | In-process dict, TTL 7 d, LRU 50k entries. Key = sha256(partition, normalised query, context hash) | Zero false-hit risk, ~1 µs. Redis behind the same 3-method interface when there are several replicas | `costguard/cache/exact.py`, [semantic_cache.md](components/semantic_cache.md) |
-| 2 | **Semantic cache** | fastembed `BAAI/bge-small-en-v1.5` (ONNX, CPU, local) + brute-force numpy or Qdrant; partition = tenant \| system-prompt hash \| kb_version \| ctx | Local embeddings: $0, no vendor call, τ calibrated on this exact model | `costguard/cache/semantic.py`, [semantic_cache.md](components/semantic_cache.md) |
+| 1 | **Exact cache** | In-process dict, TTL 7 d, LRU 50k entries. Key = sha256(partition, normalised query, context hash) | No paraphrase matching, ~1 µs. A hit needs the same normalised query (lower-cased, so questions that differ only in case share a key), partition and context. A semantic hit promoted into this tier is served only if its similarity clears the current mode's τ, and truncated answers are never stored. Redis behind the same 3-method interface when there are several replicas | `costguard/cache/exact.py`, [semantic_cache.md](components/semantic_cache.md) |
+| 2 | **Semantic cache** | fastembed `BAAI/bge-small-en-v1.5` (ONNX, CPU, local) + brute-force numpy or Qdrant; partition = tenant \| sha256(system prompt) \| kb_version \| `mt<max_tokens>` \| `ctx:<digest>` or `noctx` (digest = sha256 over the sorted per-doc sha256s of the supplied context, so doc order doesn't matter) | Local embeddings: $0, no vendor call, τ calibrated on this exact model | `costguard/cache/semantic.py`, [semantic_cache.md](components/semantic_cache.md) |
 | 2a | **Hit guards** | Deterministic checks: numbers/IDs, negation, entity lexicon, content-word fallback | A bi-encoder scores "cancel order #4821" ≈ "don't cancel #4822"; a cheap veto beats raising τ for everyone | `costguard/cache/guards.py`, [semantic_cache.md](components/semantic_cache.md) |
 | 3 | **Context optimiser** | Cross-encoder `Xenova/ms-marco-MiniLM-L-6-v2` (fastembed ONNX) → dynamic-k → drop whole docs to budget → best-first/second-best-last order | Reranking + dynamic-k beats token dropping on retrieved context; whole docs keep claims with their qualifiers | `costguard/context/optimizer.py`, [context_and_compression.md](components/context_and_compression.md) |
 | 4 | **Compressor** | Query-aware extractive (sentence/table-row units, protects numbers). LLMLingua-2 only offline | Fits the free host (Render free: 512 MB RAM); LLMLingua-2 peaked at 1.6 GB RSS (mBERT) / 4.1 GB (xlm-roberta-large) in `compression_eval.json` | `costguard/context/compress.py`, [context_and_compression.md](components/context_and_compression.md) |
@@ -114,19 +114,20 @@ flowchart LR
    - `no_cache` is not set.
 
    Otherwise the cache is bypassed.
-3. **Exact cache.** Hash the partition, normalised query and context. A hit returns now with cost $0 and a strong-tier baseline.
+3. **Exact cache.** Hash the partition, normalised query and context. A hit returns now with cost $0 and a strong-tier baseline. An entry promoted from a semantic hit keeps its similarity and is served only if that clears the current mode's τ; otherwise the request falls through to step 4.
 4. **Semantic cache.** Embed the query and search its partition. Walk the candidates with similarity ≥ τ(mode); serve the first one that every guard accepts. Always log the best similarity and the guard verdict, including on a miss.
 5. **Context optimiser.** Rerank the retrieved docs and keep the ones the question needs, within `context_budget_tokens(mode)`.
 6. **Compressor.** Only when the context block is at least `compression_min_tokens`. It touches retrieved context only; the system prompt stays byte-stable, so Anthropic prompt caching on the system prefix keeps working.
 7. **Router.**
    - Strong if anything looks hard.
+   - A client-requested cheap tier (`model="cheap"`) counts only for tenants that allow overrides.
    - Cheap only if the category's gate entry says `allow` (`gated`), or nothing looks hard (`aggressive`).
    - If the cheap tier fails, retry once on strong.
 8. **Upstream call.** Bill from the provider's returned usage: input, output, cache reads and cache writes.
-9. **Write-back.** Store the answer in both caches, with no-store on errors or empty answers.
+9. **Write-back.** Store the answer in both caches, with no-store on errors, empty answers or truncated answers (`finish_reason` `length` / `max_tokens`).
 10. **Record.** One TraceRecord: cost, baseline cost, savings, per-stage timings, stage errors, config hash. Response headers: `x-costguard-cache`, `-similarity`, `-route`, `-cost-usd`, `-baseline-cost-usd`, `-saved-usd`, `-overhead-ms`, `-config-hash`, `-request-id`.
 
-**Every optional stage fails open.** If it raises, the error lands in `stage_errors` and `costguard_stage_errors_total`, and the request continues un-optimised.
+**Every optional stage fails open.** If it raises, the error lands in `stage_errors` and `costguard_stage_errors_total`, and that stage passes its input through unchanged. After any stage error before routing, the router is skipped and the request goes to the strong tier (`route_reason = fail-safe:stage-error`).
 
 ### Latency budget per stage
 
@@ -156,7 +157,7 @@ Budgets are targets set from the non-functional requirements. The measured colum
 ### Functional
 
 1. An OpenAI-compatible `POST /v1/chat/completions`. Drop-in: only `base_url` changes, plus a caller key.
-2. An exact-match cache, then a semantic cache with a per-mode threshold τ, deterministic hit guards and tenant/system-prompt/KB-version partitions.
+2. An exact-match cache, then a semantic cache with a per-mode threshold τ, deterministic hit guards and tenant/system-prompt/KB-version/max-tokens/context partitions.
 3. Context rerank plus whole-document trimming to a per-mode token budget. Compression of the retrieved-context block only.
 4. Strong → cheap model downshift, only for categories that passed the offline eval gate.
 5. Modes `off`, `quality`, `balanced` and `economy`, plus per-tenant policy. A kill switch per tenant and per lever.

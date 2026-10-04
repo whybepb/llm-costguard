@@ -4,7 +4,7 @@
 **Deployment model, service-side:** CostGuard is a gateway the *operator* runs between its own backend services and the LLM provider.
 - End users never call it, and the savings land on the operator's LLM bill.
 - Tenant and mode come from the caller's API key (`COSTGUARD_API_KEYS`, per-tenant policy in `configs/policy.yaml`).
-- Body fields are hints from trusted internal callers. Mode overrides are honoured only for tenants that allow them.
+- Body fields are hints from trusted internal callers. Mode overrides and a requested cheap tier (`model="cheap"`) are honoured only for tenants that allow overrides.
 
 **Domain:** customer support for *ShopNest*, a fictional online store selling electronics, home goods and apparel.
 - Workload trace: public customer-support data (Bitext) plus questions about the store-policy knowledge base, which carry retrieved context.
@@ -46,7 +46,10 @@ Each stage module exposes a builder that `costguard/factory.py` imports by name,
 | Observability hooks | `costguard/obs/hooks.py` | `build_hooks(settings, policy) -> list[callable(TraceRecord)]` | Must never raise into serving |
 | Prometheus | `costguard/obs/metrics.py` | `mount(app)` adds `GET /metrics` | |
 
-**Partitions:** `partition` strings look like `tenant|syshash|kb_version|ctx-or-noctx`. Never return an entry from a different partition.
+**Partitions:** `partition` strings look like `tenant|syshash|kb_version|mt<max_tokens>|ctx:<digest>` (or `...|noctx` without context).
+- `syshash` is the full sha256 of the system prompt; `max_tokens` is the effective limit.
+- `<digest>` is the sha256 over the sorted per-doc sha256s of the supplied context, so doc order doesn't matter.
+- Never return an entry from a different partition.
 
 **Mode thresholds:** these live in `configs/policy.yaml` (`tau`, `context_budget_tokens`, `compression_rate`, `router_policy`). Calibration scripts should *write their recommendation* to `eval/results/*.json` and print it. The coordinator updates `policy.yaml`.
 

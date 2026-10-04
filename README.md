@@ -10,7 +10,7 @@ CostGuard runs **service-side**. The operator puts it between its own backend se
 4. **Compressor:** extractive compression of the context block. The system prompt is never touched.
 5. **Router:** sends a request to the cheap tier only if the request is not hard *and* its category passed an offline eval gate.
 
-Every stage fails open. A broken stage is skipped and logged, and the request still gets the full prompt on the strong tier. Every request is logged as exactly one `TraceRecord`, which feeds SQLite, Prometheus, drift checks and, optionally, Langfuse.
+Every stage fails open. A broken stage is skipped and its error is logged; its input passes through unchanged, so any trimming an earlier stage already did is kept. After a stage error the router is skipped and the request goes to the strong tier. Every request is logged as exactly one `TraceRecord`, which feeds SQLite, Prometheus, drift checks and, optionally, Langfuse.
 
 **Business objective:** cut ShopNest's support-assistant LLM bill by **≥ 30 %** while keeping **≥ 95 %** of baseline answer quality, measured on a frozen request trace. ShopNest is a fictional online store.
 

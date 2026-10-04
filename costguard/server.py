@@ -32,12 +32,17 @@ def _pct(xs: list[float], q: float) -> Optional[float]:
 
 
 def _api_keys() -> dict[str, str]:
-    """COSTGUARD_API_KEYS="key1:tenantA,key2:tenantB". Empty -> open dev mode (single 'default' tenant)."""
-    out = {}
-    for pair in filter(None, (os.environ.get("COSTGUARD_API_KEYS", "")).split(",")):
-        k, _, t = pair.partition(":")
-        if k.strip() and t.strip():
-            out[k.strip()] = t.strip()
+    """COSTGUARD_API_KEYS="key1:tenantA,key2:tenantB". Empty -> open dev mode (single 'default' tenant).
+    Set but malformed -> ValueError: a typo must never silently turn authentication off."""
+    raw = os.environ.get("COSTGUARD_API_KEYS", "").strip()
+    out: dict[str, str] = {}
+    for pair in filter(None, (p.strip() for p in raw.split(","))):
+        k, sep, t = (x.strip() for x in pair.partition(":"))
+        if not (sep and k and t) or k in out:
+            raise ValueError("COSTGUARD_API_KEYS is malformed (expected unique 'key:tenant' pairs, comma-separated)")
+        out[k] = t
+    if raw and not out:
+        raise ValueError("COSTGUARD_API_KEYS is set but has no 'key:tenant' pairs")
     return out
 
 
@@ -53,6 +58,7 @@ def resolve_tenant(authorization: Optional[str], keys: dict[str, str]) -> Option
 
 
 def create_app(engine=None) -> FastAPI:
+    _api_keys()                          # fail at startup on a malformed key list, not open on the first request
     engine = engine or build_engine()
     req_logger = next((h for h in engine.hooks if isinstance(h, RequestLogger)), None)
 
@@ -73,7 +79,11 @@ def create_app(engine=None) -> FastAPI:
 
     @app.post("/v1/chat/completions")
     def chat(req: ChatRequest, response: Response, authorization: Optional[str] = Header(default=None)) -> dict[str, Any]:
-        tenant = resolve_tenant(authorization, _api_keys())
+        try:
+            keys = _api_keys()
+        except ValueError as e:          # changed to something malformed after startup: refuse, never fall back to open
+            raise HTTPException(status_code=500, detail=f"server auth misconfigured: {e}")
+        tenant = resolve_tenant(authorization, keys)
         if req.stream:
             raise HTTPException(status_code=400, detail="stream=true is not supported; CostGuard returns whole responses")
         if tenant is not None:           # never trust tenant from the body when keys are configured
