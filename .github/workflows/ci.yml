@@ -1,0 +1,145 @@
+# CI: tests + eval gate on every push and PR. No API keys anywhere: COSTGUARD_BACKEND=mock for tests, and the eval
+# gate replays recorded cassettes. Make `tests` and `eval-gate` REQUIRED status checks on main (docs/RUNBOOK.md), so
+# a PR that, say, lowers the semantic-cache tau to 0.6 cannot merge when the gate goes red.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  COSTGUARD_BACKEND: mock
+  PYTHONUNBUFFERED: "1"
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+  FASTEMBED_CACHE_PATH: ${{ github.workspace }}/models/fastembed   # same dir the code defaults to
+  HF_HOME: ${{ github.workspace }}/.cache/huggingface
+
+jobs:
+  tests:
+    name: tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Cache embedding / rerank models (fastembed, Hugging Face)
+        uses: actions/cache@v4
+        with:
+          path: |
+            models/fastembed
+            .cache/huggingface
+          key: models-${{ runner.os }}-${{ hashFiles('costguard/cache/embedder.py', 'costguard/context/optimizer.py', 'costguard/router/classifier.py') }}
+          restore-keys: models-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: |
+          if python -m pip install -e ".[dev,dashboard]"; then
+            echo "installed the package with extras dev,dashboard"
+          else
+            echo "::warning::pip install -e .[dev,dashboard] failed (pyproject has no [build-system]/package discovery for the flat layout); installing its dependency list instead"
+            python - <<'EOF' > requirements-ci.txt
+          import tomllib
+          p = tomllib.load(open("pyproject.toml", "rb"))["project"]
+          extras = p.get("optional-dependencies", {})
+          print("\n".join(p["dependencies"] + extras.get("dev", []) + extras.get("dashboard", [])))
+          EOF
+            python -m pip install -r requirements-ci.txt
+          fi
+          # used by core (Anthropic adapter, .env loading) but not yet declared in pyproject.toml
+          python -m pip install anthropic python-dotenv
+
+      - name: Tests (mock backend, no keys)
+        run: python -m pytest -q
+
+  eval-gate:
+    name: eval-gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Cache embedding / rerank models (fastembed, Hugging Face)
+        uses: actions/cache@v4
+        with:
+          path: |
+            models/fastembed
+            .cache/huggingface
+          key: models-${{ runner.os }}-${{ hashFiles('costguard/cache/embedder.py', 'costguard/context/optimizer.py', 'costguard/router/classifier.py') }}
+          restore-keys: models-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: |
+          python - <<'EOF' > requirements-ci.txt
+          import tomllib
+          p = tomllib.load(open("pyproject.toml", "rb"))["project"]
+          extras = p.get("optional-dependencies", {})
+          print("\n".join(p["dependencies"] + extras.get("dev", [])))
+          EOF
+          python -m pip install -r requirements-ci.txt anthropic python-dotenv
+
+      - name: Eval gate (cassette replay, no keys)
+        run: |
+          if [ -f eval/ci_gate.py ]; then
+            python -m eval.ci_gate
+          else
+            echo "::warning::eval/ci_gate.py not found - eval gate skipped (it becomes blocking once the eval workstream lands it)"
+          fi
+
+      - name: Upload gate results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-gate-results
+          path: |
+            eval/results/ci_gate*.json
+            eval/results/ci_gate*.md
+          if-no-files-found: ignore
+
+  docker:
+    name: docker-build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # informational (not a required check): proves the Render image builds, models included
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build proxy image (no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: proxy
+          push: false
+          load: true
+          tags: costguard:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Smoke test the container (mock backend)
+        run: |
+          docker run -d --name cg -p 8000:8000 -e COSTGUARD_BACKEND=mock costguard:ci
+          for _ in $(seq 1 60); do curl -fsS localhost:8000/health && break; sleep 2; done
+          curl -fsS localhost:8000/v1/chat/completions -H 'content-type: application/json' \
+            -d '{"messages":[{"role":"user","content":"Where is my order?"}]}' | head -c 400; echo
+          curl -fsS localhost:8000/metrics | grep -c '^costguard_'
+          docker logs cg | tail -20
+          docker rm -f cg

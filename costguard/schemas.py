@@ -135,6 +135,7 @@ class TraceRecord(BaseModel):
     input_tokens_original: int = 0         # full prompt (system + history + all context + question), before optimisation
     input_tokens_sent: int = 0             # what was actually billed upstream (0 on cache hit)
     cached_input_tokens: int = 0
+    cache_write_tokens: int = 0
     output_tokens: int = 0
     context_docs_in: int = 0
     context_docs_kept: int = 0

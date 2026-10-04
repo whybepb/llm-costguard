@@ -1,0 +1,313 @@
+{
+  "generated_at": "2026-10-04T21:36:23+0530",
+  "git_sha": "1710507",
+  "profile": "full",
+  "config_hash": "b4291e45d86e",
+  "components": {
+    "exact_cache": "InMemoryExactCache",
+    "semantic_cache": "SemanticCacheImpl",
+    "context_optimizer": "RerankContextOptimizer",
+    "compressor": "HeuristicCompressor",
+    "router": "GatedRouter"
+  },
+  "setup": {
+    "backend": "mock",
+    "mock_latency_ms": 300.0,
+    "users": 50,
+    "spawn_rate": 10,
+    "duration": "60s",
+    "mode": "balanced",
+    "server": "1 uvicorn worker, sync endpoint (anyio threadpool, 40 threads)",
+    "client": "locust, same host",
+    "machine": "Darwin arm64, Python 3.12.13"
+  },
+  "requests": 7667,
+  "failures": 0,
+  "failure_rate": 0.0,
+  "throughput_rps": 127.59,
+  "end_to_end_ms": {
+    "p50": 6.26,
+    "p95": 342.01,
+    "p99": 380.3,
+    "n": 7668,
+    "mean": 74.78,
+    "max": 452.47
+  },
+  "end_to_end_ms_locust": {
+    "p50": 6.0,
+    "p95": 340.0,
+    "p99": 380.0
+  },
+  "hit_path": {
+    "requests": 6116,
+    "client_ms": {
+      "p50": 5.03,
+      "p95": 33.22,
+      "p99": 66.38,
+      "n": 6116,
+      "mean": 9.27,
+      "max": 143.45
+    },
+    "overhead_ms": {
+      "p50": 0.3,
+      "p95": 1.1,
+      "p99": 3.6,
+      "n": 6116,
+      "mean": 0.44,
+      "max": 17.4
+    }
+  },
+  "miss_path": {
+    "requests": 1552,
+    "client_ms": {
+      "p50": 325.08,
+      "p95": 379.99,
+      "p99": 424.08,
+      "n": 1552,
+      "mean": 332.96,
+      "max": 452.47
+    },
+    "overhead_ms": {
+      "p50": 11.8,
+      "p95": 57.04,
+      "p99": 94.59,
+      "n": 1552,
+      "mean": 18.97,
+      "max": 146.8
+    },
+    "client_added_ms": {
+      "p50": 25.08,
+      "p95": 79.99,
+      "p99": 124.08,
+      "n": 1552,
+      "mean": 32.96,
+      "max": 152.47
+    }
+  },
+  "overhead_ms_header": {
+    "p50": 0.3,
+    "p95": 26.46,
+    "p99": 57.17,
+    "n": 7668,
+    "mean": 4.19,
+    "max": 146.8
+  },
+  "cache_status_mix": {
+    "miss": 807,
+    "bypass": 745,
+    "exact": 3942,
+    "semantic": 2174
+  },
+  "by_kind": {
+    "context": {
+      "requests": 1565,
+      "hit_rate": 0.5188,
+      "client_ms": {
+        "p50": 35.64,
+        "p95": 378.88,
+        "p99": 423.98,
+        "n": 1565,
+        "mean": 170.96,
+        "max": 452.47
+      },
+      "overhead_ms": {
+        "p50": 1.7,
+        "p95": 56.96,
+        "p99": 94.43,
+        "n": 1565,
+        "mean": 15.65,
+        "max": 146.8
+      }
+    },
+    "novel": {
+      "requests": 764,
+      "hit_rate": 0.0039,
+      "client_ms": {
+        "p50": 316.41,
+        "p95": 342.04,
+        "p99": 361.65,
+        "n": 764,
+        "mean": 319.08,
+        "max": 403.12
+      },
+      "overhead_ms": {
+        "p50": 5.35,
+        "p95": 14.9,
+        "p99": 25.51,
+        "n": 764,
+        "mean": 6.57,
+        "max": 35.8
+      }
+    },
+    "paraphrase": {
+      "requests": 2271,
+      "hit_rate": 0.9868,
+      "client_ms": {
+        "p50": 4.89,
+        "p95": 36.24,
+        "p99": 314.53,
+        "n": 2271,
+        "mean": 13.18,
+        "max": 376.16
+      },
+      "overhead_ms": {
+        "p50": 0.2,
+        "p95": 1.1,
+        "p99": 6.36,
+        "n": 2271,
+        "mean": 0.49,
+        "max": 50.7
+      }
+    },
+    "repeat": {
+      "requests": 3068,
+      "hit_rate": 0.9974,
+      "client_ms": {
+        "p50": 5.11,
+        "p95": 35.49,
+        "p99": 76.05,
+        "n": 3068,
+        "mean": 10.49,
+        "max": 399.02
+      },
+      "overhead_ms": {
+        "p50": 0.3,
+        "p95": 1.1,
+        "p99": 4.23,
+        "n": 3068,
+        "mean": 0.48,
+        "max": 56.3
+      }
+    }
+  },
+  "server_log": {
+    "requests": 7668,
+    "latency_ms": {
+      "p50": 0.34,
+      "p95": 331.78,
+      "p99": 363.03,
+      "n": 7668,
+      "mean": 65.88,
+      "max": 447.99
+    },
+    "overhead_ms": {
+      "p50": 0.34,
+      "p95": 26.46,
+      "p99": 57.19,
+      "n": 7668,
+      "mean": 4.19,
+      "max": 146.78
+    },
+    "overhead_ms_by_cache_status": {
+      "bypass": {
+        "p50": 25.88,
+        "p95": 69.88,
+        "p99": 105.83,
+        "n": 745,
+        "mean": 31.55,
+        "max": 146.78
+      },
+      "exact": {
+        "p50": 0.21,
+        "p95": 0.85,
+        "p99": 2.67,
+        "n": 3942,
+        "mean": 0.34,
+        "max": 12.33
+      },
+      "miss": {
+        "p50": 5.42,
+        "p95": 17.38,
+        "p99": 34.26,
+        "n": 807,
+        "mean": 7.36,
+        "max": 95.24
+      },
+      "semantic": {
+        "p50": 0.42,
+        "p95": 1.41,
+        "p99": 4.49,
+        "n": 2174,
+        "mean": 0.61,
+        "max": 17.41
+      }
+    },
+    "stage_ms": {
+      "compression": {
+        "p50": 1.03,
+        "p95": 3.0,
+        "p99": 7.45,
+        "n": 52,
+        "mean": 1.56,
+        "max": 10.49
+      },
+      "context": {
+        "p50": 25.07,
+        "p95": 70.93,
+        "p99": 104.41,
+        "n": 753,
+        "mean": 30.64,
+        "max": 146.15
+      },
+      "count": {
+        "p50": 0.13,
+        "p95": 0.67,
+        "p99": 2.1,
+        "n": 7668,
+        "mean": 0.24,
+        "max": 17.11
+      },
+      "exact_cache": {
+        "p50": 0.0,
+        "p95": 0.01,
+        "p99": 0.01,
+        "n": 6923,
+        "mean": 0.0,
+        "max": 0.46
+      },
+      "exact_write": {
+        "p50": 0.01,
+        "p95": 0.01,
+        "p99": 0.02,
+        "n": 807,
+        "mean": 0.01,
+        "max": 0.14
+      },
+      "router": {
+        "p50": 0.14,
+        "p95": 0.6,
+        "p99": 2.11,
+        "n": 1552,
+        "mean": 0.24,
+        "max": 5.66
+      },
+      "semantic_cache": {
+        "p50": 0.17,
+        "p95": 8.03,
+        "p99": 16.95,
+        "n": 2981,
+        "mean": 1.78,
+        "max": 55.13
+      },
+      "semantic_write": {
+        "p50": 0.14,
+        "p95": 0.35,
+        "p99": 0.77,
+        "n": 807,
+        "mean": 0.18,
+        "max": 4.62
+      },
+      "upstream": {
+        "p50": 305.17,
+        "p95": 307.68,
+        "p99": 313.17,
+        "n": 1552,
+        "mean": 304.8,
+        "max": 366.88
+      }
+    },
+    "stage_errors": {},
+    "saved_pct": 80.67
+  },
+  "note": "Mock upstream (fixed 300 ms sleep): measures CostGuard's own overhead and throughput, not provider latency. overhead_ms = CostGuard stage time from the x-costguard-overhead-ms header (total - upstream). miss_path.client_added_ms = client-observed latency minus the mock sleep, so it also includes HTTP, JSON, threadpool queueing and the synchronous request-log write."
+}

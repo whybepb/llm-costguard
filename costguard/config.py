@@ -100,6 +100,12 @@ def load_policy(path: Path) -> Policy:
     raw = yaml.safe_load(Path(path).read_text())
     sp_path = ROOT / raw["system_prompt_file"]
     system_prompt = sp_path.read_text().strip()
+    bad = [k for k in raw["modes"] if not isinstance(k, str)]
+    bad += [f"tenants.{t}.mode" for t, c in (raw.get("tenants") or {}).items() if not isinstance(c.get("mode", ""), str)]
+    if not isinstance(raw.get("default_mode"), str):
+        bad.append("default_mode")
+    if bad:  # YAML reads a bare `off` as boolean False -> the kill switch would silently do nothing
+        raise ValueError(f"policy {path}: non-string mode value(s) {bad}; quote them, e.g. mode: \"off\"")
     modes = {name: ModePolicy(**{k: v for k, v in m.items()}) for name, m in raw["modes"].items()}
     gate_path = ROOT / "configs" / "router_gate.json"   # routing decisions depend on it -> part of the config identity
     gate = gate_path.read_text() if gate_path.exists() else ""

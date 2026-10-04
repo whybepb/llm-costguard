@@ -1,0 +1,68 @@
+# Local stack: CostGuard proxy + Qdrant (semantic-cache vectors) [+ Streamlit dashboard].
+#
+#   docker compose up --build                          # proxy on :8000 (mock backend, no keys), Qdrant on :6333
+#   docker compose --profile dashboard up --build      # + dashboard on :8501
+#   COSTGUARD_BACKEND=anthropic docker compose up      # real API: key comes from your shell or ./.env (gitignored)
+#   COSTGUARD_EXTRA_PIP=langfuse docker compose build  # bake the optional Langfuse SDK into the image
+#
+# Secrets are only ever passed through as environment variables (Compose reads ./.env for ${...} interpolation);
+# they are never copied into the image (.dockerignore excludes .env).
+name: costguard
+
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.15.4
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant-data:/qdrant/storage
+    restart: unless-stopped
+
+  proxy:
+    build:
+      context: .
+      target: proxy
+      args:
+        EXTRA_PIP: ${COSTGUARD_EXTRA_PIP:-}
+    image: costguard:local
+    ports:
+      - "8000:8000"
+    environment:
+      COSTGUARD_BACKEND: ${COSTGUARD_BACKEND:-mock}
+      COSTGUARD_ANTHROPIC_API_KEY: ${COSTGUARD_ANTHROPIC_API_KEY:-}      # secret: from shell/.env only
+      COSTGUARD_API_KEYS: ${COSTGUARD_API_KEYS:-}                        # caller keys -> tenants ("key:tenant,...")
+      COSTGUARD_SEMANTIC_BACKEND: qdrant
+      QDRANT_URL: http://qdrant:6333
+      COSTGUARD_DB: /app/data/runtime/costguard.sqlite
+      COSTGUARD_ADMIN_TOKEN: ${COSTGUARD_ADMIN_TOKEN:-}                  # guards POST /v1/drift/baseline
+      LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-}
+      LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-}
+      LANGFUSE_HOST: ${LANGFUSE_HOST:-https://cloud.langfuse.com}
+      COSTGUARD_LANGFUSE_SAMPLE: ${COSTGUARD_LANGFUSE_SAMPLE:-1.0}
+    volumes:
+      - costguard-data:/app/data/runtime
+    depends_on:
+      - qdrant
+    restart: unless-stopped
+
+  dashboard:
+    profiles: ["dashboard"]
+    build:
+      context: .
+      target: dashboard
+    image: costguard-dashboard:local
+    ports:
+      - "8501:8501"
+    environment:
+      COSTGUARD_DB: /app/data/runtime/costguard.sqlite
+      COSTGUARD_URL: http://proxy:8000                                   # live /v1/drift
+    volumes:
+      - costguard-data:/app/data/runtime:ro
+      - ./eval/results:/app/eval/results:ro
+      - ./configs:/app/configs:ro
+    depends_on:
+      - proxy
+
+volumes:
+  qdrant-data:
+  costguard-data:

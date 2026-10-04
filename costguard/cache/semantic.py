@@ -19,6 +19,7 @@ policy.yaml invalidates every semantic entry at once without touching storage.
 from __future__ import annotations
 
 import atexit
+import os
 import re
 import threading
 import time
@@ -176,7 +177,7 @@ class QdrantStore:
         from qdrant_client import QdrantClient, models
         self._m = models
         if url:
-            self.client = QdrantClient(url=url)
+            self.client = QdrantClient(url=url, api_key=os.environ.get("QDRANT_API_KEY"))  # Qdrant Cloud needs a key
             self.location = url
         else:
             path = Path(path or ROOT / "data" / "runtime" / "qdrant")

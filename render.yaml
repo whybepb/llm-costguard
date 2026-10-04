@@ -1,0 +1,39 @@
+# Render Blueprint: CostGuard proxy as a FREE Docker web service (Dashboard -> New -> Blueprint -> this repo).
+#
+# Free-tier facts that shape this config (render.com/docs/free, checked 2026-10-03):
+#   * spins down after 15 min without inbound traffic; the next request waits ~1 min while it wakes.
+#     -> PRE-WARM 2-3 min before any demo:  curl -fsS https://<service>.onrender.com/health
+#        (models are baked into the image, so a wake needs no Hugging Face download). Keep a recorded backup video.
+#   * single instance, no persistent disk: the SQLite request log and the in-memory caches reset on every
+#     restart/wake. The dashboard's numbers come from the local A/B replay, not from this host.
+#   * may be suspended for unusually high traffic -> never load-test against Render; run loadtest/run.sh locally.
+#   * RAM is not stated on the docs page (commonly reported as 512 MB): no torch/llmlingua in the image.
+#
+# Secrets (sync: false) are entered in the Render dashboard on first deploy and are never committed or baked in.
+services:
+  - type: web
+    name: llm-costguard
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile        # last stage = proxy
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeploy: true                    # every push to the default branch redeploys (CI must be green first)
+    envVars:
+      - key: COSTGUARD_BACKEND
+        value: anthropic                # set to "mock" for a keyless demo
+      - key: COSTGUARD_ANTHROPIC_API_KEY
+        sync: false                     # secret; set a spend limit on the Anthropic console too
+      - key: COSTGUARD_API_KEYS
+        sync: false                     # REQUIRED on a public URL: "callerkey:tenant,..."; empty = open dev mode
+      - key: COSTGUARD_ADMIN_TOKEN
+        generateValue: true             # guards POST /v1/drift/baseline
+      - key: COSTGUARD_SEMANTIC_BACKEND
+        value: memory                   # Qdrant Cloud needs an API key the semantic store does not pass yet
+      - key: LANGFUSE_PUBLIC_KEY
+        sync: false                     # optional; tracing needs the image built with EXTRA_PIP=langfuse
+      - key: LANGFUSE_SECRET_KEY
+        sync: false
+      - key: COSTGUARD_LANGFUSE_SAMPLE
+        value: "0.2"                    # stay inside Langfuse Hobby's 50k units/month
