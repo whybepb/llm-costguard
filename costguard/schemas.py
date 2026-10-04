@@ -140,6 +140,8 @@ class TraceRecord(BaseModel):
     context_docs_in: int = 0
     context_docs_kept: int = 0
     compression_ratio: Optional[float] = None
+    compression_method: Optional[str] = None
+    context_note: str = ""
     cost_usd: float = 0.0                  # actual list-price cost of this request (incl. overhead)
     baseline_cost_usd: float = 0.0         # same request on the strong tier, full prompt, no cache
     saved_usd: float = 0.0

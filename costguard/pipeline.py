@@ -139,7 +139,7 @@ class CostGuard:
         if docs and mp.context:
             res = timed("context", lambda: self.context.optimize(query, docs, mp.context_budget_tokens, mp.context_min_score))
             if res is not None:
-                sent_docs = res.docs
+                sent_docs, rec.context_note = res.docs, res.note[:200]
         rec.context_docs_kept = len(sent_docs)
         block = format_docs(sent_docs)
 
@@ -148,6 +148,7 @@ class CostGuard:
             cr = timed("compression", lambda: self.compressor.compress(block, mp.compression_rate, query))
             if cr is not None and cr.text.strip():
                 rec.compression_ratio = round(cr.tokens_before / max(1, cr.tokens_after), 3)
+                rec.compression_method = cr.method
                 block = cr.text
 
         # 5. route

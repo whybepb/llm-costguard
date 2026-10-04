@@ -81,7 +81,8 @@ class PassthroughContext:
 
 class NoCompressor:
     def compress(self, text, rate, query=None):
-        n = len(text.split())
+        from .tokens import count_text
+        n = count_text(text)
         return CompressResult(text=text, tokens_before=n, tokens_after=n, method="none")
 
 

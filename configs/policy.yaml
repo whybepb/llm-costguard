@@ -50,19 +50,19 @@ modes:
     semantic_cache: true
     tau: 0.95                    # sweep: 0.94 meets 0.5% false-hit budget; 0.95 keeps its 95% upper bound inside
     context: true
-    context_budget_tokens: 2000
+    context_budget_tokens: 1600  # compression_eval: evidence retention 98.2% (bar >= 98%)
     context_min_score: null
-    compression: false
+    compression: false           # rate 0.7 gives the same retention, so not worth the risk in quality mode
     router: false
   balanced:
     exact_cache: true
     semantic_cache: true
     tau: 0.93                    # sweep: per-request false-hit <= 1% (0.34-0.84%)
     context: true
-    context_budget_tokens: 1200
+    context_budget_tokens: 1000  # compression_eval: rerank 1000 + heuristic 0.5 -> retention 96.4% (bar >= 95%)
     context_min_score: null
     compression: true
-    compression_rate: 0.5        # keep ~50% of context tokens
+    compression_rate: 0.5        # keep ~50% of context tokens (heuristic extractive; LLMLingua-2 kept only 51.8%)
     compression_min_tokens: 400  # don't bother below this
     router: true
     router_policy: gated         # downshift only categories that passed the eval gate
@@ -71,10 +71,10 @@ modes:
     semantic_cache: true
     tau: 0.89                    # sweep: per-request false-hit <= 3% (1.56-2.54%)
     context: true
-    context_budget_tokens: 800
+    context_budget_tokens: 800   # compression_eval: 800 + 0.5 -> retention 92.9% (bar >= 90%); 0.33 fell to 85.7%
     context_min_score: null
     compression: true
-    compression_rate: 0.33
+    compression_rate: 0.5
     compression_min_tokens: 250
     router: true
     router_policy: aggressive    # downshift unless the request looks hard
