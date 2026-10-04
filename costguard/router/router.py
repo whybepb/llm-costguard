@@ -124,7 +124,8 @@ class GatedRouter:
         gate = self.gate.get()
         if gate is None:
             return "strong", "gated:no-gate-file" if self.gate.error in (None, "missing") else "gated:bad-gate-file"
-        self._check_gate_matches(gate)
+        if not self._check_gate_matches(gate):
+            return "strong", "gated:gate-for-other-models"
         if gate.get("dry_run"):
             return "strong", "gated:dry-run-gate"
 
@@ -157,18 +158,25 @@ class GatedRouter:
                     category_confidence=round(r.confidence, 4), category_margin=round(r.margin, 4))
         return (r.category if ok else None), r.source
 
-    def _check_gate_matches(self, gate: dict) -> None:
-        """Warn (once) if the gate was computed for a different model pair than the one being served. Not blocking:
-        a gate measured on one pair is evidence about that pair only - re-run the gate after changing models."""
+    def _check_gate_matches(self, gate: dict) -> bool:
+        """True if the gate may be applied to the model pair being served.
+
+        A gate measured on one (backend, strong, cheap) pair is evidence about that pair only, so a mismatch fails
+        safe: every request goes to the strong tier until `python -m eval.gate_router` is re-run for the new pair.
+        The mock backend has no quality to protect, so there a mismatch only warns (keeps demos and CI routing)."""
         if not self.expect:
-            return
+            return True
         g = (gate.get("backend"), (gate.get("models") or {}).get("strong"), (gate.get("models") or {}).get("cheap"))
         e = (self.expect.get("backend"), self.expect.get("models", {}).get("strong"), self.expect.get("models", {}).get("cheap"))
+        if g[0] is None or g == e:
+            return True
+        blocking = e[0] != "mock"
         key = repr((g, e))
-        if g[0] is not None and g != e and key not in self._warned:
+        if key not in self._warned:
             self._warned.add(key)
-            log.warning("router gate %s was computed for %s but serving %s; re-run `python -m eval.gate_router`",
-                        self.gate.path, g, e)
+            log.warning("router gate %s was computed for %s but serving %s; %s. Re-run `python -m eval.gate_router`",
+                        self.gate.path, g, e, "routing everything to strong" if blocking else "applying it anyway (mock)")
+        return not blocking
 
     # ------------------------------------------------------------------ introspection
     def status(self) -> dict:

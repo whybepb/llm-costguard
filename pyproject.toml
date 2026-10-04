@@ -18,7 +18,7 @@ local = ["mlx-lm"]                 # Apple-silicon local models (free, real gene
 compress = ["llmlingua"]           # LLMLingua-2 compressor (offline / beefy hosts)
 dashboard = ["streamlit"]
 tracing = ["langfuse"]
-dev = ["pytest", "pytest-asyncio", "locust", "huggingface_hub", "datasets"]
+dev = ["pytest", "pytest-asyncio", "locust", "huggingface_hub", "datasets", "openai"]
 
 [tool.setuptools.packages.find]
 include = ["costguard*"]

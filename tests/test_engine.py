@@ -135,3 +135,37 @@ def test_service_side_tenant_from_api_key_and_locked_mode(tmp_path, monkeypatch)
     assert r.status_code == 200 and cg["mode"] == "balanced"                          # body override ignored
     r2 = client.post("/v1/chat/completions", json=body, headers={"Authorization": "Bearer k-internal"})
     assert r2.json()["costguard"]["mode"] == "off"                                     # this tenant may override
+
+
+class DownProvider(MockProvider):
+    """Every upstream call fails (both tiers)."""
+    def complete(self, *a, **k):
+        raise ConnectionError("provider down")
+
+
+def test_double_upstream_failure_is_logged_and_counted(tmp_path):
+    seen = []
+    eng = make(tmp_path, provider=DownProvider(), router=CheapRouter(), hooks=[seen.append])
+    with pytest.raises(ConnectionError):
+        eng.handle(req("Where is my order?"))
+    assert len(seen) == 1 and seen[0].error.startswith("ConnectionError")
+    assert seen[0].stage_errors["upstream_cheap"].startswith("ConnectionError")
+
+
+def test_stream_true_is_rejected_not_silently_empty(tmp_path):
+    client = TestClient(create_app(make(tmp_path)))
+    body = {"messages": [{"role": "user", "content": "Where is my order?"}], "stream": True}
+    r = client.post("/v1/chat/completions", json=body)
+    assert r.status_code == 400 and "stream" in r.json()["detail"]
+
+
+def test_shutdown_flushes_request_log(tmp_path):
+    from costguard.obs.logger import RequestLogger
+    log = RequestLogger(tmp_path / "log.sqlite", flush_interval_s=5.0)   # slow batching: rows sit in the queue
+    eng = make(tmp_path)
+    eng.hooks.append(log)
+    with TestClient(create_app(eng)) as client:                          # context manager runs the lifespan
+        for i in range(3):
+            client.post("/v1/chat/completions", json={"messages": [{"role": "user", "content": f"order {i}?"}]})
+    assert log._q.unfinished_tasks == 0                                  # drained by shutdown, not by a reader
+    assert len(log.rows()) == 3

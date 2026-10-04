@@ -36,6 +36,7 @@ class ChatRequest(BaseModel):
     messages: list[ChatMessage]
     max_tokens: Optional[int] = None
     temperature: float = 0.0
+    stream: bool = False                   # not supported; the server rejects stream=True with 400
     user: Optional[str] = None
     costguard: CostGuardOptions = Field(default_factory=CostGuardOptions)
 

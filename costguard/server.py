@@ -13,6 +13,7 @@ from typing import Any, Optional
 
 import hmac
 import os
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Header, HTTPException, Response
 from pydantic import BaseModel
@@ -53,9 +54,16 @@ def resolve_tenant(authorization: Optional[str], keys: dict[str, str]) -> Option
 
 def create_app(engine=None) -> FastAPI:
     engine = engine or build_engine()
-    app = FastAPI(title="LLM CostGuard", version="0.1.0")
-    app.state.engine = engine
     req_logger = next((h for h in engine.hooks if isinstance(h, RequestLogger)), None)
+
+    @asynccontextmanager
+    async def lifespan(_app: FastAPI):
+        yield
+        if req_logger is not None:     # the writer thread is a daemon: drain it before the process exits
+            req_logger.flush()
+
+    app = FastAPI(title="LLM CostGuard", version="0.1.0", lifespan=lifespan)
+    app.state.engine = engine
 
     @app.get("/health")
     def health() -> dict[str, Any]:
@@ -66,6 +74,8 @@ def create_app(engine=None) -> FastAPI:
     @app.post("/v1/chat/completions")
     def chat(req: ChatRequest, response: Response, authorization: Optional[str] = Header(default=None)) -> dict[str, Any]:
         tenant = resolve_tenant(authorization, _api_keys())
+        if req.stream:
+            raise HTTPException(status_code=400, detail="stream=true is not supported; CostGuard returns whole responses")
         if tenant is not None:           # never trust tenant from the body when keys are configured
             req.costguard.tenant = tenant
         try:

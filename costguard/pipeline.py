@@ -179,7 +179,13 @@ class CostGuard:
                 raise
             rec.stage_errors["upstream_cheap"] = f"{type(e).__name__}: {e}"[:300]
             rec.model_used, rec.route_reason, rec.model_id = "strong", "fallback-after-cheap-error", strong_id
-            comp = self.provider.complete(sent, strong_id, max_tokens, req.temperature)
+            try:
+                comp = self.provider.complete(sent, strong_id, max_tokens, req.temperature)
+            except Exception as e2:
+                rec.error = f"{type(e2).__name__}: {e2}"[:300]
+                rec.latency_ms = (time.perf_counter() - t0) * 1000
+                self._emit(rec)
+                raise
         stage["upstream"] = round((time.perf_counter() - s) * 1000, 3)
         rec.upstream_latency_ms = comp.latency_ms
 

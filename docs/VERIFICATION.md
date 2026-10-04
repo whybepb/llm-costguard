@@ -96,7 +96,16 @@ hit rate 35.9% (exact 8, semantic 20), savings 73.27% [66.17, 78.96], quality re
 | F7 | `eval/gate_router.py` | `results["written"]` paths go through the existing `_rel()`. | They were absolute (`/Users/<name>/…`), which is how the scrubbed path had entered `router_gate_dryrun.json`. The running mlx job loaded the old code, so its output still needs a scrub (R3). |
 | — | `.gitignore` | Added `.env.*`, `!.env.example`, `build/`, `*.egg-info/`. Already committed by the coordinator in `db5e5b2`. | `pip install .` leaves `build/` and `llm_costguard.egg-info/` untracked, and a `.env.local` would have been committable. |
 
-## Bugs found but not fixed (core files)
+## Core bugs found by the verifier
+
+> **Status: all fixed after this report**, each with a regression test in `tests/test_engine.py` / `tests/test_router.py`:
+> - **C1:** a FastAPI lifespan drains the request log on shutdown.
+> - **C2:** a failed strong retry now records `error`, emits the row and counts the error.
+> - **C3:** `stream=true` returns 400.
+> - **R1:** a gate measured on another model pair now routes everything to strong (warn-only on `mock`).
+> - **R14:** `openai` is in the `dev` extra.
+>
+> The analysis below is kept as found.
 
 ### C1. Request-log rows are lost on every SIGTERM (redeploy, Render sleep, `docker stop`, end of the load test)
 

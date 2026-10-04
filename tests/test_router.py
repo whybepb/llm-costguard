@@ -127,6 +127,18 @@ def test_dry_run_or_bad_gate_stays_strong(tmp_path, clf):
     assert GatedRouter(bad, clf).route(rin("How do I return a jacket?", "returns"), "gated").reason == "gated:bad-gate-file"
 
 
+def test_gate_for_other_models_fails_safe(tmp_path, clf):
+    pair = {"backend": "mlx", "models": {"strong": "qwen-7b", "cheap": "qwen-1.5b"}}
+    gate = write_gate(tmp_path / "g.json", {"returns": True}, **pair)
+    q = rin("How do I return a jacket?", "returns")
+    assert GatedRouter(gate, clf, expect=pair).route(q, "gated").alias == "cheap"          # same pair -> applied
+    other = {"backend": "anthropic", "models": {"strong": "claude-sonnet-5-5", "cheap": "claude-haiku-4-5-20251001"}}
+    d = GatedRouter(gate, clf, expect=other).route(q, "gated")
+    assert (d.alias, d.reason) == ("strong", "gated:gate-for-other-models")               # foreign gate -> strong
+    mock = {"backend": "mock", "models": {"strong": "mock-strong", "cheap": "mock-cheap"}}
+    assert GatedRouter(gate, clf, expect=mock).route(q, "gated").alias == "cheap"          # mock: warn only
+
+
 def test_gate_file_hot_reload_is_the_rollback(tmp_path, clf):
     gate = write_gate(tmp_path / "g.json", {"returns": True})
     r = GatedRouter(gate, clf)
