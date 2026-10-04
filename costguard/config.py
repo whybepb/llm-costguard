@@ -87,6 +87,10 @@ class Policy:
     def model_id(self, backend: str, alias: str) -> str:
         return self.backends[backend][alias]
 
+    def tenant(self, name: str) -> dict:
+        t = self.raw.get("tenants", {})
+        return t.get(name) or t.get("default") or {"mode": self.default_mode, "allow_mode_override": True}
+
     def billing_for(self, backend: str) -> dict[str, str]:
         """Real APIs bill at their own prices; local/mock backends at the list price of the model they stand in for."""
         return {**self.billing, **self.raw.get("billing_by_backend", {}).get(backend, {})}

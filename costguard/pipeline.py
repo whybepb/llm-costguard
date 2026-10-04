@@ -75,7 +75,9 @@ class CostGuard:
     def handle(self, req: ChatRequest) -> tuple[Completion, TraceRecord]:
         t0 = time.perf_counter()
         opts = req.costguard
-        mode_name, mp = self.policy.mode(opts.mode)
+        tcfg = self.policy.tenant(opts.tenant)
+        requested_mode = opts.mode if (opts.mode and tcfg.get("allow_mode_override", True)) else None
+        mode_name, mp = self.policy.mode(requested_mode or tcfg.get("mode"))
         requested = req.model if req.model in TIERS else "strong"
         max_tokens = req.max_tokens or self.policy.default_max_tokens
 

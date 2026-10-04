@@ -11,7 +11,10 @@ import statistics
 import time
 from typing import Any, Optional
 
-from fastapi import FastAPI, HTTPException, Response
+import hmac
+import os
+
+from fastapi import FastAPI, Header, HTTPException, Response
 from pydantic import BaseModel
 
 from .factory import build_engine
@@ -27,6 +30,27 @@ def _pct(xs: list[float], q: float) -> Optional[float]:
     return round(xs[k], 2)
 
 
+def _api_keys() -> dict[str, str]:
+    """COSTGUARD_API_KEYS="key1:tenantA,key2:tenantB". Empty -> open dev mode (single 'default' tenant)."""
+    out = {}
+    for pair in filter(None, (os.environ.get("COSTGUARD_API_KEYS", "")).split(",")):
+        k, _, t = pair.partition(":")
+        if k.strip() and t.strip():
+            out[k.strip()] = t.strip()
+    return out
+
+
+def resolve_tenant(authorization: Optional[str], keys: dict[str, str]) -> Optional[str]:
+    """Service-side identity: the caller's key decides the tenant. Returns None in open dev mode."""
+    if not keys:
+        return None
+    token = (authorization or "").removeprefix("Bearer ").strip()
+    for k, tenant in keys.items():
+        if token and hmac.compare_digest(token, k):
+            return tenant
+    raise HTTPException(status_code=401, detail="invalid or missing API key")
+
+
 def create_app(engine=None) -> FastAPI:
     engine = engine or build_engine()
     app = FastAPI(title="LLM CostGuard", version="0.1.0")
@@ -40,7 +64,10 @@ def create_app(engine=None) -> FastAPI:
                 "components": getattr(engine, "component_status", {})}
 
     @app.post("/v1/chat/completions")
-    def chat(req: ChatRequest, response: Response) -> dict[str, Any]:
+    def chat(req: ChatRequest, response: Response, authorization: Optional[str] = Header(default=None)) -> dict[str, Any]:
+        tenant = resolve_tenant(authorization, _api_keys())
+        if tenant is not None:           # never trust tenant from the body when keys are configured
+            req.costguard.tenant = tenant
         try:
             comp, rec = engine.handle(req)
         except ValueError as e:

@@ -23,6 +23,14 @@ billing_by_backend:            # real APIs are billed at their own list prices
   openai:    {strong: gpt-5.4-mini, cheap: gpt-5-nano}
   gemini:    {strong: gemini-2.5-flash, cheap: gemini-2.5-flash-lite}
 
+# Service-side tenancy: CostGuard runs inside the operator's infrastructure; callers are the operator's own backend
+# services, never end users. Tenant + mode come from the caller's API key (COSTGUARD_API_KEYS="key:tenant,..."),
+# not from the request body. Body hints (category, context) are accepted; mode/tenant overrides only if allowed.
+tenants:
+  default:          {mode: balanced, allow_mode_override: true}    # local dev / no keys configured
+  shopnest-support: {mode: balanced, allow_mode_override: false}   # production support bot: ops sets the policy
+  shopnest-internal: {mode: quality, allow_mode_override: true}    # internal tools / eval harness
+
 cache:
   max_temperature: 0.3          # don't cache creative/high-temperature requests
   single_turn_only: true        # multi-turn answers depend on history -> bypass

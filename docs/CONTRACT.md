@@ -1,6 +1,11 @@
 # CostGuard build contract (read before touching code)
 
 **Story:** "Given an LLM request, what is the cheapest way to produce an acceptable-quality answer, and can we prove it?"
+**Deployment model, service-side:** CostGuard is a gateway the *operator* runs between its own backend services and the LLM provider.
+- End users never call it, and the savings land on the operator's LLM bill.
+- Tenant and mode come from the caller's API key (`COSTGUARD_API_KEYS`, per-tenant policy in `configs/policy.yaml`).
+- Body fields are hints from trusted internal callers. Mode overrides are honoured only for tenants that allow them.
+
 **Domain:** customer support for *ShopNest*, a fictional online store selling electronics, home goods and apparel.
 - Workload trace: public customer-support data (Bitext) plus questions about the store-policy knowledge base, which carry retrieved context.
 - Eval set: hand-written by the team.

@@ -121,3 +121,17 @@ def test_http_endpoint_openai_shape(tmp_path):
     st = client.get("/v1/stats").json()
     assert st["requests"] == 2 and st["cache_hit_rate"] == 0.5
     assert client.get("/health").json()["status"] == "ok"
+
+
+def test_service_side_tenant_from_api_key_and_locked_mode(tmp_path, monkeypatch):
+    monkeypatch.setenv("COSTGUARD_API_KEYS", "k-support:shopnest-support,k-internal:shopnest-internal")
+    eng = make(tmp_path)
+    client = TestClient(create_app(eng))
+    body = {"messages": [{"role": "user", "content": "Where is my order?"}],
+            "costguard": {"mode": "off", "tenant": "spoofed-tenant"}}
+    assert client.post("/v1/chat/completions", json=body).status_code == 401           # no key -> rejected
+    r = client.post("/v1/chat/completions", json=body, headers={"Authorization": "Bearer k-support"})
+    cg = r.json()["costguard"]
+    assert r.status_code == 200 and cg["mode"] == "balanced"                          # body override ignored
+    r2 = client.post("/v1/chat/completions", json=body, headers={"Authorization": "Bearer k-internal"})
+    assert r2.json()["costguard"]["mode"] == "off"                                     # this tenant may override
