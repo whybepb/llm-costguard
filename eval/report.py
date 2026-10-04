@@ -336,8 +336,14 @@ def readme_block() -> str:
     r = load("router_gate.json") or load("router_gate_dryrun.json")
     if r:
         allowed = ", ".join(r.get("allowed") or []) or "none"
-        parts.append(f"**Router gate** ({'dry run, ' if r.get('dry_run') else ''}backend `{r.get('backend')}`): "
-                     f"categories allowed to downshift to the cheap tier: {allowed}.")
+        line = (f"**Router gate** ({'dry run, ' if r.get('dry_run') else ''}backend `{r.get('backend')}`): "
+                f"categories allowed to downshift to the cheap tier: {allowed}.")
+        diffs = [c["diff"] for c in r.get("categories", {}).values() if _num(c.get("diff"))]
+        if diffs and not r.get("dry_run"):
+            line += (f" Cheap − strong quality per category: {f(min(diffs), 1)} to {f(max(diffs), 1)} points; a category "
+                     f"needs n ≥ {r.get('min_n')} and a 95% CI lower bound ≥ −{f(r.get('margin'), 0)} points "
+                     f"(judge `{r.get('judge')}`).")
+        parts.append(line)
     lt = load("loadtest.json")
     if lt:
         miss, st = lt.get("miss_path", {}), lt.get("setup", {})

@@ -32,7 +32,7 @@ Every stage fails open. A broken stage is skipped and logged, and the request st
 
 600 requests from the frozen trace (sha256 `19c0834c9442…`), backend `mock`, judge `heuristic-mock`, paired cluster bootstrap. Source: `eval/results/ab_summary_mock.json`.
 
-**Router gate** (dry run, backend `mock`): categories allowed to downshift to the cheap tier: none.
+**Router gate** (backend `mlx`): categories allowed to downshift to the cheap tier: none. Cheap − strong quality per category: -30.3 to -8.3 points; a category needs n ≥ 30 and a 95% CI lower bound ≥ −5 points (judge `mlx-community/Qwen2.5-7B-Instruct-4bit`).
 
 **Proxy overhead** (load test, 50 users, mock upstream): 128 req/s, 0 failures of 7,667; CostGuard's own overhead on a cache miss p50 / p99 = 11.8 / 94.6 ms.
 

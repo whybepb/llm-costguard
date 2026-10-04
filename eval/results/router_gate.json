@@ -1,0 +1,527 @@
+{
+  "version": 1,
+  "created": "2026-10-04T22:29:34+0530",
+  "margin": 5.0,
+  "min_n": 30,
+  "min_saving": 0.0,
+  "judge": "mlx-community/Qwen2.5-7B-Instruct-4bit",
+  "metric": "grade diff (cheap - strong), points",
+  "subset": "routable",
+  "dry_run": false,
+  "partial": false,
+  "backend": "mlx",
+  "models": {
+    "strong": "mlx-community/Qwen2.5-7B-Instruct-4bit",
+    "cheap": "mlx-community/Qwen2.5-1.5B-Instruct-4bit"
+  },
+  "billing": {
+    "strong": "gpt-5.4-mini",
+    "cheap": "gpt-5-nano"
+  },
+  "data_source": "bitext-sample:bitext/Bitext-customer-support-llm-chatbot-training-dataset+kb-seed",
+  "policy_hash": "b9bbbd4ee512",
+  "allowed": [],
+  "expected_routing_savings_if_deployed": 0.0,
+  "traffic_source": "trace_v1",
+  "categories": {
+    "order": {
+      "allow": false,
+      "n": 44,
+      "n_items": 47,
+      "hard_share": 0.064,
+      "diff": -15.34,
+      "ci": [
+        -22.73,
+        -7.95
+      ],
+      "sd": 26.53,
+      "reason": "CI lower bound -22.7 < -5",
+      "n_needed": null,
+      "savings_if_allowed": 0.8821,
+      "traffic_share": 0.4517,
+      "pairwise": {
+        "cheap_wins": 3,
+        "ties": 33,
+        "strong_wins": 8,
+        "non_inferior_rate": 0.8182,
+        "non_inferior_ci": [
+          0.6804,
+          0.9049
+        ]
+      },
+      "diff_pairwise": {
+        "mean": -11.36,
+        "ci": [
+          -25.0,
+          2.27
+        ]
+      },
+      "all_items_diff": {
+        "n": 47,
+        "mean": -15.43,
+        "ci": [
+          -22.87,
+          -7.98
+        ]
+      }
+    },
+    "shipping": {
+      "allow": false,
+      "n": 49,
+      "n_items": 51,
+      "hard_share": 0.039,
+      "diff": -16.33,
+      "ci": [
+        -24.49,
+        -8.67
+      ],
+      "sd": 27.27,
+      "reason": "CI lower bound -24.5 < -5",
+      "n_needed": null,
+      "savings_if_allowed": 0.8711,
+      "traffic_share": 0.09,
+      "pairwise": {
+        "cheap_wins": 3,
+        "ties": 32,
+        "strong_wins": 14,
+        "non_inferior_rate": 0.7143,
+        "non_inferior_ci": [
+          0.5759,
+          0.8215
+        ]
+      },
+      "diff_pairwise": {
+        "mean": -22.45,
+        "ci": [
+          -38.78,
+          -8.16
+        ]
+      },
+      "all_items_diff": {
+        "n": 51,
+        "mean": -17.16,
+        "ci": [
+          -24.51,
+          -9.8
+        ]
+      }
+    },
+    "returns": {
+      "allow": false,
+      "n": 11,
+      "n_items": 11,
+      "hard_share": 0.0,
+      "diff": -13.64,
+      "ci": [
+        -25.0,
+        -4.55
+      ],
+      "sd": 20.5,
+      "reason": "n=11 < min_n=30",
+      "n_needed": null,
+      "savings_if_allowed": 0.9254,
+      "traffic_share": 0.0333,
+      "pairwise": {
+        "cheap_wins": 0,
+        "ties": 8,
+        "strong_wins": 3,
+        "non_inferior_rate": 0.7273,
+        "non_inferior_ci": [
+          0.4344,
+          0.9025
+        ]
+      },
+      "diff_pairwise": {
+        "mean": -27.27,
+        "ci": [
+          -54.55,
+          -9.09
+        ]
+      },
+      "all_items_diff": {
+        "n": 11,
+        "mean": -13.64,
+        "ci": [
+          -25.0,
+          -4.55
+        ]
+      }
+    },
+    "refund": {
+      "allow": false,
+      "n": 48,
+      "n_items": 49,
+      "hard_share": 0.02,
+      "diff": -9.38,
+      "ci": [
+        -18.75,
+        -0.52
+      ],
+      "sd": 31.63,
+      "reason": "CI lower bound -18.8 < -5",
+      "n_needed": null,
+      "savings_if_allowed": 0.8603,
+      "traffic_share": 0.09,
+      "pairwise": {
+        "cheap_wins": 1,
+        "ties": 37,
+        "strong_wins": 10,
+        "non_inferior_rate": 0.7917,
+        "non_inferior_ci": [
+          0.6574,
+          0.8827
+        ]
+      },
+      "diff_pairwise": {
+        "mean": -18.75,
+        "ci": [
+          -31.25,
+          -6.25
+        ]
+      },
+      "all_items_diff": {
+        "n": 49,
+        "mean": -9.18,
+        "ci": [
+          -18.37,
+          -0.51
+        ]
+      }
+    },
+    "payment": {
+      "allow": false,
+      "n": 47,
+      "n_items": 49,
+      "hard_share": 0.041,
+      "diff": -24.47,
+      "ci": [
+        -32.98,
+        -15.96
+      ],
+      "sd": 30.17,
+      "reason": "CI lower bound -33.0 < -5",
+      "n_needed": null,
+      "savings_if_allowed": 0.8489,
+      "traffic_share": 0.0617,
+      "pairwise": {
+        "cheap_wins": 1,
+        "ties": 33,
+        "strong_wins": 13,
+        "non_inferior_rate": 0.7234,
+        "non_inferior_ci": [
+          0.5824,
+          0.8306
+        ]
+      },
+      "diff_pairwise": {
+        "mean": -25.53,
+        "ci": [
+          -40.43,
+          -10.64
+        ]
+      },
+      "all_items_diff": {
+        "n": 49,
+        "mean": -25.0,
+        "ci": [
+          -33.67,
+          -16.82
+        ]
+      }
+    },
+    "account": {
+      "allow": false,
+      "n": 41,
+      "n_items": 44,
+      "hard_share": 0.068,
+      "diff": -17.07,
+      "ci": [
+        -26.22,
+        -7.32
+      ],
+      "sd": 31.84,
+      "reason": "CI lower bound -26.2 < -5",
+      "n_needed": null,
+      "savings_if_allowed": 0.8841,
+      "traffic_share": 0.21,
+      "pairwise": {
+        "cheap_wins": 1,
+        "ties": 30,
+        "strong_wins": 10,
+        "non_inferior_rate": 0.7561,
+        "non_inferior_ci": [
+          0.6066,
+          0.8617
+        ]
+      },
+      "diff_pairwise": {
+        "mean": -21.95,
+        "ci": [
+          -36.59,
+          -7.32
+        ]
+      },
+      "all_items_diff": {
+        "n": 44,
+        "mean": -15.91,
+        "ci": [
+          -25.57,
+          -6.82
+        ]
+      }
+    },
+    "product": {
+      "allow": false,
+      "n": 9,
+      "n_items": 9,
+      "hard_share": 0.0,
+      "diff": -8.33,
+      "ci": [
+        -27.78,
+        5.56
+      ],
+      "sd": 27.95,
+      "reason": "n=9 < min_n=30",
+      "n_needed": null,
+      "savings_if_allowed": 0.9309,
+      "traffic_share": 0.04,
+      "pairwise": {
+        "cheap_wins": 0,
+        "ties": 7,
+        "strong_wins": 2,
+        "non_inferior_rate": 0.7778,
+        "non_inferior_ci": [
+          0.4526,
+          0.9368
+        ]
+      },
+      "diff_pairwise": {
+        "mean": -22.22,
+        "ci": [
+          -55.56,
+          0.0
+        ]
+      },
+      "all_items_diff": {
+        "n": 9,
+        "mean": -8.33,
+        "ci": [
+          -27.78,
+          5.56
+        ]
+      }
+    },
+    "other": {
+      "allow": false,
+      "n": 38,
+      "n_items": 44,
+      "hard_share": 0.136,
+      "diff": -30.26,
+      "ci": [
+        -40.79,
+        -19.74
+      ],
+      "sd": 33.97,
+      "reason": "CI lower bound -40.8 < -5",
+      "n_needed": null,
+      "savings_if_allowed": 0.8302,
+      "traffic_share": 0.0233,
+      "pairwise": {
+        "cheap_wins": 3,
+        "ties": 22,
+        "strong_wins": 13,
+        "non_inferior_rate": 0.6579,
+        "non_inferior_ci": [
+          0.4989,
+          0.7879
+        ]
+      },
+      "diff_pairwise": {
+        "mean": -26.32,
+        "ci": [
+          -44.74,
+          -10.53
+        ]
+      },
+      "all_items_diff": {
+        "n": 44,
+        "mean": -28.98,
+        "ci": [
+          -38.07,
+          -19.32
+        ]
+      }
+    }
+  },
+  "warnings": [
+    "WARN: returns: n=11 routable+scored items < 30: the 95% CI is too wide to allow a downshift; it stays on strong.",
+    "WARN: product: n=9 routable+scored items < 30: the 95% CI is too wide to allow a downshift; it stays on strong."
+  ],
+  "notes": [
+    "No hand-written eval set in eval/data/evalset: falling back to a fixed-seed sample of public Bitext rows (40/category, seed 0). Bitext references are generic chatbot replies, not ShopNest policy, so this gate is weaker evidence than the eval set.",
+    "Added 64 KB seed questions (eval.kb.kb_questions, with retrieved context): Bitext has no returns or product rows."
+  ],
+  "errors": {},
+  "n_items": 304,
+  "n_scored": 304,
+  "hard_signal_rate": {
+    "answerable": {
+      "flagged": 14,
+      "n": 240,
+      "rate": 0.058
+    },
+    "single": {
+      "flagged": 1,
+      "n": 44,
+      "rate": 0.023
+    },
+    "multi_hop": {
+      "flagged": 2,
+      "n": 12,
+      "rate": 0.167
+    },
+    "unanswerable": {
+      "flagged": 0,
+      "n": 8,
+      "rate": 0.0
+    }
+  },
+  "estimate": {
+    "items": 304,
+    "generations_total": 608,
+    "generations_new": {
+      "strong": 304,
+      "cheap": 304
+    },
+    "generations_cached": 0,
+    "judge_calls_upper_bound": 1216,
+    "usd_generation_upper_bound": 0.5028,
+    "usd_generation_typical": 0.3122,
+    "usd_judge_upper_bound": 0.5323,
+    "usd_total_upper_bound": 1.0351
+  },
+  "spend": {
+    "generation_usd_list_price": 0.19864,
+    "judge": {
+      "judge": "mlx-community/Qwen2.5-7B-Instruct-4bit",
+      "backend": "mlx",
+      "stats": {
+        "grades": 608,
+        "calls": 1216,
+        "new_calls": 1216,
+        "pairwise": 304,
+        "position_inconsistent": 202
+      },
+      "cost_new_usd": 0.332806,
+      "cost_all_usd": 0.332806
+    }
+  },
+  "price_gap": {
+    "strong": {
+      "billed_as": "gpt-5.4-mini",
+      "input": 0.75,
+      "output": 4.5,
+      "cached_input": 0.075
+    },
+    "cheap": {
+      "billed_as": "gpt-5-nano",
+      "input": 0.05,
+      "output": 0.4,
+      "cached_input": 0.005
+    },
+    "reference_request": {
+      "input_tokens": 1500,
+      "output_tokens": 400,
+      "strong_usd": 0.002925,
+      "cheap_usd": 0.000235
+    },
+    "cost_ratio_cheap_over_strong": 0.0803,
+    "saving_per_downshifted_request": 0.9197,
+    "router_saving_at_50pct_routed": 0.4598,
+    "cascade_break_even_escalation": 0.9197,
+    "cascade_saving_at_20pct_escalation": 0.7197,
+    "measured_ratio": 0.0789,
+    "measured_saving_per_downshifted_request": 0.9211,
+    "cache_minimum_prefix": {
+      "strong": 1024,
+      "cheap": 1024
+    },
+    "example_3000_token_cached_prefix": {
+      "request": "3,000-token shared prefix (cached where the model allows) + 500 new input + 400 output",
+      "strong_usd": 0.0024,
+      "cheap_usd": 0.0002,
+      "saving_per_downshifted_request": 0.9167
+    }
+  },
+  "price_gap_all_backends": {
+    "anthropic": {
+      "strong": "claude-sonnet-5.5",
+      "cheap": "claude-haiku-4.5",
+      "cost_ratio": 0.5,
+      "saving_per_downshifted_request": 0.5
+    },
+    "mock": {
+      "strong": "gpt-5.4-mini",
+      "cheap": "gpt-5-nano",
+      "cost_ratio": 0.0803,
+      "saving_per_downshifted_request": 0.9197
+    },
+    "mlx": {
+      "strong": "gpt-5.4-mini",
+      "cheap": "gpt-5-nano",
+      "cost_ratio": 0.0803,
+      "saving_per_downshifted_request": 0.9197
+    },
+    "openai": {
+      "strong": "gpt-5.4-mini",
+      "cheap": "gpt-5-nano",
+      "cost_ratio": 0.0803,
+      "saving_per_downshifted_request": 0.9197
+    },
+    "gemini": {
+      "strong": "gemini-2.5-flash",
+      "cheap": "gemini-2.5-flash-lite",
+      "cost_ratio": 0.2138,
+      "saving_per_downshifted_request": 0.7862
+    }
+  },
+  "economics_summary": [
+    "Price gap (mlx): strong=gpt-5.4-mini $0.75/$4.5 vs cheap=gpt-5-nano $0.05/$0.4 per 1M tokens (configs/prices.yaml).",
+    "  1,500-in/400-out request: strong $0.00293 vs cheap $0.00023 -> cheap costs 8% of strong; each downshifted request saves 92%.",
+    "  Router: savings ~= r x 92% (r = share routed cheap); routing 50% saves ~46% of that traffic's spend.",
+    "  Cascade (cheap first, escalate on failure): cost ~= p_cheap + e x p_strong; breaks even at e = 92% escalation (before verifier cost); at e=20% it saves 72%.",
+    "  Measured on this run (actual tokens, both tiers): each downshifted request saves 92%.",
+    "  Prompt caching: minimum cacheable prefix 1024 (strong) vs 1024 (cheap) tokens. With a 3,000-token cached prefix the saving per downshifted request drops to 92%. Today's system prompt is ~110 tokens, below both minimums, so neither tier caches it yet.",
+    "  Other configured pairs: anthropic: claude-haiku-4.5/claude-sonnet-5.5 = 50% -> saves 50%; mock: gpt-5-nano/gpt-5.4-mini = 8% -> saves 92%; mlx: gpt-5-nano/gpt-5.4-mini = 8% -> saves 92%; openai: gpt-5-nano/gpt-5.4-mini = 8% -> saves 92%; gemini: gemini-2.5-flash-lite/gemini-2.5-flash = 21% -> saves 79%"
+  ],
+  "seconds": 2374.5,
+  "args": {
+    "backend": "mlx",
+    "dry_run": false,
+    "yes": false,
+    "replay": false,
+    "limit": null,
+    "data": null,
+    "source": "bitext+kb",
+    "per_category": 40,
+    "seed": 0,
+    "scorer": "both",
+    "decision": "grade",
+    "judge": "auto",
+    "subset": "routable",
+    "margin": 5.0,
+    "min_n": 30,
+    "min_saving": 0.0,
+    "bootstrap": 2000,
+    "cassette": null,
+    "gate_out": null,
+    "results_out": null,
+    "force": false,
+    "quiet": false
+  },
+  "written": {
+    "gate": "configs/router_gate.json",
+    "results": "eval/results/router_gate.json",
+    "items": "eval/results/router_gate_items.json"
+  }
+}

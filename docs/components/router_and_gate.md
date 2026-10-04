@@ -31,6 +31,7 @@ The first rule that fires wins, and every decision is logged as `TraceRecord.rou
 | 2 | Any hardness signal | strong | `hard:<signal>` |
 | 3 | Policy `aggressive` | cheap | `aggressive:easy` |
 | 4 | Gate file missing, unreadable or dry run | strong | `gated:no-gate-file`, `gated:bad-gate-file`, `gated:dry-run-gate` |
+| 4b | Gate measured on a different backend or model pair than the one being served (except `mock`, which only warns) | strong | `gated:gate-for-other-models` |
 | 5 | Category sent but not one of the 8 | strong | `gated:unknown-category` |
 | 6 | No category sent, and inference is unsure | strong | `gated:unclassified` |
 | 7 | Category not in the gate file | strong | `gated:<cat>-not-evaluated` |
