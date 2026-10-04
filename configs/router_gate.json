@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "created": "2026-10-04T21:25:57+0530",
+  "margin": 5.0,
+  "min_n": 30,
+  "min_saving": 0.0,
+  "judge": "heuristic-mock",
+  "metric": "grade diff (cheap - strong), points",
+  "subset": "routable",
+  "dry_run": true,
+  "partial": false,
+  "backend": "mock",
+  "models": {
+    "strong": "mock-strong",
+    "cheap": "mock-cheap"
+  },
+  "billing": {
+    "strong": "gpt-5.4-mini",
+    "cheap": "gpt-5-nano"
+  },
+  "data_source": "evalset:seed.jsonl",
+  "policy_hash": "e235c00ff9b0",
+  "categories": {
+    "order": {
+      "allow": false,
+      "n": 7,
+      "diff": 0.68,
+      "ci": [
+        -0.87,
+        2.76
+      ],
+      "reason": "dry-run",
+      "savings_if_allowed": 0.7332
+    },
+    "shipping": {
+      "allow": false,
+      "n": 4,
+      "diff": 0.17,
+      "ci": [
+        -1.93,
+        1.3
+      ],
+      "reason": "dry-run",
+      "savings_if_allowed": 0.6367
+    },
+    "returns": {
+      "allow": false,
+      "n": 6,
+      "diff": 0.63,
+      "ci": [
+        0.0,
+        2.26
+      ],
+      "reason": "dry-run",
+      "savings_if_allowed": 0.7931
+    },
+    "refund": {
+      "allow": false,
+      "n": 4,
+      "diff": 1.21,
+      "ci": [
+        -2.48,
+        4.55
+      ],
+      "reason": "dry-run",
+      "savings_if_allowed": 0.7299
+    },
+    "payment": {
+      "allow": false,
+      "n": 3,
+      "diff": 3.72,
+      "ci": [
+        -0.27,
+        11.43
+      ],
+      "reason": "dry-run",
+      "savings_if_allowed": 0.7022
+    },
+    "account": {
+      "allow": false,
+      "n": 4,
+      "diff": 1.42,
+      "ci": [
+        -3.13,
+        5.79
+      ],
+      "reason": "dry-run",
+      "savings_if_allowed": 0.931
+    },
+    "product": {
+      "allow": false,
+      "n": 5,
+      "diff": 0.0,
+      "ci": [
+        0.0,
+        0.0
+      ],
+      "reason": "dry-run",
+      "savings_if_allowed": 0.7709
+    },
+    "other": {
+      "allow": false,
+      "n": 2,
+      "diff": 4.19,
+      "ci": [
+        2.67,
+        5.71
+      ],
+      "reason": "dry-run",
+      "savings_if_allowed": 0.3341
+    }
+  }
+}

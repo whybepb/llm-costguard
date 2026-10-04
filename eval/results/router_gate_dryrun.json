@@ -1,0 +1,523 @@
+{
+  "version": 1,
+  "created": "2026-10-04T21:25:57+0530",
+  "margin": 5.0,
+  "min_n": 30,
+  "min_saving": 0.0,
+  "judge": "heuristic-mock",
+  "metric": "grade diff (cheap - strong), points",
+  "subset": "routable",
+  "dry_run": true,
+  "partial": false,
+  "backend": "mock",
+  "models": {
+    "strong": "mock-strong",
+    "cheap": "mock-cheap"
+  },
+  "billing": {
+    "strong": "gpt-5.4-mini",
+    "cheap": "gpt-5-nano"
+  },
+  "data_source": "evalset:seed.jsonl",
+  "policy_hash": "e235c00ff9b0",
+  "allowed": [],
+  "expected_routing_savings_if_deployed": 0.0,
+  "traffic_source": "trace_v1",
+  "categories": {
+    "order": {
+      "allow": false,
+      "n": 7,
+      "n_items": 8,
+      "hard_share": 0.125,
+      "diff": 0.68,
+      "ci": [
+        -0.87,
+        2.76
+      ],
+      "sd": 4.98,
+      "reason": "dry-run",
+      "n_needed": 3,
+      "savings_if_allowed": 0.7332,
+      "traffic_share": 0.3717,
+      "pairwise": {
+        "cheap_wins": 4,
+        "ties": 0,
+        "strong_wins": 3,
+        "non_inferior_rate": 0.5714,
+        "non_inferior_ci": [
+          0.2505,
+          0.8418
+        ]
+      },
+      "diff_pairwise": {
+        "mean": 14.29,
+        "ci": [
+          -71.43,
+          71.43
+        ]
+      },
+      "all_items_diff": {
+        "n": 8,
+        "mean": 0.69,
+        "ci": [
+          -0.82,
+          2.5
+        ]
+      }
+    },
+    "shipping": {
+      "allow": false,
+      "n": 4,
+      "n_items": 6,
+      "hard_share": 0.333,
+      "diff": 0.17,
+      "ci": [
+        -1.93,
+        1.3
+      ],
+      "sd": 2.95,
+      "reason": "dry-run",
+      "n_needed": 2,
+      "savings_if_allowed": 0.6367,
+      "traffic_share": 0.125,
+      "pairwise": {
+        "cheap_wins": 1,
+        "ties": 1,
+        "strong_wins": 2,
+        "non_inferior_rate": 0.5,
+        "non_inferior_ci": [
+          0.15,
+          0.85
+        ]
+      },
+      "diff_pairwise": {
+        "mean": -25.0,
+        "ci": [
+          -100.0,
+          50.0
+        ]
+      },
+      "all_items_diff": {
+        "n": 6,
+        "mean": -0.16,
+        "ci": [
+          -1.43,
+          0.77
+        ]
+      }
+    },
+    "returns": {
+      "allow": false,
+      "n": 6,
+      "n_items": 7,
+      "hard_share": 0.143,
+      "diff": 0.63,
+      "ci": [
+        0.0,
+        2.26
+      ],
+      "sd": 1.54,
+      "reason": "dry-run",
+      "n_needed": 1,
+      "savings_if_allowed": 0.7931,
+      "traffic_share": 0.0417,
+      "pairwise": {
+        "cheap_wins": 1,
+        "ties": 5,
+        "strong_wins": 0,
+        "non_inferior_rate": 1.0,
+        "non_inferior_ci": [
+          0.6097,
+          1.0
+        ]
+      },
+      "diff_pairwise": {
+        "mean": 16.67,
+        "ci": [
+          0.0,
+          50.0
+        ]
+      },
+      "all_items_diff": {
+        "n": 7,
+        "mean": 0.11,
+        "ci": [
+          -1.28,
+          1.62
+        ]
+      }
+    },
+    "refund": {
+      "allow": false,
+      "n": 4,
+      "n_items": 5,
+      "hard_share": 0.2,
+      "diff": 1.21,
+      "ci": [
+        -2.48,
+        4.55
+      ],
+      "sd": 4.21,
+      "reason": "dry-run",
+      "n_needed": 2,
+      "savings_if_allowed": 0.7299,
+      "traffic_share": 0.1017,
+      "pairwise": {
+        "cheap_wins": 2,
+        "ties": 1,
+        "strong_wins": 1,
+        "non_inferior_rate": 0.75,
+        "non_inferior_ci": [
+          0.3006,
+          0.9544
+        ]
+      },
+      "diff_pairwise": {
+        "mean": 25.0,
+        "ci": [
+          -50.0,
+          100.0
+        ]
+      },
+      "all_items_diff": {
+        "n": 5,
+        "mean": 0.67,
+        "ci": [
+          -2.28,
+          3.75
+        ]
+      }
+    },
+    "payment": {
+      "allow": false,
+      "n": 3,
+      "n_items": 4,
+      "hard_share": 0.25,
+      "diff": 3.72,
+      "ci": [
+        -0.27,
+        11.43
+      ],
+      "sd": 6.68,
+      "reason": "dry-run",
+      "n_needed": 3,
+      "savings_if_allowed": 0.7022,
+      "traffic_share": 0.105,
+      "pairwise": {
+        "cheap_wins": 1,
+        "ties": 2,
+        "strong_wins": 0,
+        "non_inferior_rate": 1.0,
+        "non_inferior_ci": [
+          0.4385,
+          1.0
+        ]
+      },
+      "diff_pairwise": {
+        "mean": 33.33,
+        "ci": [
+          0.0,
+          100.0
+        ]
+      },
+      "all_items_diff": {
+        "n": 4,
+        "mean": 2.83,
+        "ci": [
+          -0.17,
+          8.57
+        ]
+      }
+    },
+    "account": {
+      "allow": false,
+      "n": 4,
+      "n_items": 4,
+      "hard_share": 0.0,
+      "diff": 1.42,
+      "ci": [
+        -3.13,
+        5.79
+      ],
+      "sd": 5.61,
+      "reason": "dry-run",
+      "n_needed": 3,
+      "savings_if_allowed": 0.931,
+      "traffic_share": 0.2,
+      "pairwise": {
+        "cheap_wins": 2,
+        "ties": 1,
+        "strong_wins": 1,
+        "non_inferior_rate": 0.75,
+        "non_inferior_ci": [
+          0.3006,
+          0.9544
+        ]
+      },
+      "diff_pairwise": {
+        "mean": 25.0,
+        "ci": [
+          -50.0,
+          100.0
+        ]
+      },
+      "all_items_diff": {
+        "n": 4,
+        "mean": 1.42,
+        "ci": [
+          -3.13,
+          5.79
+        ]
+      }
+    },
+    "product": {
+      "allow": false,
+      "n": 5,
+      "n_items": 6,
+      "hard_share": 0.167,
+      "diff": 0.0,
+      "ci": [
+        0.0,
+        0.0
+      ],
+      "sd": 0.0,
+      "reason": "dry-run",
+      "n_needed": null,
+      "savings_if_allowed": 0.7709,
+      "traffic_share": 0.035,
+      "pairwise": {
+        "cheap_wins": 0,
+        "ties": 5,
+        "strong_wins": 0,
+        "non_inferior_rate": 1.0,
+        "non_inferior_ci": [
+          0.5655,
+          1.0
+        ]
+      },
+      "diff_pairwise": {
+        "mean": 0.0,
+        "ci": [
+          0.0,
+          0.0
+        ]
+      },
+      "all_items_diff": {
+        "n": 6,
+        "mean": 0.0,
+        "ci": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "other": {
+      "allow": false,
+      "n": 2,
+      "n_items": 4,
+      "hard_share": 0.5,
+      "diff": 4.19,
+      "ci": [
+        2.67,
+        5.71
+      ],
+      "sd": 2.15,
+      "reason": "dry-run",
+      "n_needed": 1,
+      "savings_if_allowed": 0.3341,
+      "traffic_share": 0.02,
+      "pairwise": {
+        "cheap_wins": 2,
+        "ties": 0,
+        "strong_wins": 0,
+        "non_inferior_rate": 1.0,
+        "non_inferior_ci": [
+          0.3424,
+          1.0
+        ]
+      },
+      "diff_pairwise": {
+        "mean": 100.0,
+        "ci": [
+          100.0,
+          100.0
+        ]
+      },
+      "all_items_diff": {
+        "n": 4,
+        "mean": 1.08,
+        "ci": [
+          -3.49,
+          4.66
+        ]
+      }
+    }
+  },
+  "warnings": [
+    "WARN: order: n=7 routable+scored items < 30: the 95% CI is too wide to allow a downshift; it stays on strong.",
+    "WARN: shipping: n=4 routable+scored items < 30: the 95% CI is too wide to allow a downshift; it stays on strong.",
+    "WARN: returns: n=6 routable+scored items < 30: the 95% CI is too wide to allow a downshift; it stays on strong.",
+    "WARN: refund: n=4 routable+scored items < 30: the 95% CI is too wide to allow a downshift; it stays on strong.",
+    "WARN: payment: n=3 routable+scored items < 30: the 95% CI is too wide to allow a downshift; it stays on strong.",
+    "WARN: account: n=4 routable+scored items < 30: the 95% CI is too wide to allow a downshift; it stays on strong.",
+    "WARN: product: n=5 routable+scored items < 30: the 95% CI is too wide to allow a downshift; it stays on strong.",
+    "WARN: other: n=2 routable+scored items < 30: the 95% CI is too wide to allow a downshift; it stays on strong."
+  ],
+  "notes": [],
+  "errors": {},
+  "n_items": 44,
+  "n_scored": 44,
+  "hard_signal_rate": {
+    "answerable": {
+      "flagged": 3,
+      "n": 25,
+      "rate": 0.12
+    },
+    "hard": {
+      "flagged": 6,
+      "n": 7,
+      "rate": 0.857
+    },
+    "trap_pair": {
+      "flagged": 0,
+      "n": 12,
+      "rate": 0.0
+    }
+  },
+  "estimate": {
+    "items": 44,
+    "generations_total": 88,
+    "generations_new": {
+      "strong": 44,
+      "cheap": 44
+    },
+    "generations_cached": 0,
+    "judge_calls_upper_bound": 0,
+    "usd_generation_upper_bound": 0.114,
+    "usd_generation_typical": 0.0864,
+    "usd_judge_upper_bound": 0.0,
+    "usd_total_upper_bound": 0.114
+  },
+  "spend": {
+    "generation_usd_list_price": 0.070675,
+    "judge": {
+      "judge": "heuristic-mock",
+      "backend": "mock",
+      "stats": {
+        "grades": 88,
+        "pairwise": 44,
+        "position_inconsistent": 19
+      },
+      "cost_new_usd": 0.0,
+      "cost_all_usd": 0.0
+    }
+  },
+  "price_gap": {
+    "strong": {
+      "billed_as": "gpt-5.4-mini",
+      "input": 0.75,
+      "output": 4.5,
+      "cached_input": 0.075
+    },
+    "cheap": {
+      "billed_as": "gpt-5-nano",
+      "input": 0.05,
+      "output": 0.4,
+      "cached_input": 0.005
+    },
+    "reference_request": {
+      "input_tokens": 1500,
+      "output_tokens": 400,
+      "strong_usd": 0.002925,
+      "cheap_usd": 0.000235
+    },
+    "cost_ratio_cheap_over_strong": 0.0803,
+    "saving_per_downshifted_request": 0.9197,
+    "router_saving_at_50pct_routed": 0.4598,
+    "cascade_break_even_escalation": 0.9197,
+    "cascade_saving_at_20pct_escalation": 0.7197,
+    "measured_ratio": 0.0708,
+    "measured_saving_per_downshifted_request": 0.9292,
+    "cache_minimum_prefix": {
+      "strong": 1024,
+      "cheap": 1024
+    },
+    "example_3000_token_cached_prefix": {
+      "request": "3,000-token shared prefix (cached where the model allows) + 500 new input + 400 output",
+      "strong_usd": 0.0024,
+      "cheap_usd": 0.0002,
+      "saving_per_downshifted_request": 0.9167
+    }
+  },
+  "price_gap_all_backends": {
+    "anthropic": {
+      "strong": "claude-sonnet-5.5",
+      "cheap": "claude-haiku-4.5",
+      "cost_ratio": 0.5,
+      "saving_per_downshifted_request": 0.5
+    },
+    "mock": {
+      "strong": "gpt-5.4-mini",
+      "cheap": "gpt-5-nano",
+      "cost_ratio": 0.0803,
+      "saving_per_downshifted_request": 0.9197
+    },
+    "mlx": {
+      "strong": "gpt-5.4-mini",
+      "cheap": "gpt-5-nano",
+      "cost_ratio": 0.0803,
+      "saving_per_downshifted_request": 0.9197
+    },
+    "openai": {
+      "strong": "gpt-5.4-mini",
+      "cheap": "gpt-5-nano",
+      "cost_ratio": 0.0803,
+      "saving_per_downshifted_request": 0.9197
+    },
+    "gemini": {
+      "strong": "gemini-2.5-flash",
+      "cheap": "gemini-2.5-flash-lite",
+      "cost_ratio": 0.2138,
+      "saving_per_downshifted_request": 0.7862
+    }
+  },
+  "economics_summary": [
+    "Price gap (mock): strong=gpt-5.4-mini $0.75/$4.5 vs cheap=gpt-5-nano $0.05/$0.4 per 1M tokens (configs/prices.yaml).",
+    "  1,500-in/400-out request: strong $0.00293 vs cheap $0.00023 -> cheap costs 8% of strong; each downshifted request saves 92%.",
+    "  Router: savings ~= r x 92% (r = share routed cheap); routing 50% saves ~46% of that traffic's spend.",
+    "  Cascade (cheap first, escalate on failure): cost ~= p_cheap + e x p_strong; breaks even at e = 92% escalation (before verifier cost); at e=20% it saves 72%.",
+    "  Measured on this run (actual tokens, both tiers): each downshifted request saves 93%.",
+    "  Prompt caching: minimum cacheable prefix 1024 (strong) vs 1024 (cheap) tokens. With a 3,000-token cached prefix the saving per downshifted request drops to 92%. Today's system prompt is ~110 tokens, below both minimums, so neither tier caches it yet.",
+    "  Other configured pairs: anthropic: claude-haiku-4.5/claude-sonnet-5.5 = 50% -> saves 50%; mock: gpt-5-nano/gpt-5.4-mini = 8% -> saves 92%; mlx: gpt-5-nano/gpt-5.4-mini = 8% -> saves 92%; openai: gpt-5-nano/gpt-5.4-mini = 8% -> saves 92%; gemini: gemini-2.5-flash-lite/gemini-2.5-flash = 21% -> saves 79%"
+  ],
+  "seconds": 0.7,
+  "args": {
+    "backend": null,
+    "dry_run": true,
+    "yes": false,
+    "replay": false,
+    "limit": null,
+    "data": null,
+    "source": "auto",
+    "per_category": 40,
+    "seed": 0,
+    "scorer": "both",
+    "decision": "grade",
+    "judge": "auto",
+    "subset": "routable",
+    "margin": 5.0,
+    "min_n": 30,
+    "min_saving": 0.0,
+    "bootstrap": 2000,
+    "cassette": null,
+    "gate_out": null,
+    "results_out": null,
+    "force": false,
+    "quiet": false
+  },
+  "written": {
+    "gate": "configs/router_gate.json",
+    "results": "eval/results/router_gate_dryrun.json",
+    "items": "eval/results/router_gate_dryrun_items.json"
+  }
+}

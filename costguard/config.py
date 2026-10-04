@@ -101,7 +101,9 @@ def load_policy(path: Path) -> Policy:
     sp_path = ROOT / raw["system_prompt_file"]
     system_prompt = sp_path.read_text().strip()
     modes = {name: ModePolicy(**{k: v for k, v in m.items()}) for name, m in raw["modes"].items()}
-    canon = json.dumps({"policy": raw, "system_prompt": system_prompt}, sort_keys=True)
+    gate_path = ROOT / "configs" / "router_gate.json"   # routing decisions depend on it -> part of the config identity
+    gate = gate_path.read_text() if gate_path.exists() else ""
+    canon = json.dumps({"policy": raw, "system_prompt": system_prompt, "router_gate": gate}, sort_keys=True)
     h = hashlib.sha256(canon.encode()).hexdigest()[:12]
     return Policy(raw=raw, default_mode=raw["default_mode"], kb_version=raw["kb_version"], system_prompt=system_prompt,
                   default_max_tokens=int(raw.get("default_max_tokens", 256)), backends=raw["backends"],

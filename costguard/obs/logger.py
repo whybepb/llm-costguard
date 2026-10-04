@@ -8,7 +8,7 @@ from pathlib import Path
 
 from ..schemas import TraceRecord
 
-_JSON_COLS = {"stage_ms", "stage_errors"}
+_JSON_COLS = {"stage_ms", "stage_errors", "route_signals"}
 
 
 class RequestLogger:

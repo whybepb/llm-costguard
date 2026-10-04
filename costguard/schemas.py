@@ -97,6 +97,7 @@ class RouteInput(BaseModel):
     category: Optional[str] = None
     input_tokens: int = 0
     has_context: bool = False
+    context_docs: int = 0
     history_turns: int = 0
     requested_alias: str = "strong"
 
@@ -104,6 +105,8 @@ class RouteInput(BaseModel):
 class RouteDecision(BaseModel):
     alias: str                              # "strong" | "cheap"
     reason: str
+    category: Optional[str] = None          # category the router used (given or inferred)
+    signals: list[str] = Field(default_factory=list)   # hardness signals that fired
 
 
 class TraceRecord(BaseModel):
@@ -127,6 +130,8 @@ class TraceRecord(BaseModel):
     model_used: str = "strong"             # tier alias actually used ("" on cache hit)
     model_id: str = ""                     # concrete model id called
     route_reason: str = ""
+    route_category: Optional[str] = None   # category used by the router (given or inferred)
+    route_signals: list[str] = Field(default_factory=list)
     input_tokens_original: int = 0         # full prompt (system + history + all context + question), before optimisation
     input_tokens_sent: int = 0             # what was actually billed upstream (0 on cache hit)
     cached_input_tokens: int = 0

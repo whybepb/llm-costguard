@@ -1,0 +1,624 @@
+{
+  "model": "BAAI/bge-small-en-v1.5",
+  "created": "2026-10-04T21:22:09",
+  "seed": 0,
+  "train": {
+    "bitext": 10400,
+    "seeds": 555,
+    "centroids": 43,
+    "bitext_map": {
+      "cancel_order": "order",
+      "change_order": "order",
+      "place_order": "order",
+      "track_order": "order",
+      "delivery_options": "shipping",
+      "delivery_period": "shipping",
+      "change_shipping_address": "shipping",
+      "set_up_shipping_address": "shipping",
+      "check_refund_policy": "refund",
+      "get_refund": "refund",
+      "track_refund": "refund",
+      "check_payment_methods": "payment",
+      "payment_issue": "payment",
+      "check_invoice": "payment",
+      "get_invoice": "payment",
+      "create_account": "account",
+      "delete_account": "account",
+      "edit_account": "account",
+      "recover_password": "account",
+      "registration_problems": "account",
+      "switch_account": "account",
+      "newsletter_subscription": "account",
+      "contact_customer_service": "other",
+      "contact_human_agent": "other",
+      "complaint": "other",
+      "review": "other"
+    },
+    "excluded_bitext_intents": [
+      "check_cancellation_fee"
+    ]
+  },
+  "min_similarity": 0.7039,
+  "min_similarity_rule": "95% quantile of top similarity on 26 off-topic queries",
+  "tiebreak_margin": 0.03,
+  "heldout_bitext": {
+    "shipped": {
+      "n": 2600,
+      "accuracy": 0.9935,
+      "coverage": 0.9969,
+      "accuracy_when_covered": 0.9965,
+      "misrouted_share": 0.0035,
+      "per_category": {
+        "order": 0.995,
+        "shipping": 0.9925,
+        "refund": 0.9967,
+        "payment": 0.9875,
+        "account": 0.9957,
+        "other": 0.9925
+      },
+      "gated_view": {
+        "min_margin": 0.03,
+        "coverage": 0.9823,
+        "accuracy_when_covered": 0.9992,
+        "misrouted_share": 0.0008
+      }
+    },
+    "no_tiebreak": {
+      "n": 2600,
+      "accuracy": 0.9927,
+      "coverage": 0.9969,
+      "accuracy_when_covered": 0.9958,
+      "misrouted_share": 0.0042,
+      "per_category": {
+        "order": 0.99,
+        "shipping": 0.9875,
+        "refund": 1.0,
+        "payment": 0.99,
+        "account": 0.9957,
+        "other": 0.9925
+      },
+      "gated_view": {
+        "min_margin": 0.03,
+        "coverage": 0.9823,
+        "accuracy_when_covered": 0.9992,
+        "misrouted_share": 0.0008
+      }
+    },
+    "no_threshold_no_tiebreak": {
+      "n": 2600,
+      "accuracy": 0.9946,
+      "coverage": 1.0,
+      "accuracy_when_covered": 0.9946,
+      "misrouted_share": 0.0054,
+      "per_category": {
+        "order": 0.99,
+        "shipping": 0.995,
+        "refund": 1.0,
+        "payment": 0.99,
+        "account": 0.9971,
+        "other": 0.995
+      },
+      "gated_view": {
+        "min_margin": 0.03,
+        "coverage": 0.9838,
+        "accuracy_when_covered": 0.9992,
+        "misrouted_share": 0.0008
+      }
+    },
+    "one_centroid_per_category": {
+      "n": 2600,
+      "accuracy": 0.9658,
+      "coverage": 1.0,
+      "accuracy_when_covered": 0.9658,
+      "misrouted_share": 0.0342,
+      "per_category": {
+        "order": 0.8975,
+        "shipping": 0.9875,
+        "refund": 1.0,
+        "payment": 0.9825,
+        "account": 0.97,
+        "other": 0.9625
+      },
+      "gated_view": {
+        "min_margin": 0.03,
+        "coverage": 0.8923,
+        "accuracy_when_covered": 0.9957,
+        "misrouted_share": 0.0038
+      }
+    },
+    "keyword_rules": {
+      "n": 2600,
+      "accuracy": 0.7796,
+      "coverage": 0.8096,
+      "accuracy_when_covered": 0.9629,
+      "misrouted_share": 0.03,
+      "per_category": {
+        "order": 0.7125,
+        "shipping": 0.8975,
+        "refund": 0.7467,
+        "payment": 0.86,
+        "account": 0.8157,
+        "other": 0.61
+      }
+    }
+  },
+  "heldout_seed_frames": {
+    "shipped": {
+      "n": 169,
+      "accuracy": 0.8994,
+      "coverage": 0.929,
+      "accuracy_when_covered": 0.9682,
+      "misrouted_share": 0.0296,
+      "per_category": {
+        "order": 0.5714,
+        "returns": 0.9821,
+        "refund": 1.0,
+        "payment": 0.9583,
+        "product": 0.8182,
+        "other": 1.0
+      },
+      "gated_view": {
+        "min_margin": 0.03,
+        "coverage": 0.716,
+        "accuracy_when_covered": 0.9917,
+        "misrouted_share": 0.0059
+      }
+    },
+    "no_tiebreak": {
+      "n": 169,
+      "accuracy": 0.858,
+      "coverage": 0.929,
+      "accuracy_when_covered": 0.9236,
+      "misrouted_share": 0.071,
+      "per_category": {
+        "order": 0.5714,
+        "returns": 0.9107,
+        "refund": 0.625,
+        "payment": 0.9583,
+        "product": 0.8182,
+        "other": 1.0
+      },
+      "gated_view": {
+        "min_margin": 0.03,
+        "coverage": 0.716,
+        "accuracy_when_covered": 0.9917,
+        "misrouted_share": 0.0059
+      }
+    },
+    "no_threshold_no_tiebreak": {
+      "n": 169,
+      "accuracy": 0.9231,
+      "coverage": 1.0,
+      "accuracy_when_covered": 0.9231,
+      "misrouted_share": 0.0769,
+      "per_category": {
+        "order": 0.5714,
+        "returns": 0.9107,
+        "refund": 0.625,
+        "payment": 0.9583,
+        "product": 0.9848,
+        "other": 1.0
+      },
+      "gated_view": {
+        "min_margin": 0.03,
+        "coverage": 0.7692,
+        "accuracy_when_covered": 0.9923,
+        "misrouted_share": 0.0059
+      }
+    },
+    "one_centroid_per_category": {
+      "n": 169,
+      "accuracy": 0.9053,
+      "coverage": 1.0,
+      "accuracy_when_covered": 0.9053,
+      "misrouted_share": 0.0947,
+      "per_category": {
+        "order": 0.5714,
+        "returns": 0.9464,
+        "refund": 1.0,
+        "payment": 0.875,
+        "product": 0.9697,
+        "other": 0.375
+      },
+      "gated_view": {
+        "min_margin": 0.03,
+        "coverage": 0.6391,
+        "accuracy_when_covered": 1.0,
+        "misrouted_share": 0.0
+      }
+    },
+    "keyword_rules": {
+      "n": 169,
+      "accuracy": 0.6095,
+      "coverage": 0.6627,
+      "accuracy_when_covered": 0.9196,
+      "misrouted_share": 0.0533,
+      "per_category": {
+        "order": 0.4286,
+        "returns": 0.8214,
+        "refund": 1.0,
+        "payment": 0.75,
+        "product": 0.4242,
+        "other": 0.0
+      }
+    }
+  },
+  "probes": {
+    "shipped": {
+      "n": 48,
+      "accuracy": 0.9167,
+      "coverage": 0.9375,
+      "accuracy_when_covered": 0.9778,
+      "misrouted_share": 0.0208,
+      "per_category": {
+        "order": 1.0,
+        "shipping": 1.0,
+        "returns": 1.0,
+        "refund": 1.0,
+        "payment": 0.6667,
+        "account": 1.0,
+        "product": 0.6667,
+        "other": 1.0
+      },
+      "gated_view": {
+        "min_margin": 0.03,
+        "coverage": 0.875,
+        "accuracy_when_covered": 0.9762,
+        "misrouted_share": 0.0208
+      }
+    },
+    "no_tiebreak": {
+      "n": 48,
+      "accuracy": 0.9167,
+      "coverage": 0.9375,
+      "accuracy_when_covered": 0.9778,
+      "misrouted_share": 0.0208,
+      "per_category": {
+        "order": 1.0,
+        "shipping": 1.0,
+        "returns": 1.0,
+        "refund": 1.0,
+        "payment": 0.6667,
+        "account": 1.0,
+        "product": 0.6667,
+        "other": 1.0
+      },
+      "gated_view": {
+        "min_margin": 0.03,
+        "coverage": 0.875,
+        "accuracy_when_covered": 0.9762,
+        "misrouted_share": 0.0208
+      }
+    },
+    "no_threshold_no_tiebreak": {
+      "n": 48,
+      "accuracy": 0.9792,
+      "coverage": 1.0,
+      "accuracy_when_covered": 0.9792,
+      "misrouted_share": 0.0208,
+      "per_category": {
+        "order": 1.0,
+        "shipping": 1.0,
+        "returns": 1.0,
+        "refund": 1.0,
+        "payment": 0.8333,
+        "account": 1.0,
+        "product": 1.0,
+        "other": 1.0
+      },
+      "gated_view": {
+        "min_margin": 0.03,
+        "coverage": 0.9167,
+        "accuracy_when_covered": 0.9773,
+        "misrouted_share": 0.0208
+      }
+    },
+    "one_centroid_per_category": {
+      "n": 48,
+      "accuracy": 0.8125,
+      "coverage": 1.0,
+      "accuracy_when_covered": 0.8125,
+      "misrouted_share": 0.1875,
+      "per_category": {
+        "order": 0.6667,
+        "shipping": 1.0,
+        "returns": 1.0,
+        "refund": 0.6667,
+        "payment": 0.3333,
+        "account": 1.0,
+        "product": 1.0,
+        "other": 0.8333
+      },
+      "gated_view": {
+        "min_margin": 0.03,
+        "coverage": 0.7292,
+        "accuracy_when_covered": 0.9429,
+        "misrouted_share": 0.0417
+      }
+    },
+    "keyword_rules": {
+      "n": 48,
+      "accuracy": 0.9583,
+      "coverage": 0.9583,
+      "accuracy_when_covered": 1.0,
+      "misrouted_share": 0.0,
+      "per_category": {
+        "order": 1.0,
+        "shipping": 1.0,
+        "returns": 1.0,
+        "refund": 1.0,
+        "payment": 1.0,
+        "account": 1.0,
+        "product": 0.6667,
+        "other": 1.0
+      }
+    },
+    "shipped_errors": [
+      {
+        "query": "I was charged twice for one order",
+        "gold": "payment",
+        "pred": "order",
+        "source": "embedding",
+        "confidence": 0.821
+      },
+      {
+        "query": "is EMI available on phones",
+        "gold": "payment",
+        "pred": null,
+        "source": "embedding-low-confidence",
+        "confidence": 0.69
+      },
+      {
+        "query": "does this laptop come with a charger",
+        "gold": "product",
+        "pred": null,
+        "source": "embedding-low-confidence",
+        "confidence": 0.612
+      },
+      {
+        "query": "is this kettle stainless steel inside",
+        "gold": "product",
+        "pred": null,
+        "source": "embedding-low-confidence",
+        "confidence": 0.652
+      }
+    ]
+  },
+  "off_topic_rejected": {
+    "calibration": 0.9231,
+    "heldout": 1.0
+  },
+  "notes": [
+    "Bitext held-out rows come from the same generator as the training rows (in-distribution, optimistic).",
+    "Seed frames are held out by template but share slot fillers (optimistic).",
+    "PROBES were used while developing the seeds and tie-break, so they are not a clean held-out set.",
+    "The team-written evalset (when present) is the honest out-of-distribution number.",
+    "The *_kb seed frames were added after a first OOD check (evalset 0.70, kb_questions 0.58); they were written from KB section headings, not from those questions, but the OOD numbers after that change are no longer fully blind. Re-run `train` when the team's hand-written rows land.",
+    "accuracy counts 'None' (rejected -> strong) as wrong; misrouted_share is the risky error."
+  ],
+  "evalset": {
+    "shipped": {
+      "n": 44,
+      "accuracy": 0.8409,
+      "coverage": 0.9545,
+      "accuracy_when_covered": 0.881,
+      "misrouted_share": 0.1136,
+      "per_category": {
+        "order": 0.875,
+        "shipping": 1.0,
+        "returns": 1.0,
+        "refund": 0.8,
+        "payment": 0.75,
+        "account": 0.75,
+        "product": 1.0,
+        "other": 0.25
+      },
+      "gated_view": {
+        "min_margin": 0.03,
+        "coverage": 0.7273,
+        "accuracy_when_covered": 0.9688,
+        "misrouted_share": 0.0227
+      }
+    },
+    "no_tiebreak": {
+      "n": 44,
+      "accuracy": 0.8182,
+      "coverage": 0.9545,
+      "accuracy_when_covered": 0.8571,
+      "misrouted_share": 0.1364,
+      "per_category": {
+        "order": 0.875,
+        "shipping": 0.8333,
+        "returns": 1.0,
+        "refund": 0.8,
+        "payment": 0.75,
+        "account": 0.75,
+        "product": 1.0,
+        "other": 0.25
+      },
+      "gated_view": {
+        "min_margin": 0.03,
+        "coverage": 0.7273,
+        "accuracy_when_covered": 0.9688,
+        "misrouted_share": 0.0227
+      }
+    },
+    "no_threshold_no_tiebreak": {
+      "n": 44,
+      "accuracy": 0.8409,
+      "coverage": 1.0,
+      "accuracy_when_covered": 0.8409,
+      "misrouted_share": 0.1591,
+      "per_category": {
+        "order": 0.875,
+        "shipping": 0.8333,
+        "returns": 1.0,
+        "refund": 0.8,
+        "payment": 1.0,
+        "account": 0.75,
+        "product": 1.0,
+        "other": 0.25
+      },
+      "gated_view": {
+        "min_margin": 0.03,
+        "coverage": 0.75,
+        "accuracy_when_covered": 0.9697,
+        "misrouted_share": 0.0227
+      }
+    },
+    "one_centroid_per_category": {
+      "n": 44,
+      "accuracy": 0.7727,
+      "coverage": 1.0,
+      "accuracy_when_covered": 0.7727,
+      "misrouted_share": 0.2273,
+      "per_category": {
+        "order": 0.625,
+        "shipping": 1.0,
+        "returns": 1.0,
+        "refund": 0.8,
+        "payment": 0.5,
+        "account": 0.75,
+        "product": 1.0,
+        "other": 0.25
+      },
+      "gated_view": {
+        "min_margin": 0.03,
+        "coverage": 0.7045,
+        "accuracy_when_covered": 0.9355,
+        "misrouted_share": 0.0455
+      }
+    },
+    "keyword_rules": {
+      "n": 44,
+      "accuracy": 0.7273,
+      "coverage": 0.9318,
+      "accuracy_when_covered": 0.7805,
+      "misrouted_share": 0.2045,
+      "per_category": {
+        "order": 0.375,
+        "shipping": 1.0,
+        "returns": 1.0,
+        "refund": 0.8,
+        "payment": 0.75,
+        "account": 0.75,
+        "product": 0.8333,
+        "other": 0.25
+      }
+    }
+  },
+  "kb_questions": {
+    "shipped": {
+      "n": 64,
+      "accuracy": 0.6719,
+      "coverage": 0.9219,
+      "accuracy_when_covered": 0.7288,
+      "misrouted_share": 0.25,
+      "per_category": {
+        "order": 0.5714,
+        "shipping": 0.7273,
+        "returns": 0.8182,
+        "refund": 0.6667,
+        "payment": 0.8889,
+        "account": 0.25,
+        "product": 0.5556,
+        "other": 0.5
+      },
+      "gated_view": {
+        "min_margin": 0.03,
+        "coverage": 0.5312,
+        "accuracy_when_covered": 0.8824,
+        "misrouted_share": 0.0625
+      }
+    },
+    "no_tiebreak": {
+      "n": 64,
+      "accuracy": 0.6719,
+      "coverage": 0.9219,
+      "accuracy_when_covered": 0.7288,
+      "misrouted_share": 0.25,
+      "per_category": {
+        "order": 0.5714,
+        "shipping": 0.7273,
+        "returns": 0.8182,
+        "refund": 0.7778,
+        "payment": 0.7778,
+        "account": 0.25,
+        "product": 0.5556,
+        "other": 0.5
+      },
+      "gated_view": {
+        "min_margin": 0.03,
+        "coverage": 0.5312,
+        "accuracy_when_covered": 0.8824,
+        "misrouted_share": 0.0625
+      }
+    },
+    "no_threshold_no_tiebreak": {
+      "n": 64,
+      "accuracy": 0.7031,
+      "coverage": 1.0,
+      "accuracy_when_covered": 0.7031,
+      "misrouted_share": 0.2969,
+      "per_category": {
+        "order": 0.5714,
+        "shipping": 0.7273,
+        "returns": 0.8182,
+        "refund": 0.7778,
+        "payment": 0.7778,
+        "account": 0.5,
+        "product": 0.6667,
+        "other": 0.5
+      },
+      "gated_view": {
+        "min_margin": 0.03,
+        "coverage": 0.5469,
+        "accuracy_when_covered": 0.8857,
+        "misrouted_share": 0.0625
+      }
+    },
+    "one_centroid_per_category": {
+      "n": 64,
+      "accuracy": 0.6094,
+      "coverage": 1.0,
+      "accuracy_when_covered": 0.6094,
+      "misrouted_share": 0.3906,
+      "per_category": {
+        "order": 0.2857,
+        "shipping": 0.9091,
+        "returns": 0.8182,
+        "refund": 0.6667,
+        "payment": 0.3333,
+        "account": 0.75,
+        "product": 0.4444,
+        "other": 0.5
+      },
+      "gated_view": {
+        "min_margin": 0.03,
+        "coverage": 0.4219,
+        "accuracy_when_covered": 0.8519,
+        "misrouted_share": 0.0625
+      }
+    },
+    "keyword_rules": {
+      "n": 64,
+      "accuracy": 0.5312,
+      "coverage": 0.7656,
+      "accuracy_when_covered": 0.6939,
+      "misrouted_share": 0.2344,
+      "per_category": {
+        "order": 0.4286,
+        "shipping": 0.6364,
+        "returns": 0.7273,
+        "refund": 0.6667,
+        "payment": 0.6667,
+        "account": 0.25,
+        "product": 0.2222,
+        "other": 0.25
+      }
+    }
+  },
+  "centroids_file": "costguard/router/centroids.npz",
+  "centroids_bytes": 63429,
+  "seconds": 59.9
+}

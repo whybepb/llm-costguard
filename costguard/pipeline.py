@@ -153,11 +153,13 @@ class CostGuard:
         decision = RouteDecision(alias=requested, reason="router-off")
         if mp.router:
             rin = RouteInput(query=query, category=opts.category, input_tokens=rec.input_tokens_original,
-                             has_context=bool(docs), history_turns=len(history), requested_alias=requested)
+                             has_context=bool(docs), context_docs=len(docs), history_turns=len(history),
+                             requested_alias=requested)
             d = timed("router", lambda: self.router.route(rin, mp.router_policy))
             if d is not None and d.alias in TIERS:
                 decision = d
         rec.model_used, rec.route_reason = decision.alias, decision.reason
+        rec.route_category, rec.route_signals = decision.category, list(decision.signals)
 
         # 6. upstream call (cheap-tier failure falls back to strong once)
         sent = build_messages(system, history, query, block)
