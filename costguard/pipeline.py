@@ -45,12 +45,13 @@ class CostGuard:
                  semantic_cache=None, context_optimizer=None, compressor=None, router=None,
                  hooks: Optional[list[Callable[[TraceRecord], None]]] = None):
         self.policy, self.settings, self.provider, self.prices = policy, settings, provider, prices
-        self.exact = exact_cache or NoExactCache()
-        self.semantic = semantic_cache or NoSemanticCache()
-        self.context = context_optimizer or PassthroughContext()
-        self.compressor = compressor or NoCompressor()
-        self.router = router or AlwaysRequestedRouter()
-        self.hooks = hooks or []
+        # `is None`, not `or`: a component that is empty (len 0) is still a real component
+        self.exact = NoExactCache() if exact_cache is None else exact_cache
+        self.semantic = NoSemanticCache() if semantic_cache is None else semantic_cache
+        self.context = PassthroughContext() if context_optimizer is None else context_optimizer
+        self.compressor = NoCompressor() if compressor is None else compressor
+        self.router = AlwaysRequestedRouter() if router is None else router
+        self.hooks = [] if hooks is None else hooks
 
     # ------------------------------------------------------------------ helpers
     @property

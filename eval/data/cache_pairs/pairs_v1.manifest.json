@@ -1,0 +1,62 @@
+{
+  "file": "eval/data/cache_pairs/pairs_v1.jsonl",
+  "seed": 13,
+  "rows": 5048,
+  "by_source": {
+    "bitext": 3000,
+    "qqp": 2000,
+    "trap": 34,
+    "seed": 14
+  },
+  "by_kind": {
+    "bitext:same_intent": 1200,
+    "bitext:same_intent_diff_specifics": 300,
+    "bitext:near_miss_intent": 600,
+    "bitext:mined_hard_negative": 600,
+    "bitext:random_negative": 300,
+    "qqp:duplicate": 1000,
+    "qqp:non_duplicate": 1000,
+    "trap:trap": 34,
+    "seed:paraphrase": 14
+  },
+  "by_label": {
+    "bitext": {
+      "1": 1200,
+      "0": 1800
+    },
+    "qqp": {
+      "1": 1000,
+      "0": 1000
+    },
+    "seed": {
+      "1": 14
+    },
+    "trap": {
+      "0": 34
+    }
+  },
+  "bitext_rows": 26872,
+  "bitext_labels": 28,
+  "sha256": "98763d18d09ce8e4bfacc4207ea13cb59293fc7042fd1d4227099f334ddafccb",
+  "licences": {
+    "bitext": {
+      "dataset": "hf:bitext/Bitext-customer-support-llm-chatbot-training-dataset",
+      "licence": "CDLA-Sharing-1.0",
+      "note": "Bitext sample customer-support dataset; we keep a compact copy of instruction/category/intent."
+    },
+    "qqp": {
+      "dataset": "hf:nyu-mll/glue (qqp, validation)",
+      "licence": "Quora original release terms (GLUE card: 'other')",
+      "note": "Used for non-commercial evaluation only; only a 2,000-pair sample is stored."
+    },
+    "trap": {
+      "dataset": "hand-written (this repo)",
+      "licence": "project licence"
+    },
+    "seed": {
+      "dataset": "hand-written (this repo)",
+      "licence": "project licence"
+    }
+  },
+  "notes": []
+}
