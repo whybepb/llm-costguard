@@ -131,7 +131,7 @@ never be a cache hit.
 
 Even done right, the saving is bounded by `input share x compressible share x (1 - 1/r)`.
 
-- A median ShopNest RAG request has ~1,870 input tokens, 1,756 of them context, and ~100 output tokens, priced at
+- A median ShopNest RAG request has ~1,870 input tokens, 1,756 of them context, and ~100 output tokens (assumed), priced at
   gpt-5.4-mini rates ($0.75 in, $4.50 out). So input is ~76% of the bill and context ~94% of the input.
 - At the balanced setting (r ≈ 5.4) that is 0.76 x 0.94 x 0.81 ≈ **58% of the bill**.
 - Most of that comes from reranking, the stage that cannot break a sentence.
@@ -184,7 +184,8 @@ What the table says:
   - Stacked on reranking (rerank@1200 + heuristic@0.5), it sends **5.45x fewer context tokens at 96.4% retention**,
     and adds only ~4 ms on top of the rerank.
   - Rows in this table compress unconditionally. The pipeline skips compression below `compression_min_tokens`,
-    which the grid below simulates: today's balanced policy measures 4.99x at 96.4% there.
+    which the grid below simulates: the earlier balanced policy (budget 1200, rate 0.5) measures 4.99x at 96.4% there;
+    the current one (budget 1000, rate 0.5) measures 5.36x.
   - The hybrid scorer (lexical + bge-small) kept 2 more questions at rate 0.33 (100% vs 96.4%; within noise at
     n = 56). It costs 450-600 ms per call instead of 4 ms.
 - **LLMLingua-2 is the wrong tool for policy text.**
@@ -214,14 +215,15 @@ retention clears its bar. The grid simulates the pipeline exactly: rerank, then 
 | balanced | 95% | 1000 | 0.5 | 19% | 96.4% (88%-99%) |
 | economy | 90% | 800 | 0.5 | 16% | 92.9% (83%-97%) |
 
-How this compares with `configs/policy.yaml` today:
+How this compared with the earlier `configs/policy.yaml` starting points. The policy has since been updated: quality
+uses budget 1600 with compression off, balanced 1000 at rate 0.5, economy 800 at rate 0.5.
 
-- **quality:** today budget 2000 with compression off: 43.5% of tokens kept, 98.2%. The grid's pick is budget
-  1600 with compression on at 0.7 (29% kept, same retention). The policy currently disables compression in quality
-  mode; the conservative alternative is budget 1600 with no compression (42.5% kept, 98.2%).
-- **balanced:** today budget 1200 at rate 0.5: 20% kept, 96.4%, which already passes. The pick, budget 1000, trims to
+- **quality:** was budget 2000 with compression off: 43.5% of tokens kept, 98.2%. The grid's pick is budget
+  1600 with compression on at 0.7 (29% kept, same retention). The policy keeps compression off in quality mode
+  and takes the conservative alternative: budget 1600 with no compression (42.5% kept, 98.2%).
+- **balanced:** was budget 1200 at rate 0.5: 20% kept, 96.4%, which already passed. The pick, budget 1000, trims to
   19% at the same retention. Rerank-only alternative: budget 1000 (35% kept, 96.4%).
-- **economy:** today budget 800 at rate 0.33 measures **85.7%, below the 90% bar**. The pick keeps budget 800 and
+- **economy:** was budget 800 at rate 0.33, which measures **85.7%, below the 90% bar**. The pick keeps budget 800 and
   raises the rate to 0.5 (16% kept, 92.9%). Rerank-only alternative: budget 600 (25% kept, 91.1%).
 
 The coordinator owns `policy.yaml`. The numbers are in `eval/results/compression_eval.json` under `recommendation`.

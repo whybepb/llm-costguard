@@ -287,6 +287,9 @@ def build() -> str:
     t = load("threshold_sweep.json")
     if t:
         parts.append("## Semantic-cache threshold calibration")
+        parts.append("> Hit rates come from a paraphrase-heavy replay (Bitext: 27 intents, many phrasings each), so treat them "
+                     "as an **upper bound**. Savings claims come from the frozen-trace A/B, not from this sweep. False-hit rates "
+                     "are per request (wrong hits / all requests).")
         parts.append(safe(render_threshold, t, title=""))
     c = load("compression_eval.json")
     if c:

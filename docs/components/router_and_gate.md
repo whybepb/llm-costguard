@@ -53,7 +53,7 @@ These are regexes and token counts, deterministic and with no I/O. They run in a
 | `multi-question` | Two or more questions, enumerated lists, two fused asks ("how much, and when?"), or "also" across sentences. |
 | `long-query`, `long-input`, `deep-history`, `many-context-docs` | Query over 120 tokens, prompt over 4,000 tokens, more than 4 prior messages, more than 8 retrieved docs. These are configurable under `router.hardness` in policy.yaml. |
 
-Measured rates (`eval/results/router_gate_dryrun.json`, plus `kb_questions()`):
+Measured rates (seed rows: `eval/results/router_gate_dryrun.json` → `hard_signal_rate`; the Bitext and KB rows come from a run that was not saved under `eval/results`):
 
 | Set | Items flagged |
 |---|---|
@@ -94,7 +94,7 @@ Accuracy, from `python -m costguard.router.classifier train`, written to `eval/r
 |---|---|---|---|---|
 | Bitext held-out (in-distribution) | 2,600 | 99.4% | 98.2% | 0.1% |
 | Seed frames held out by template | 169 | 89.9% | 71.6% | 0.6% |
-| Team seed eval set (`evalset/seed.jsonl`) | 44 | 84.1% | 72.7% | 2.3% |
+| Seed eval set (`evalset/seed.jsonl`, AI-written) | 44 | 84.1% | 72.7% | 2.3% |
 | KB questions (`eval.kb.kb_questions`) | 64 | 67.2% | 53.1% | 6.2% |
 
 Two caveats on these numbers:
@@ -102,7 +102,7 @@ Two caveats on these numbers:
 - **Earlier, blind results.** On the two out-of-distribution sets, the first run scored 70% and 58%. The `*_kb` seed frames (warranty, installation, sizing, damaged items) were then written from the KB's section headings. They were not written from those questions, but the numbers are no longer fully blind. Re-run `train` when the team's hand-written eval rows land.
 - **Why the gap.** Most remaining errors are either genuinely two-topic questions ("return it, and how long will the refund take?") or ShopNest-only concepts (NestCoins, Plus, sales). The two eval sets label those concepts inconsistently, so they are left to fall below the floor and stay on strong.
 
-Router overhead: 0.03 ms p50 with an explicit category, 1.9 ms p50 when it has to embed the query.
+Router overhead: 0.03 ms p50 with an explicit category, 1.9 ms p50 when it has to embed the query (micro-benchmark, not saved). Under load the router stage measured p50 0.14 ms, p99 2.1 ms (`loadtest.json` → `server_log.stage_ms.router`).
 
 ## 2. Why simple features plus a statistical gate
 
@@ -122,9 +122,9 @@ The gate prints this on every run (`price_gap` in the results JSON). Prices come
 | openai: GPT-5.4-mini → GPT-5-nano | $0.00293 / $0.00024 | 8% | 92% | 46% |
 | gemini: 2.5 Flash → 2.5 Flash-Lite | $0.00145 / $0.00031 | 21% | 79% | 39% |
 
-**The real experiments run on Anthropic, which is only a 2× gap. Be honest about what that means:**
+**The production backend is Anthropic, which is only a 2× gap. (The measured runs use the local MLX stand-in, billed at the OpenAI pair's ~12× gap, so their routing savings are an upper bound for Anthropic.) Be honest about what the 2× gap means:**
 
-- **Router savings are capped.** Savings ≈ r × (1 − p_cheap/p_strong) = r × 50%. Even with every category allowed and 85% of requests easy (r ≈ 0.85), routing alone saves about 42% of upstream spend. If half the traffic is downshifted, it saves at most about 25% on that slice. That ceiling is before any category is blocked.
+- **Router savings are capped.** Savings ≈ r × (1 − p_cheap/p_strong) = r × 50%. Even with every category allowed and 85% of requests easy (r ≈ 0.85), routing alone saves about 42% of upstream spend. If half the traffic is downshifted, it saves at most about 25% overall (50% on that half). That ceiling is before any category is blocked.
 - **A cheap-first cascade barely pays.** Cascade cost ≈ p_cheap + e × p_strong (+ verifier). It breaks even at e = 50% escalation and saves only 30% at 20% escalation, before paying a verifier. We therefore route before generating instead of cascading (see trade-offs).
 - **Prompt caching can erase the gap.** Sonnet 5.5 caches prefixes from 512 tokens; Haiku 4.5 only from 4,096 (Anthropic prompt-caching docs, via the research notes). Take a 3,000-token shared prefix plus 500 new input and 400 output tokens. Sonnet reads the prefix at $0.20/M and costs $0.0056; Haiku can't cache it and costs $0.0055. **The downshift then saves 1.8%, not 50%.**
   - **Today:** the system prompt is about 110 tokens, below both minimums, and retrieved context sits after the cache breakpoint. So neither tier caches, and the 2× gap holds.
@@ -180,7 +180,7 @@ Even if cheap and strong were truly equal (d̄ = 0), the lower bound only clears
 
 - **Under 30 items:** the interval is too wide to allow anything. The gate prints a `WARN` and the category stays on strong, which is the intended behaviour, not a bug.
 - **To unlock a category:** add items to it. `n_needed` in the results says roughly how many.
-- **Today:** the 44-item seed set has only 2–8 routable items per category, so a real run on it will allow nothing until the team's hand-written rows land.
+- **Today:** the 44-item seed set has only 2–7 routable items per category, so a real run on it will allow nothing until the team's hand-written rows land.
 
 ### Judge caveats
 
@@ -198,7 +198,7 @@ COSTGUARD_BACKEND=anthropic python -m eval.gate_router --replay   # re-score fro
 python -m eval.gate_router --limit 8 --yes         # smoke run (round-robin across categories, marked partial)
 ```
 
-Spend guard: on any backend other than mock or MLX, the script first prints the number of new generations (it checks the cassette for each call key), the number of judge calls, and an upper-bound dollar estimate. It calls nothing without `--yes`. On the seed set, the Anthropic estimate is at most $0.64; on the Bitext+KB fallback (304 items) it is at most $3.30.
+Spend guard: on any backend other than mock or MLX, the script first prints the number of new generations (it checks the cassette for each call key), the number of judge calls, and an upper-bound dollar estimate. It calls nothing without `--yes`. On the seed set, the Anthropic estimate is at most $0.64; on the Bitext+KB fallback (304 items) it is at most $3.30 (console estimates, not saved under `eval/results`).
 
 ### Outputs
 
@@ -254,8 +254,8 @@ On any trigger, set that category's `allow` to false.
 1. **Rules plus a nearest-centroid classifier over a learned router (RouteLLM, Not Diamond)**, because independent benchmarks find simple routers competitive (RouterArena, LLMRouterBench), we have no preference data for our domain, and every decision must be explainable in one log string. Cost: we may miss some downshift opportunities a trained router would find.
 2. **A per-category gate on the CI lower bound over a single global quality average**, because an average hides one bad category behind good ones, and a lower bound is automatically conservative when data is thin. Cost: small categories never get downshifted until someone writes more eval items.
 3. **Pre-generation routing over a cheap-first cascade**, because on the Anthropic pair (cheap = 50% of strong) a cascade breaks even at 50% escalation and saves only 30% at 20% escalation before verifier cost. Every request also pays for the cheap call and its latency. Cost: no second chance when a cheap answer is bad; the gate and the monitors carry that risk instead.
-4. **Leaving uncertain requests on strong over trusting the classifier's top-1**, via the margin rule. On the team's eval set, misroutes drop from 11.4% to 2.3% at 73% coverage. A misroute risks quality; non-coverage only costs savings.
-5. **One centroid per source intent over one per category**, because heterogeneous categories ("other" covers contact, complaints, reviews and store info) average into a blurry centroid: Bitext held-out accuracy is 99.4% versus 96.7%.
+4. **Leaving uncertain requests on strong over trusting the classifier's top-1**, via the margin rule. On the seed eval set (44 AI-written rows), misroutes drop from 11.4% to 2.3% at 73% coverage. A misroute risks quality; non-coverage only costs savings.
+5. **One centroid per source intent over one per category**, because heterogeneous categories ("other" covers contact, complaints, reviews and store info) average into a blurry centroid: Bitext held-out accuracy is 99.4% versus 96.6%.
 6. **Deciding on the routable subset over all items**, because hard items never reach the cheap tier in production. The gate should measure the policy we actually run, and missed hard items stay inside the measurement. `all_items_diff` is still reported.
 7. **A hot-reloaded JSON gate file over thresholds in `policy.yaml`**, because measured evidence (who allowed what, on which data and judge) should be separate from hand-set config, and rollback should not need a deploy. Cost: `config_hash` doesn't cover the gate, so `route_reason` and the gate's `created` stamp carry the traceability (see requested core changes).
 

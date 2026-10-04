@@ -43,7 +43,7 @@ Every lookup fills `SemanticHit.similarity` and `neighbor_query`, even on a miss
 
 - **It is lossless.** The key covers the partition, the normalised query and a hash of the retrieved context, so a hit can never be a different question.
 - **It costs almost nothing.** One dict lookup takes about 1 µs; the semantic tier pays for an embedding (about 2–5 ms).
-- **It catches a real share of traffic.** In the cache simulation, 10–24% of requests (depending on τ and rendering) were served from a cached query with identical text.
+- **It catches a real share of traffic.** In the Bitext cache simulation, 10–24% of requests (depending on τ and rendering) were served from a cached query with identical text. Like every Bitext hit rate, read this as an upper bound (section 3).
 
 The research brief's references put a deterministic tier first for the same reasons (Krites: static then dynamic cache; VentureBeat: 18% exact duplicates).
 
@@ -90,7 +90,7 @@ Bi-encoder embeddings put "I want to cancel my order #4821" and "I don't want to
 | entities | Both queries name something from the same ShopNest lexicon group, and the two sets are disjoint. Groups: product, action, payment, tier, shipping, time, timing, place, object. | laptops vs phones; refund vs exchange; PayPal vs UPI; express vs standard | `entity_mismatch:<group>` |
 | content | Otherwise near-identical queries each carry a different uncommon word that the lexicon doesn't know | "ship to Nagpur" vs "ship to Indore" | `content_mismatch` |
 
-**These guards are our own engineering heuristic, not a published method.** The research notes found no benchmark for entity or number guards. The rules were developed by reading Bitext false hits and false rejections, plus the hand-written seed traps. Treat the trap pass rate as optimistic. The 6 trap pairs in `eval/data/evalset/seed.jsonl`, written separately by the eval workstream, are the cleaner held-out check, and all 6 are caught.
+**These guards are our own engineering heuristic, not a published method.** The research notes found no benchmark for entity or number guards. The rules were developed by reading Bitext false hits and false rejections, plus the 28 seed traps in `eval/cache_pairs.py` (`author: "seed"`, AI-written scaffolding, not team-written). Treat the trap pass rate as optimistic. The 6 trap pairs in `eval/data/evalset/seed.jsonl`, written separately by the eval workstream (also AI-written seed rows), are the cleaner held-out check, and all 6 are caught. The team's hand-written trap pairs are the real test once they land.
 
 If the best candidate is vetoed, the cache tries the next-best candidate above τ. A query about order #4822 can therefore still hit a cached #4822 answer when a cached #4821 answer scores slightly higher.
 
@@ -115,7 +115,7 @@ Embedded Qdrant takes a file lock, so only one process can open `data/runtime/qd
 
 ### Poisoning and leakage risks, and mitigations
 
-The semantic key is a fuzzy hash, so collisions can be engineered. CacheAttack reports an 86% response-hijack rate. The 2026 defence paper adds that query embeddings structurally lose the information needed to separate valid hits from invalid ones. Our exposure and mitigations:
+The semantic key is a fuzzy hash, so collisions can be engineered. CacheAttack reports an 86% response-hijack rate. The 2026 defence paper (arXiv 2609.35908) adds that query embeddings can lose the information needed to separate valid hits from invalid ones. Our exposure and mitigations:
 
 | Risk | Mitigation in CostGuard | Gap |
 |---|---|---|
@@ -135,12 +135,12 @@ All of it is stored under `eval/data/cache_pairs/`; build it with `python -m eva
 |---|---|---|---|
 | Bitext customer-support (`bitext/Bitext-customer-support-llm-chatbot-training-dataset`, 26,872 queries, 27 intents) | 3,000 pairs; the replay stream | **CDLA-Sharing-1.0** | Domain pairs and cache simulation. We keep a compact parquet with instruction, category and intent (450 kB). |
 | Quora Question Pairs (`nyu-mll/glue`, qqp validation) | 2,000 pairs, 1,000 positive and 1,000 negative | Quora's original release terms; the GLUE card lists "other" | General-domain check only, for non-commercial evaluation; only the sample is stored |
-| Trap pairs | 34: 28 seed (`author: "seed"`) and 6 from `eval/data/evalset/seed.jsonl` | project | Lookalikes that need different answers |
-| Seed paraphrases | 14 | project | Pairs that *should* hit, to measure what the guards wrongly block |
+| Trap pairs | 34: 28 seed (`author: "seed"`, AI-written) and 6 from `eval/data/evalset/seed.jsonl` (also AI-written seed rows) | project | Lookalikes that need different answers |
+| Seed paraphrases | 14 (`author: "seed"`, AI-written) | project | Pairs that *should* hit, to measure what the guards wrongly block |
 
 **Labels.** A hit is correct when the cached query and the new query have the same intent *and* the same specifics.
 
-- Bitext responses are written per intent, but they echo the customer's specifics. In our analysis of the dataset, `{{Order Number}}` is echoed 100% of the time, `{{Account Type}}` 98%, and literal tiers 70%. So "cancel order #A" and "cancel order #B" share an intent but are labelled a wrong hit.
+- Bitext responses are written per intent, but they echo the customer's specifics. In our analysis of the dataset (not saved under `eval/results`), `{{Order Number}}` is echoed 100% of the time, `{{Account Type}}` 98%, and literal tiers 70%. So "cancel order #A" and "cancel order #B" share an intent but are labelled a wrong hit.
 - One relabel: Bitext's `newsletter_subscription` mixes subscribe and unsubscribe requests whose responses differ, so it is split in two, giving 28 labels.
 - `pairs_v1.jsonl` keeps `label_intent_only` for anyone who wants the plain intent label.
 
@@ -181,11 +181,11 @@ These numbers come from `eval/results/threshold_sweep.json` for `BAAI/bge-small-
 | balanced | 1% | **0.93** | 77.3% / 0.84% [0.62, 1.13] / 98.91% | 57.7% / 0.34% [0.21, 0.54] / 99.41% |
 | economy | 3% | **0.89** | 87.2% / 2.54% [2.14, 3.01] / 97.09% | 67.3% / 1.56% [1.25, 1.94] / 97.68% |
 
-The current `policy.yaml` starting points are 0.95, 0.90 and 0.85. The sweep says balanced and economy should be stricter.
+`policy.yaml` has since moved from its starting points (0.95, 0.90, 0.85) to 0.95, 0.93 and 0.89: balanced and economy follow the sweep, and quality keeps the stricter 0.95 (next paragraph).
 
 Quality's point estimate is just inside budget, but its CI upper bound (0.71%) is not. If the team wants the CI upper bound inside budget, use **τ = 0.95**: 69.5% hit and 0.24% false-hit templated, 51.0% hit and 0.14% false-hit filled.
 
-**Read the hit rates as an upper bound.** Bitext is 27 intents with roughly 1,000 template paraphrases each, so nearly every query has a close neighbour. The research brief warns about exactly this: paraphrase-generated benchmarks report 50–90% hit rates, while real chat logs show 4.5–7.5% reusable queries and support/FAQ workloads about 20–60%.
+**Read the hit rates as an upper bound.** Bitext is 27 intents with roughly 1,000 template paraphrases each, so nearly every query has a close neighbour. The research brief warns about exactly this: paraphrase-generated benchmarks report 50–90% hit rates, while real chat logs show 4.5% (MOSS) and 7.5% (LMSYS) reusable queries (SCALM), and Portkey reports about 20% (18–60% on RAG) at 99% accuracy on Q&A/RAG traffic.
 
 The calibrated quantity is the false-hit rate at a given τ. Realised savings come from the frozen-trace A/B (`eval/run_ab.py`). Of the hits above, 10–24% of all requests are served from a cached query with identical text, which the exact tier would serve first.
 
@@ -202,7 +202,7 @@ The same stream was run with guards on and off. "False hits removed" is the numb
 | 0.93 | templated | 1.02% → 0.84% | 9 | +2 | 77.5% → 77.3% |
 | 0.93 | filled | 9.88% → 0.34% | 477 | +138 | 64.4% → 57.7% |
 
-**Without guards, real order numbers make semantic caching unusable below τ ≈ 0.96–0.97.** "Cancel order SN-48213" and "cancel order SN-90211" embed at about 0.97. Without guards, the τ that meets each budget in both renderings would be 0.97 / 0.96 / 0.95, giving filled hit rates of 41.6% / 47.0% / 52.7%. Guards allow 0.94 / 0.93 / 0.89 instead, giving 54.7% / 57.7% / 67.3%. That is **+11 to +15 points of hit rate at the same error budget**.
+**Without guards, real order numbers make semantic caching unusable below τ ≈ 0.96–0.97.** "Please cancel order SN-48213" and "Please cancel order SN-48231" embed at 0.976 (`trap_detail` in the JSON). Without guards, the τ that meets each budget in both renderings would be 0.97 / 0.96 / 0.95, giving filled hit rates of 41.6% / 47.0% / 52.7%. Guards allow 0.94 / 0.93 / 0.89 instead, giving 54.7% / 57.7% / 67.3%. That is **+11 to +15 points of hit rate at the same error budget**.
 
 Per-candidate verdicts at τ = 0.90, counting each vetoed candidate as either "would have been wrong" or "would have been correct":
 
@@ -242,15 +242,15 @@ Pairwise ROC AUC is similar for the two models: Bitext 0.69 vs 0.70, QQP 0.87 vs
 - **Embedding:** `embed_one` p50 2–3.6 ms, p99 3–8 ms, measured on CPU across runs.
 - **Full lookup:** embed, search and guards on a 2k-entry cache take p50 2.5 ms and p99 5.2 ms.
 - **Search alone** (memory store, 1.1k entries): p50 0.02 ms.
-- **Model load:** about 60–250 ms when cached on disk; the first-ever download takes about 15 s.
+- **Model load:** 58 ms in the saved run (`latency_ms.model_load_ms`), up to about 250 ms in other runs, when cached on disk; the first-ever download took about 15 s (not saved).
 - **Cost:** $0 per lookup. `overhead_cost_usd` stays 0.
-- **Memory:** about 130 MB of ONNX weights per process.
+- **Memory:** the quantised ONNX weights are 66 MB on disk (`models/fastembed`). Process RSS was not measured for the cache alone; with the KB index also loaded, `compression_eval.json` records 302 MB (`setup.peak_rss_mb.after_retrieval_index`).
 
 For comparison, the research brief cites a production report of 20 ms p50 for embedding plus vector search, and the upstream call is 1–6 s.
 
 ## 4. Trade-offs
 
-- **We chose local bge-small over OpenAI text-embedding-3-small** because the cache must work offline with no keys (this project has none), and because τ must be calibrated on the model actually serving. A hosted model would add a network hop (about 50–200 ms) to every lookup, hits and misses alike, plus a vendor dependency on the hot path. That would erode the latency win of a hit. Embedding cost is not the reason: about $0.02 per 1M tokens is negligible.
+- **We chose local bge-small over OpenAI text-embedding-3-small** because the cache must work offline with no keys (this project has none), and because τ must be calibrated on the model actually serving. A hosted model would add a network hop (our estimate: about 50–200 ms, not measured) to every lookup, hits and misses alike, plus a vendor dependency on the hot path. That would erode the latency win of a hit. Embedding cost is not the reason: about $0.02 per 1M tokens is negligible.
 
   We picked bge-small over MiniLM on licence parity (MIT vs Apache) and on behaviour: it is the more conservative cosine scale, its pairwise AUC is the same, and it is fastembed's default. Redis's cache-tuned `langcache-embed-v3-small` is the natural next comparison.
 

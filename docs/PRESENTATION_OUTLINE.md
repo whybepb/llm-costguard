@@ -17,7 +17,7 @@
 | Architecture | 30% | 4:30 |
 | LLMOps depth | 20% | 3:00 |
 | Trade-offs | 20% | 3:00 |
-| Results and delivery | 10% | 1:30 |
+| Presentation quality (delivery; results slide) | 10% | 1:30 |
 
 Six speakers × 2:30, so time is shared equally.
 
@@ -47,7 +47,7 @@ Each speaker also owns the Q&A questions about their slides (see the end of this
 **1. Title + the one-line result** (S1, 0:30)
 
 - "CostGuard: an OpenAI-compatible gateway that cut ShopNest's LLM bill by **X%** at **Y%** quality retained, with no change to the calling code."
-- X = `saved_pct` with its 95% CI; Y = `quality_retained` with its CI, both from `eval/results/ab_summary.json`.
+- X = the A5 arm's `savings_pct` with `savings_ci`; Y = its `quality.retained` with `quality.retained_ci`. Take both from the real-run summary: `eval/results/ab_summary_mlx.json` for the local MLX run (dollars are list-price equivalents at GPT-5.4-mini / GPT-5-nano prices, so say "list-price equivalent"), or `ab_summary.json` for a paid-backend run. Never `ab_summary_mock.json`.
 
 **2. Problem and business objective** (S1, 1:00)
 
@@ -82,7 +82,7 @@ Each speaker also owns the Q&A questions about their slides (see the end of this
 
 **6. Caching: exact → semantic → guards** (S2, 1:00)
 
-- The threshold curve from `threshold_sweep.json`: hit rate and **per-request** false-hit rate against τ, with the recommended τ per mode.
+- The threshold curve from `threshold_sweep.json`: hit rate and **per-request** false-hit rate against τ, with the recommended τ per mode. Label the hit rates as an upper bound: Bitext is template paraphrases, so nearly every query has a close neighbour.
 - The guard effect: false hits removed vs correct hits lost.
 - One trap example: "cancel #4821" vs "don't cancel #4822" at about 0.9 cosine.
 - Why the exact cache sits in front: zero risk, ~1 µs.
@@ -97,7 +97,7 @@ Each speaker also owns the Q&A questions about their slides (see the end of this
 
 - The per-category gate table from `configs/router_gate.json`: allow/block with the lower bound of the paired CI.
 - Anything uncertain goes to strong.
-- **Be upfront:** Sonnet → Haiku is only a **2× price gap**, so routing is a small lever and caching dominates.
+- **Be upfront:** Sonnet → Haiku is only a **2× price gap**, so routing is a small lever and caching dominates. The measured MLX runs are billed at GPT-5.4-mini → GPT-5-nano (~12×), so their routing step overstates what the Anthropic pair would save. Say which pair each number uses.
 
 **9. Latency budget** (S3, 0:45)
 
@@ -114,7 +114,7 @@ Each speaker also owns the Q&A questions about their slides (see the end of this
   - cassettes make re-analysis $0 and deterministic;
   - a cumulative ablation (A0–A5);
   - paired bootstrap CIs;
-  - a hand-written domain eval set;
+  - a hand-written domain eval set (until the team's rows land, only AI-written seed rows exist; say so);
   - a judge with position swap, plus a human-agreement check.
 - Online:
   - offline shadow replay of logged queries;
@@ -163,11 +163,11 @@ Plus one line on rejected alternatives: self-hosting is below the ~$10k/month br
 
 **16. Results** (S6, 1:30)
 
-- The savings waterfall by lever (dashboard tab, from `ab_summary.json`).
+- The savings waterfall by lever (dashboard tab, from the real-run summary, e.g. `ab_summary_mlx.json`; never the mock file).
 - The A/B table with CIs.
 - Cost per correct answer, baseline vs CostGuard.
 - Load test: **128 req/s, 0 failures**; hit-path overhead p99 3.6 ms; miss-path p99 94.6 ms; mock upstream.
-- Close with the honest headline. Compression is big in tokens but small in dollars (output tokens cost 5× input), and routing is capped by the 2× price gap.
+- Close with the honest headline. Compression is big in tokens but small in dollars (output tokens cost 5× input on Anthropic, 6–8× at the GPT prices the MLX run is billed at), and on Anthropic routing is capped by the 2× price gap.
 - The resume line.
 
 ---
@@ -204,6 +204,7 @@ Each question has an owner and a short answer, with the file that proves it.
 
 7. **"Where does your eval set come from? Is it contaminated by the trace?"** (S4)
    - Hand-written by the team, with authors recorded per row; AI seeds are labelled `"author": "seed"`.
+   - Be honest about the current state: until the team's files land, the only rows are the 44 AI-written seed rows, and the router gate falls back to a Bitext + KB sample.
    - The workload trace (Bitext + KB questions) is separate from the graded set.
 8. **"How reliable is your judge?"** (S4)
    - Position-swapped pairwise judging; disagreement counts as a tie. Reference-guided grading.
@@ -230,6 +231,7 @@ Each question has an owner and a short answer, with the file that proves it.
     - Fewer layers, and an explicit endpoint that ignores `ANTHROPIC_BASE_URL` (DESIGN_DECISIONS #10).
 14. **"Isn't 2× too small a gap for routing to matter?"** (S3)
     - Yes, and we say so. Routing saves at most 50% of a routed request, while a hit saves 100%, including output tokens at 5× the input price.
+   - The MLX run is billed at a ~12× pair, so its routing share is an upper bound for the Anthropic deployment.
     - That is why the levers are ordered as they are.
 15. **"What is your p99, and does CostGuard slow things down?"** (S5)
     - Hit-path overhead p99 3.6 ms; miss path 94.6 ms; 128 req/s with 0 failures (`loadtest.json`, mock upstream).

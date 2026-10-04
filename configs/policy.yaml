@@ -1,5 +1,5 @@
 # CostGuard policy: versioned in git. Its hash is logged on every request (config_hash), so every number traces to a config.
-# Thresholds below are starting points; the sweep scripts in eval/ produce the calibrated values (see docs/DESIGN_DECISIONS.md).
+# Values below are calibrated from eval/results/threshold_sweep.json and compression_eval.json (comments cite the numbers).
 version: 1
 default_mode: balanced
 kb_version: kb-v1                      # bump when the knowledge base changes -> new cache partition (invalidates semantic cache)
@@ -62,7 +62,7 @@ modes:
     context_budget_tokens: 1000  # compression_eval: rerank 1000 + heuristic 0.5 -> retention 96.4% (bar >= 95%)
     context_min_score: null
     compression: true
-    compression_rate: 0.5        # keep ~50% of context tokens (heuristic extractive; LLMLingua-2 kept only 51.8%)
+    compression_rate: 0.5        # keep ~50% of context tokens (heuristic extractive). LLMLingua-2 at the same rate kept only 51.8% of the needed facts
     compression_min_tokens: 400  # don't bother below this
     router: true
     router_policy: gated         # downshift only categories that passed the eval gate

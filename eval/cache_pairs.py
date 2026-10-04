@@ -15,10 +15,10 @@ Sources
            Negatives: near-miss intents in the same category (cancel_order vs track_order), embedder-mined nearest
            neighbours with a different intent, and random different-intent pairs.
   qqp      Quora Question Pairs (GLUE validation split), 1,000 duplicates + 1,000 non-duplicates: general-domain check.
-  trap     hand-written lookalikes that need different answers (numbers, negation, entities, constraints).
+  trap     seed (AI-written) lookalikes that need different answers (numbers, negation, entities, constraints).
            Rows of eval/data/evalset/*.jsonl with type == "trap_pair" are used when present; the in-file seed set
            (author "seed") is always included.
-  seed     hand-written paraphrases that *should* hit, to measure what the guards wrongly block.
+  seed     seed (AI-written) paraphrases that *should* hit, to measure what the guards wrongly block.
 """
 from __future__ import annotations
 
@@ -52,8 +52,8 @@ LICENCES = {
                "note": "Bitext sample customer-support dataset; we keep a compact copy of instruction/category/intent."},
     "qqp": {"dataset": f"hf:{QQP_REPO} (qqp, validation)", "licence": "Quora original release terms (GLUE card: 'other')",
             "note": "Used for non-commercial evaluation only; only a 2,000-pair sample is stored."},
-    "trap": {"dataset": "hand-written (this repo)", "licence": "project licence"},
-    "seed": {"dataset": "hand-written (this repo)", "licence": "project licence"},
+    "trap": {"dataset": "seed (AI-written scaffolding, this repo; team to replace with hand-written rows)", "licence": "project licence"},
+    "seed": {"dataset": "seed (AI-written scaffolding, this repo; team to replace with hand-written rows)", "licence": "project licence"},
 }
 
 # ============================================================================================ Bitext
@@ -113,7 +113,7 @@ def embed_texts(texts: list[str], model_name: Optional[str] = None) -> np.ndarra
     return m
 
 
-# ============================================================================================ hand-written pairs
+# ============================================================================================ seed pairs (AI-written; team extends)
 
 SEED_TRAPS: list[tuple[str, str, str]] = [  # (query_a, query_b, what differs) -- a hit between them is a false hit
     ("I want to cancel my order #4821", "I want to cancel my order #4822", "number"),

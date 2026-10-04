@@ -11,7 +11,7 @@ is judged on those same requests. Every number in `docs/RESULTS.md` is generated
 | Piece | File | Command |
 |---|---|---|
 | Frozen replay trace | `eval/data/trace_v1.jsonl` + `.sha256` | `python -m eval.build_trace` |
-| Hand-written eval set | `eval/data/evalset/*.jsonl` | (written by the team) |
+| Hand-written eval set | `eval/data/evalset/*.jsonl` | (written by the team; today only `seed.jsonl`, AI-written scaffolding, see §9) |
 | CI subset | `eval/data/ci_subset.jsonl` | `python -m eval.build_trace --ci-subset` |
 | Cumulative ablation (A/B) | `eval/results/ab_summary.json` | `python -m eval.run_ab` |
 | CI eval gate | `eval/results/ci_gate.json`, `ci_baseline.json` | `python -m eval.ci_gate` |
@@ -29,7 +29,7 @@ is judged on those same requests. Every number in `docs/RESULTS.md` is generated
 | KB questions with retrieved context | ~28% | `eval.kb.kb_questions()`; context = `eval.kb.retrieve(query, k=8)`, stored in the row | the KB question's reference |
 | Trap pairs | 10% | the eval set's `trap_pair` rows, topped up with Bitext near-miss pairs | as above |
 
-The brief's "10% exact repeats and near-duplicates" are spread over the first two slices; see duplicates below. The
+Exact repeats and near-duplicates (30% of requests in the headline trace) are spread over the first two slices; see duplicates below. The
 default size is 600 so that a full A/B fits the budget (and local MLX generation stays feasible).
 
 **Clusters: what counts as the "same question".** A cache may serve one request's answer for another only if both
@@ -131,7 +131,8 @@ The arms are ordered by quality risk; each arm adds one lever to the previous ar
 - Paid backends need `--yes` to spend.
 - With `--workers N`, the known new calls are generated in parallel first, so the sequential replay is all cassette
   hits.
-- Estimate for the headline trace (anthropic, empty cassettes): **684 new Sonnet generations ≈ $2.01, ≤ 2,189 judge
+- Estimate for the headline trace (anthropic, empty cassettes; console output of `--estimate-only`, not saved under
+  `eval/results`): **684 new Sonnet generations ≈ $2.01, ≤ 2,189 judge
   calls ≤ $2.48, total ≤ $4.49**. Router downshifts, once the router gate is computed for anthropic, add a few cents
   of Haiku calls.
 
@@ -176,7 +177,8 @@ paired score difference is reported too.
 - Overhead = `overhead_ms` from the record.
 
 **Waterfall.** Each arm's increment over the previous arm, in dollars, % of A0 cost, and input and output tokens
-saved. Tokens overstate compression's dollar value because output tokens cost 5× input tokens, so both are reported.
+saved. Tokens overstate compression's dollar value because output tokens cost 5× input tokens on the Anthropic pair
+(6× for gpt-5.4-mini and 8× for gpt-5-nano, the prices mlx and mock are billed at), so both are reported.
 
 ## 5. The judge
 
@@ -184,7 +186,7 @@ saved. Tokens overstate compression's dollar value because output tokens cost 5�
 
 **Model.**
 - **Default:** the engine backend's strong tier, at temperature 0 with ≤ 5 output tokens. On `anthropic` that is
-  `claude-sonnet-5-5`.
+  `claude-sonnet-5-5`; on `mlx` it is `mlx-community/Qwen2.5-7B-Instruct-4bit`.
 - **Override:** `COSTGUARD_JUDGE_BACKEND` / `COSTGUARD_JUDGE_MODEL`.
 - **Cassette:** every call is cassette-backed (`COSTGUARD_JUDGE_CASSETTE`, `COSTGUARD_JUDGE_CASSETTE_MODE`).
 - **Without a key or MLX:** the judge runs replay-only.
@@ -215,9 +217,11 @@ saved. Tokens overstate compression's dollar value because output tokens cost 5�
 **Known biases and mitigations.**
 - **Position bias.** In the MT-Bench study, GPT-4 was position-consistent in only 65% of cases. The swap converts
   inconsistent verdicts to ties, and `stats.position_inconsistent` reports how often that happened.
-  - In the MLX smoke run, Qwen-7B answered "A" in both orders: pure position bias, correctly scored as a tie.
+  - In an MLX smoke run (output not saved under `eval/results`), Qwen-7B answered "A" in both orders: pure position
+    bias, correctly scored as a tie.
 - **Verbosity bias.** The prompts say to ignore length.
-- **Self-preference risk.** A **Sonnet judge grading Sonnet vs Haiku** answers (arm A5) can favour its own family.
+- **Self-preference risk.** A **Sonnet judge grading Sonnet vs Haiku** answers (arm A5) can favour its own family. On
+  mlx the default judge is the strong model itself (Qwen2.5-7B grading Qwen2.5-7B vs Qwen2.5-1.5B), with the same risk.
   - Mitigations: the position swap, reference-guided grading (an absolute grade against a written reference, not
     taste), and the hand-label agreement check below.
   - If keys allow, set `COSTGUARD_JUDGE_BACKEND`/`COSTGUARD_JUDGE_MODEL` to a different family and report both.
@@ -245,14 +249,15 @@ saved. Tokens overstate compression's dollar value because output tokens cost 5�
 - `cohen_kappa`.
 
 **Sample-size caveat.** For a proportion near 0.5, the 95% half-width is ±13.9 points at n = 50, ±9.8 at n = 100
-and ±5.7 at n = 300. The 600-row trace supports the savings and false-hit claims. The hand-written eval set (~40
-rows per author group) supports only coarse gates.
+and ±5.7 at n = 300. The 600-row trace supports the savings and false-hit claims. The hand-written eval set (10–15
+rows per author, about 60–90 in total; today only the 44 AI-written seed rows) supports only coarse gates.
 
 ## 7. Sensitivity to the duplicate rate
 
 The headline uses a 30% duplicate rate.
 - **Source:** MeanCache's 31%, which is a **per-user** figure from 20 ChatGPT users, not a service-wide one.
-- **Contrast:** SCALM measured 4.5–7.5% on real chat logs. Customer support is FAQ-heavy, so the true value is
+- **Contrast:** SCALM found 4.5% (MOSS) and 7.5% (LMSYS) of real chat queries answerable from a similar earlier query
+  (text-embedding-3-small, τ = 0.90). Customer support is FAQ-heavy, so the true value is
   probably in between.
 
 So the A/B is repeated on nested variants:
@@ -307,7 +312,9 @@ False hits are listed as "request ← served the cached answer of".
 - 11 trap false hits and 22 false hits overall appear;
 - the gate fails (exit 1).
 
-These figures come from the mock backend with every real stage component, on 2026-10-04.
+These figures come from the mock backend with every real stage component, on 2026-10-04. Only the 60.5% baseline is
+saved (`ci_gate.json` → `metrics.savings_pct`). The τ = 0.6 run's output was not saved, so re-run it and keep its
+output before quoting 72.7% / 11 / 22.
 
 At the calibrated τ it passes with zero false hits. The mock backend is enough for this, because the cache decision
 depends only on the queries.

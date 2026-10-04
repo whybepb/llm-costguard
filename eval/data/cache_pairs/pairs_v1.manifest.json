@@ -50,11 +50,11 @@
       "note": "Used for non-commercial evaluation only; only a 2,000-pair sample is stored."
     },
     "trap": {
-      "dataset": "hand-written (this repo)",
+      "dataset": "seed (AI-written scaffolding, this repo; team to replace with hand-written rows)",
       "licence": "project licence"
     },
     "seed": {
-      "dataset": "hand-written (this repo)",
+      "dataset": "seed (AI-written scaffolding, this repo; team to replace with hand-written rows)",
       "licence": "project licence"
     }
   },

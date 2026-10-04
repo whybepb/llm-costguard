@@ -6,7 +6,7 @@ The `.example` e-mail domain is reserved and never resolves.
 
 What this folder is:
 
-- System content for the RAG path: `eval/kb.py` chunks these files into ~150-250-token passages and retrieves the
+- System content for the RAG path: `eval/kb.py` chunks these files into 61 passages of 99-315 tokens (median 219) and retrieves the
   top-8 for a question, the way a typical "stuff 8 chunks" support bot would.
 - **Not** the graded eval set. The hand-written, graded questions live in `eval/data/evalset/`.
 

@@ -91,7 +91,7 @@ flowchart LR
 | 2 | **Semantic cache** | fastembed `BAAI/bge-small-en-v1.5` (ONNX, CPU, local) + brute-force numpy or Qdrant; partition = tenant \| system-prompt hash \| kb_version \| ctx | Local embeddings: $0, no vendor call, τ calibrated on this exact model | `costguard/cache/semantic.py`, [semantic_cache.md](components/semantic_cache.md) |
 | 2a | **Hit guards** | Deterministic checks: numbers/IDs, negation, entity lexicon, content-word fallback | A bi-encoder scores "cancel order #4821" ≈ "don't cancel #4822"; a cheap veto beats raising τ for everyone | `costguard/cache/guards.py`, [semantic_cache.md](components/semantic_cache.md) |
 | 3 | **Context optimiser** | Cross-encoder `Xenova/ms-marco-MiniLM-L-6-v2` (fastembed ONNX) → dynamic-k → drop whole docs to budget → best-first/second-best-last order | Reranking + dynamic-k beats token dropping on retrieved context; whole docs keep claims with their qualifiers | `costguard/context/optimizer.py`, [context_and_compression.md](components/context_and_compression.md) |
-| 4 | **Compressor** | Query-aware extractive (sentence/table-row units, protects numbers). LLMLingua-2 only offline | Fits a 512 MB free host; LLMLingua-2 needs ~2 GB of torch | `costguard/context/compress.py`, [context_and_compression.md](components/context_and_compression.md) |
+| 4 | **Compressor** | Query-aware extractive (sentence/table-row units, protects numbers). LLMLingua-2 only offline | Fits the free host (Render free: 512 MB RAM); LLMLingua-2 peaked at 1.6 GB RSS (mBERT) / 4.1 GB (xlm-roberta-large) in `compression_eval.json` | `costguard/context/compress.py`, [context_and_compression.md](components/context_and_compression.md) |
 | 5 | **Router** | Hardness signals + category (hint or embedding-centroid classifier) + `configs/router_gate.json`, written by the offline gate and re-read on mtime change | Downshift is the riskiest lever, so it only fires for categories that passed a paired-CI gate | `costguard/router/`, [router_and_gate.md](components/router_and_gate.md) |
 | 6 | **Provider adapters** | Native Anthropic SDK (Sonnet 5.5 strong / Haiku 4.5 cheap), mock, MLX (local), LiteLLM (others); cassette record/replay wrapper | Exact cache-read/write usage fields; explicit endpoint; replay makes CI and re-analysis free | `costguard/providers/` |
 | — | **Pricing** | `configs/prices.yaml`: input, output, cached-input and cache-write prices per model, checked 2026-10-03 | One formula, input and output priced separately; baseline = strong tier, full prompt, no cache | `costguard/pricing.py` |
@@ -140,10 +140,10 @@ Budgets are targets set from the non-functional requirements. The measured colum
 | 3 Context rerank | 40 ms | 25.1 ms | **104.4 ms** | Over budget under 50-user concurrency: CPU-bound cross-encoder on 4–6 docs; first thing to scale (DESIGN_DECISIONS §3); n = 753 |
 | 4 Compression | 5 ms | 1.0 ms | **7.5 ms** | Pure Python; n = 52 (runs only when the trimmed block is still ≥ `compression_min_tokens`) |
 | 5 Router | 2 ms | 0.14 ms | 2.1 ms | centroid classifier + gate lookup; at budget |
-| 6 Upstream | provider | 305 ms | 313 ms | mock = 300 ms sleep; real Sonnet/Haiku TTFT is seconds |
+| 6 Upstream | provider | 305 ms | 313 ms | mock = 300 ms sleep; a real Sonnet/Haiku completion takes seconds (not measured here) |
 | 7 Write-back | 2 ms | 0.14 ms | 0.8 ms | exact + semantic insert |
-| 8 Hooks: metrics + drift | 0.1 ms | ~0.02 ms | — | micro-benchmark: 19 µs + 3 µs per request |
-| 8 Request-log write (SQLite) | 1 ms | ~0.5 ms | — | micro-benchmark; synchronous, outside `overhead_ms` |
+| 8 Hooks: metrics + drift | 0.1 ms | ~0.02 ms | — | micro-benchmark (not saved under `eval/results`): 19 µs + 3 µs per request |
+| 8 Request-log write (SQLite) | 1 ms | ~0.5 ms | — | micro-benchmark (not saved under `eval/results`); synchronous, outside `overhead_ms` |
 | **CostGuard overhead, hit path** | **50 ms** | **0.3 ms** | **3.6 ms** | `x-costguard-overhead-ms`, exact + semantic, n = 6,116 |
 | **CostGuard overhead, miss path** | **100 ms** | **11.8 ms** | **94.6 ms** | n = 1,552 |
 | of which RAG requests with 4–6 docs (cache bypass) | 100 ms | 25.9 ms | **105.8 ms** | n = 745; over budget because of the reranker |
@@ -202,7 +202,7 @@ These are a design point, not measurements.
 **In scope:**
 
 - Text chat completions, English, one domain (ShopNest support).
-- One strong/cheap pair per backend: Anthropic Sonnet 5.5 / Haiku 4.5 for real runs; mock, MLX and LiteLLM backends for development.
+- One strong/cheap pair per backend: Anthropic Sonnet 5.5 / Haiku 4.5 is the real API backend. MLX (Qwen2.5-7B / Qwen2.5-1.5B, local, billed at GPT-5.4-mini / GPT-5-nano list-price equivalents) is the free stand-in used for the measured runs. Mock and LiteLLM backends are for development.
 - Single-region, single-replica deployment.
 - The cost levers: exact cache, semantic cache, context trimming, compression, gated downshift.
 - Per-request cost and latency observability, drift monitoring, the A/B harness and the CI eval gate.

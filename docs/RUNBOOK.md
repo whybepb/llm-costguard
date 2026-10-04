@@ -229,7 +229,7 @@ Pip, fastembed and Hugging Face model directories are cached.
 
    ```bash
    git checkout -b demo/tau-0.6
-   # in configs/policy.yaml, modes.balanced:  tau: 0.90  ->  tau: 0.60
+   # in configs/policy.yaml, modes.balanced:  tau: 0.93  ->  tau: 0.60
    git commit -am "Lower semantic-cache tau to 0.6 for more savings"
    git push -u origin demo/tau-0.6
    gh pr create --title "Lower semantic-cache tau to 0.6 for more savings" \

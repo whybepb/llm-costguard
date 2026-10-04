@@ -23,7 +23,7 @@ Related documents:
 
 **2. τ chosen from a per-request false-hit budget.** We chose the threshold from a curve of false hits over **all requests**, with a budget per mode (0.5% / 1% / 3% for quality / balanced / economy, see `eval/results/threshold_sweep.json`). We rejected a single eyeballed or hit-rate-maximising τ.
 
-- **Why:** a false hit is a confidently wrong answer with no error signal. Per-hit precision flatters aggressive thresholds: AWS's ~92% "accuracy" at τ = 0.80 is still 1 wrong answer in 14 requests.
+- **Why:** a false hit is a confidently wrong answer with no error signal. Per-hit precision flatters aggressive thresholds. In AWS's ElastiCache benchmark (Titan Text Embeddings V2 on SemBenchmarkLmArena), τ = 0.80 has 91.8% per-hit "accuracy", but with an 87.6% hit rate that is a wrong answer for about 7.2% of all requests, 1 in 14.
 - **Cost:** a lower hit rate, and τ must be recalibrated whenever the embedding model changes.
 
 **3. Deterministic guards on near-hits.** We chose number/ID, negation and entity guards that veto a near-hit over raising τ for everyone.
@@ -45,12 +45,12 @@ Related documents:
 
 **6. Rerank and drop whole documents.** We chose a cross-encoder rerank, then dynamic-k, then dropping whole documents to a token budget, over mid-chunk truncation or token-level dropping.
 
-- **Why:** half-chunks strand claims from their qualifiers ("returns within 30 days *unless* opened"). Rerank plus dynamic-k is the published winner on retrieved context.
+- **Why:** half-chunks strand claims from their qualifiers ("returns within 30 days *unless* opened"). Published comparisons favour selecting whole passages over token pruning (Jha et al. 2024: extractive selection "often outperforms" it, up to 10× compression).
 - **Cost:** the cross-encoder is our slowest stage, p50 25 / p99 104 ms under 50-user load (n = 753, `eval/results/loadtest.json`). It pushes RAG misses just past the 100 ms miss-path budget.
 
 **7. Heuristic compressor live, LLMLingua-2 offline.** We chose a query-aware extractive compressor in the serving path over LLMLingua-2 in the serving path.
 
-- **Why:** LLMLingua-2 needs torch and about 2 GB of weights, which cannot run on a 512 MB free host. Our heuristic protects numbers and runs in under 1 ms.
+- **Why:** LLMLingua-2 needs torch plus a 0.7–2.2 GB model. Peak RSS measured 1.6 GB (mBERT) and 4.1 GB (xlm-roberta-large) (`compression_eval.json`), which cannot run on Render free's 512 MB. Our heuristic protects numbers and runs at about 1 ms p50 / 7.5 ms p99 in the pipeline (`loadtest.json`), 4 ms p50 in the offline eval.
 - **Cost:** a lower compression ratio at equal retention. LLMLingua-2 results are reported from the offline eval only (`eval/results/compression_eval.json`).
 
 ### Routing and models
@@ -62,13 +62,14 @@ Related documents:
 
 **9. Sonnet 5.5 as strong, Haiku 4.5 as cheap.** We chose this Anthropic pair over a wider-gap pair such as GPT-5.4-mini → GPT-5-nano (about 12×).
 
-- **Why:** one provider and SDK for both tiers, the same prompt-caching semantics, and Haiku 4.5 is strong enough to pass the gate on simple categories.
+- **Why:** one provider and SDK for both tiers, the same prompt-caching semantics, and we expect Haiku 4.5 to pass the gate on simple categories. That is an expectation, not a measurement: the gate has not been run on the Anthropic pair.
 - **Limitation:** **the price gap is only 2×**: $2 / $10 vs $1 / $5 per 1M input / output tokens. A downshift saves at most 50% on a routed request. A cache hit saves 100%, including output tokens, which cost 5× input.
 - **Consequence:** this is the honest reason **caching matters more than routing here**. The waterfall should show routing as a small lever, and we say so before an examiner does.
+- **Measured runs:** the headline A/B and the router gate run on the local MLX stand-in (Qwen2.5-7B → 1.5B), billed at GPT-5.4-mini → GPT-5-nano list prices, a ~12× gap. Routing will look bigger in that waterfall than it would on the Anthropic pair, so quote it with that caveat.
 
 **10. Native Anthropic SDK.** We chose the native `anthropic` SDK adapter over LiteLLM for the real backend.
 
-- **Exact usage fields:** the SDK returns `cache_read_input_tokens` and `cache_creation_input_tokens` separately. PriceBook bills them at the cached price and the cache-write price; LiteLLM's normalised usage blurs them.
+- **Exact usage fields:** the SDK returns `cache_read_input_tokens` and `cache_creation_input_tokens` separately. PriceBook bills them at the cached price and the cache-write price. LiteLLM re-maps them into the OpenAI usage shape (`prompt_tokens_details.cached_tokens` plus an extra `cache_creation_input_tokens`), one more translation layer between the provider's numbers and the bill.
 - **Fewer layers:** one fewer dependency between the request and the bill, and failures surface as the provider's own errors.
 - **Explicit endpoint:** the adapter always calls `https://api.anthropic.com` unless `COSTGUARD_ANTHROPIC_BASE_URL` is set. It deliberately ignores an inherited `ANTHROPIC_BASE_URL`, so the key can't be silently sent to some other tool's proxy.
 - **Cost:** a second code path to maintain. LiteLLM is kept for the other backends and as an off-the-shelf comparison arm.
@@ -86,12 +87,12 @@ Related documents:
 - Langfuse goes through a bounded queue and a background thread.
 - The LLM judge runs offline on samples.
 
-- **Why:** monitoring must add no latency. The in-process hooks cost 19 µs (metrics) and 3 µs (drift) per request. Langfuse init and network I/O happen off-thread and drop events rather than block.
+- **Why:** monitoring must add no latency. The in-process hooks cost 19 µs (metrics) and 3 µs (drift) per request in a micro-benchmark (not yet saved under `eval/results`). Langfuse init and network I/O happen off-thread and drop events rather than block.
 - **Cost:** quality signals arrive minutes or hours late, not per request.
 
 **13. Our own SQLite log as the source of truth.** We chose a local SQLite TraceRecord log over Langfuse or a SaaS as the system of record.
 
-- **Why:** no quota (Langfuse Hobby is 50k units/month, about 8k requests), it is reproducible, and the dashboard, `/v1/stats` and README tables all read the same rows.
+- **Why:** no quota (Langfuse Hobby is 50k units/month, about 8k requests at ~6 units per request), it is reproducible, and the dashboard, `/v1/stats` and README tables all read the same rows.
 - **Cost:** it is single-host. The core logger writes synchronously (~0.5 ms), and a multi-replica deployment would need Postgres or ClickHouse.
 
 **14. Cassette replay in CI.** We chose to replay recorded upstream responses (cassettes) in CI over calling the live API.
@@ -154,7 +155,7 @@ At 10× the design point, that is 200k requests/day and ~12 req/s at peak, the o
      - cache query embeddings, since repeats already skip them;
      - move rerank to a sidecar, or switch it off in `economy`;
      - scale replicas horizontally.
-2. **One worker's threadpool.** The sync endpoint uses 40 threads, so a 300 ms upstream caps pure-miss traffic near 133 req/s per worker. With real 2–5 s provider latency, that cap drops to about 10–20 req/s.
+2. **One worker's threadpool.** The sync endpoint uses 40 threads, so a 300 ms upstream caps pure-miss traffic near 133 req/s per worker. With real 2–5 s provider latency, that cap drops to about 8–20 req/s.
    - **Fix:** more uvicorn workers or replicas, or an async provider path.
 3. **In-process caches stop being shared.** Each replica has its own exact and semantic cache, so the hit rate falls as replicas are added.
    - **Fix:** Redis for the exact tier and Qdrant (already supported) for the semantic tier. Tenant-namespaced keys carry over unchanged.
