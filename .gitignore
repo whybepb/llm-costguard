@@ -11,3 +11,13 @@ eval/cassettes/*.jsonl.tmp
 models/
 eval/data/raw/
 eval/results/*.sqlite
+
+# course-derived material stays local (not project content)
+docs/research/notes/course_rubric_mapping.md
+
+# local env variants and build artefacts from `pip install .`
+.env.*
+!.env.example
+build/
+*.egg-info/
+eval/results/logs/

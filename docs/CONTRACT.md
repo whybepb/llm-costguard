@@ -8,7 +8,7 @@
 
 **Domain:** customer support for *ShopNest*, a fictional online store selling electronics, home goods and apparel.
 - Workload trace: public customer-support data (Bitext) plus questions about the store-policy knowledge base, which carry retrieved context.
-- Eval set: hand-written by the team.
+- Eval set: hand-written by the team. Today only `eval/data/evalset/seed.jsonl` exists, and it is AI-written scaffolding (`"author": "seed"`).
 
 **Research brief:** `docs/research/LLM CostGuard project research.md` (detailed notes in `../research/notes/`). Read the sections for your component; it has the published numbers, pitfalls and evaluation method.
 
@@ -100,4 +100,5 @@ def retrieve(query: str, k: int = 8) -> list[str]: ...   # deliberately generous
 - **Savings:** 1 − Σ cost ÷ Σ baseline_cost.
   - The baseline is the strong tier with the full prompt and no cache.
   - Costs are list-price equivalents from `configs/prices.yaml`.
+  - In the A/B, the headline (paired) savings divide by A0's actual cost on the same items; the `baseline_cost_usd` version is reported as "est. savings" (`docs/EVALUATION.md` §4).
 - **Quality retained:** the optimised arm's judge score ÷ the baseline score on the same items, with a paired bootstrap 95% CI.
