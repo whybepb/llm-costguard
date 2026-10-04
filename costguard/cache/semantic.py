@@ -38,6 +38,8 @@ from . import guards as G
 DEFAULT_TOP_K = 5
 DEFAULT_DEDUP = 0.98
 DEFAULT_MAX_PER_PARTITION = 50_000
+DEFAULT_MAX_TOTAL = 200_000          # across all partitions (memory backend)
+PURGE_EVERY = 1024                   # inserts between expiry sweeps (both backends)
 
 
 @dataclass
@@ -79,9 +81,12 @@ class MemoryStore:
 
     name = "memory"
 
-    def __init__(self, max_entries_per_partition: int = DEFAULT_MAX_PER_PARTITION):
+    def __init__(self, max_entries_per_partition: int = DEFAULT_MAX_PER_PARTITION,
+                 max_entries_total: int = DEFAULT_MAX_TOTAL):
         self.max_per_partition = int(max_entries_per_partition)
-        self._parts: dict[str, _Partition] = {}
+        self.max_total = int(max_entries_total)
+        self._parts: "OrderedDict[str, _Partition]" = OrderedDict()   # least recently written/hit first
+        self._adds = 0
         self.evictions = 0
 
     def search(self, partition, vec, k, now):
@@ -108,6 +113,7 @@ class MemoryStore:
         p = self._parts.get(partition)
         if p is None:
             p = self._parts[partition] = _Partition(vec.shape[0])
+        self._parts.move_to_end(partition)
         if p.n >= self.max_per_partition:
             self._compact(p, now=time.time(), make_room=True)
         if p.n == p.vecs.shape[0]:
@@ -122,6 +128,9 @@ class MemoryStore:
         p.alive[i] = True
         p.recs.append(rec)
         p.n += 1
+        self._adds += 1
+        if self._adds % PURGE_EVERY == 0:
+            self.purge_expired()
 
     def replace(self, partition, old, vec, rec):
         p = self._parts.get(partition)
@@ -133,6 +142,8 @@ class MemoryStore:
 
     def touch(self, partition, rec, now):
         rec.last_used = now
+        if partition in self._parts:
+            self._parts.move_to_end(partition)
 
     def _compact(self, p: _Partition, now: float, make_room: bool = False):
         keep = [i for i in range(p.n) if p.alive[i] and p.expires[i] > now]
@@ -151,9 +162,19 @@ class MemoryStore:
         p.n = m
 
     def purge_expired(self, now: Optional[float] = None) -> None:
+        """Drop expired entries and empty partitions, then enforce the global bound by evicting whole partitions,
+        least recently used first (many distinct system prompts must not grow memory without limit)."""
         now = time.time() if now is None else now
-        for p in self._parts.values():
+        for key in list(self._parts):
+            p = self._parts[key]
             self._compact(p, now)
+            if p.n == 0:
+                del self._parts[key]
+        total = self.count()
+        while total > self.max_total and len(self._parts) > 1:
+            _, p = self._parts.popitem(last=False)
+            total -= p.n
+            self.evictions += p.n
 
     def clear(self):
         self._parts.clear()
@@ -218,6 +239,18 @@ class QdrantStore:
     def add(self, partition, vec, rec):
         self.client.upsert(self.collection, points=[
             self._m.PointStruct(id=rec.id, vector=vec.astype(np.float32).tolist(), payload=self._to_payload(partition, rec))])
+        self._adds = getattr(self, "_adds", 0) + 1
+        if self._adds % PURGE_EVERY == 0:
+            self.purge_expired()
+
+    def purge_expired(self, now: Optional[float] = None) -> None:
+        """Search filters expired points out; this deletes them so storage does not grow without limit."""
+        m, now = self._m, time.time() if now is None else now
+        try:
+            self.client.delete(self.collection, points_selector=m.FilterSelector(filter=m.Filter(
+                must=[m.FieldCondition(key="expires_at", range=m.Range(lt=now))])))
+        except Exception:  # cleanup is best-effort; never fail an insert over it
+            pass
 
     def replace(self, partition, old, vec, rec):
         rec.id = old.id
@@ -377,7 +410,8 @@ def build_semantic_cache(settings, policy) -> SemanticCacheImpl:
         store = QdrantStore(dim=emb.dim, collection=f"costguard_semcache__{_slug(emb.model_name)}",
                             url=getattr(settings, "qdrant_url", None))
     elif backend == "memory":
-        store = MemoryStore(int(c.get("semantic_max_entries", DEFAULT_MAX_PER_PARTITION)))
+        store = MemoryStore(int(c.get("semantic_max_entries", DEFAULT_MAX_PER_PARTITION)),
+                            int(c.get("semantic_max_entries_total", DEFAULT_MAX_TOTAL)))
     else:
         raise ValueError(f"unknown semantic_backend {backend!r} (memory | qdrant)")
     return SemanticCacheImpl(emb, store, ttl_seconds=ttl, guards=guards,

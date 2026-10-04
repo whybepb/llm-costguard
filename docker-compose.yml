@@ -1,19 +1,23 @@
 # Local stack: CostGuard proxy + Qdrant (semantic-cache vectors) [+ Streamlit dashboard].
 #
-#   docker compose up --build                          # proxy on :8000 (mock backend, no keys), Qdrant on :6333
-#   docker compose --profile dashboard up --build      # + dashboard on :8501
+#   docker compose up --build                          # proxy on :8000 (mock backend, no keys), Qdrant on 127.0.0.1:6333
+#   docker compose --profile dashboard up --build      # + dashboard on 127.0.0.1:8501
 #   COSTGUARD_BACKEND=anthropic docker compose up      # real API: key comes from your shell or ./.env (gitignored)
 #   COSTGUARD_EXTRA_PIP=langfuse docker compose build  # bake the optional Langfuse SDK into the image
 #
 # Secrets are only ever passed through as environment variables (Compose reads ./.env for ${...} interpolation);
 # they are never copied into the image (.dockerignore excludes .env).
+#
+# Only the proxy is published on all interfaces (it authenticates callers via COSTGUARD_API_KEYS). Qdrant has no auth
+# here and holds every tenant's cached queries and answers, and the dashboard reads the request log, so both are bound
+# to localhost; the proxy reaches Qdrant over the compose network.
 name: costguard
 
 services:
   qdrant:
     image: qdrant/qdrant:v1.19.1   # open source (Apache-2.0); matches qdrant-client 1.19.1
     ports:
-      - "6333:6333"
+      - "127.0.0.1:6333:6333"       # debugging only; remove in shared environments
     volumes:
       - qdrant-data:/qdrant/storage
     restart: unless-stopped
@@ -52,7 +56,7 @@ services:
       target: dashboard
     image: costguard-dashboard:local
     ports:
-      - "8501:8501"
+      - "127.0.0.1:8501:8501"
     environment:
       COSTGUARD_DB: /app/data/runtime/costguard.sqlite
       COSTGUARD_URL: http://proxy:8000                                   # live /v1/drift

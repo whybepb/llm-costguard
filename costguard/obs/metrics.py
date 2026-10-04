@@ -134,6 +134,8 @@ class CostGuardMetrics:
                                    registry=r)
         self.hook_dropped = Counter("costguard_hook_dropped", "Telemetry events dropped (queue full / sampled out)",
                                     ["hook", "reason"], registry=r)
+        self.log_health = Gauge("costguard_request_log", "SQLite request log: rows queued, dropped (queue full) "
+                                "and lost to failed inserts; writer_alive is 1/0", ["kind"], registry=r)
 
     # ------------------------------------------------------------ recording
     def observe(self, rec: TraceRecord) -> None:
@@ -267,6 +269,8 @@ def mount(app) -> None:
         dh = None
     app.state.metrics = metrics
     app.state.drift = dh
+    from .logger import RequestLogger
+    rl = _find_hook(engine, RequestLogger)
 
     @app.get("/metrics", include_in_schema=False)
     def prometheus_metrics() -> Response:
@@ -275,6 +279,11 @@ def mount(app) -> None:
                 metrics.set_drift(dh.monitor.report())
             except Exception:
                 pass
+        if rl is not None:
+            h = rl.health()
+            for kind in ("queued", "dropped", "write_errors"):
+                metrics.log_health.labels(kind=kind).set(h[kind])
+            metrics.log_health.labels(kind="writer_alive").set(1 if h["writer_alive"] else 0)
         return Response(content=metrics.render(), media_type=CONTENT_TYPE_LATEST)
 
     @app.get("/v1/drift")
