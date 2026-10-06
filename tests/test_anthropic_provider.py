@@ -44,8 +44,9 @@ def test_request_shape_per_model():
     p.complete(msgs, strong, 256, 0.0)
     p.complete(msgs, cheap, 256, 0.0)
     s, c = fake.messages.calls
-    assert strong == "claude-sonnet-5-5" and "temperature" not in s and s["thinking"] == {"type": "between_tools"}
-    assert c["temperature"] == 0.0 and "thinking" not in c
+    assert strong == "claude-sonnet-5-5" and "temperature" not in s and "extra_body" not in s
+    assert s["thinking"] == {"type": "between_tools"}
+    assert c["extra_body"] == {"temperature": 0.0} and "thinking" not in c   # SDK 1.x: sent via extra_body
 
 
 def test_text_is_read_by_block_type():

@@ -149,7 +149,8 @@ class AnthropicProvider:
         sys_param, msgs = self._split(messages)
         kw = {"system": sys_param} if sys_param else {}
         if accepts_sampling(model):        # on the others even temperature=0 is a 400; they run at the API default
-            kw["temperature"] = temperature
+            # anthropic SDK 1.x dropped `temperature` from messages.create(); the API still honours it on these models
+            kw["extra_body"] = {"temperature": temperature}
         if model in THINKING_OFF:
             kw["thinking"] = THINKING_OFF[model]
         if self.ledger is not None:
