@@ -1,0 +1,440 @@
+{
+  "case_ret_10d": {
+    "order_id": "NS-104482",
+    "customer": "Avery Cole",
+    "item": "Nova Wireless Headphones",
+    "seller": "Northstar",
+    "fulfilled_by": "Northstar",
+    "order_status": "Delivered",
+    "delivered_days_ago": 10,
+    "final_sale": false,
+    "international": false,
+    "return_requested": false,
+    "refund_status": "none"
+  },
+  "case_ret_40d": {
+    "order_id": "NS-104499",
+    "customer": "Avery Cole",
+    "item": "Nova Wireless Headphones",
+    "seller": "Northstar",
+    "fulfilled_by": "Northstar",
+    "order_status": "Delivered",
+    "delivered_days_ago": 40,
+    "final_sale": false,
+    "international": false,
+    "return_requested": false,
+    "refund_status": "none"
+  },
+  "case_ret_final": {
+    "order_id": "NS-104500",
+    "customer": "Avery Cole",
+    "item": "Nova Wireless Headphones",
+    "seller": "Northstar",
+    "fulfilled_by": "Northstar",
+    "order_status": "Delivered",
+    "delivered_days_ago": 5,
+    "final_sale": true,
+    "international": false,
+    "return_requested": false,
+    "refund_status": "none"
+  },
+  "case_ret_intl": {
+    "order_id": "NS-104510",
+    "customer": "Avery Cole",
+    "item": "Nova Wireless Headphones",
+    "seller": "Northstar",
+    "fulfilled_by": "Northstar",
+    "order_status": "Delivered",
+    "delivered_days_ago": 10,
+    "final_sale": false,
+    "international": true,
+    "destination": "Canada",
+    "prepaid_return_label": false,
+    "duty_amount_shown": false
+  },
+  "case_ref_3d": {
+    "order_id": "NS-33001",
+    "customer": "Jordan Blake",
+    "item": "Nova Wireless Headphones",
+    "refund_status": "issued",
+    "business_days_since_issued": 3,
+    "status_changed_since_issue": false,
+    "return_received": true,
+    "payment_method": "card",
+    "amount_posted_to_card": false
+  },
+  "case_ref_12d": {
+    "order_id": "NS-33012",
+    "customer": "Jordan Blake",
+    "item": "Nova Wireless Headphones",
+    "refund_status": "issued",
+    "business_days_since_issued": 12,
+    "status_changed_since_issue": false,
+    "return_received": true,
+    "payment_method": "card",
+    "amount_posted_to_card": false
+  },
+  "case_ref_none": {
+    "order_id": "NS-33020",
+    "customer": "Jordan Blake",
+    "item": "Nova Wireless Headphones",
+    "refund_status": "none",
+    "return_received": false,
+    "return_shipped": false,
+    "payment_method": "card"
+  },
+  "case_can_open": {
+    "order_id": "NS-22011",
+    "customer": "Sam Patel",
+    "item": "Desk lamp",
+    "order_status": "Processing",
+    "cancel_control_visible": true,
+    "carrier_has_parcel": false
+  },
+  "case_can_shipped": {
+    "order_id": "NS-22018",
+    "customer": "Sam Patel",
+    "item": "Desk lamp",
+    "order_status": "Shipped",
+    "cancel_control_visible": false,
+    "carrier_has_parcel": true,
+    "shipped_hours_ago": 5
+  },
+  "case_can_partial": {
+    "order_id": "NS-22019",
+    "customer": "Sam Patel",
+    "lines": "desk lamp shipped with no cancel control; mug still Processing with Cancel item visible",
+    "order_status": "Partially shipped"
+  },
+  "case_trk_6h": {
+    "order_id": "NS-44101",
+    "customer": "Riley Nguyen",
+    "item": "Cotton towel set",
+    "handoff_hours_ago": 6,
+    "scan_count": 0,
+    "tracking_number": "1Z90844101",
+    "tracking_status": "Label created, no carrier scan",
+    "delivered": false
+  },
+  "case_trk_30h": {
+    "order_id": "NS-44109",
+    "customer": "Riley Nguyen",
+    "item": "Cotton towel set",
+    "handoff_hours_ago": 30,
+    "scan_count": 0,
+    "tracking_number": "1Z90844109",
+    "tracking_status": "No scan since handoff",
+    "delivered": false
+  },
+  "case_trk_none": {
+    "order_id": "NS-44110",
+    "customer": "Riley Nguyen",
+    "item": "Cotton towel set",
+    "handoff_hours_ago": 6,
+    "scan_count": 0,
+    "tracking_number_in_context": false,
+    "tracking_status": "not included",
+    "city": "not included",
+    "delivered": false
+  },
+  "case_trk_delivered": {
+    "order_id": "NS-44112",
+    "customer": "Riley Nguyen",
+    "item": "Cotton towel set",
+    "tracking_number": "1Z90844112",
+    "tracking_status": "Delivered",
+    "handoff_hours_ago": 6,
+    "delivered_morning": true,
+    "recipient_named": false
+  },
+  "case_mis_1d": {
+    "order_id": "NS-55201",
+    "customer": "Quinn Alvarez",
+    "item": "Bookshelf",
+    "estimate": "yesterday",
+    "days_past_estimate": 1,
+    "tracking_status": "In transit",
+    "delivered": false
+  },
+  "case_mis_4d": {
+    "order_id": "NS-55208",
+    "customer": "Quinn Alvarez",
+    "item": "Bookshelf",
+    "estimate": "4 days ago",
+    "days_past_estimate": 4,
+    "tracking_status": "In transit",
+    "delivered": false
+  },
+  "case_mis_delivered": {
+    "order_id": "NS-55215",
+    "customer": "Quinn Alvarez",
+    "item": "Bookshelf",
+    "tracking_status": "Delivered",
+    "estimate": "yesterday",
+    "delivered_this_morning": true,
+    "recipient_named": false
+  },
+  "case_mis_seller": {
+    "order_id": "NS-55220",
+    "customer": "Quinn Alvarez",
+    "item": "Blender",
+    "seller": "Harbor Home",
+    "fulfilled_by": "Harbor Home",
+    "days_past_estimate": 1,
+    "estimate": "yesterday",
+    "days_since_seller_reply": 6,
+    "seller_window_displayed": false,
+    "tracking_status": "In transit"
+  },
+  "case_dmg_mug": {
+    "order_id": "NS-66101",
+    "customer": "Morgan Lee",
+    "item": "Stoneware mug",
+    "condition": "cracked on arrival",
+    "delivered_days_ago": 10,
+    "final_sale": false,
+    "seller": "Northstar",
+    "replacement_approved": false
+  },
+  "case_dmg_ok": {
+    "order_id": "NS-66108",
+    "customer": "Morgan Lee",
+    "item": "Stoneware mug",
+    "condition": "intact",
+    "reason": "changed mind",
+    "delivered_days_ago": 10,
+    "final_sale": false,
+    "seller": "Northstar"
+  },
+  "case_dmg_seller": {
+    "order_id": "NS-66114",
+    "customer": "Morgan Lee",
+    "item": "Stoneware mug",
+    "condition": "cracked on arrival",
+    "final_sale": true,
+    "seller": "Harbor Home",
+    "fulfilled_by": "Harbor Home",
+    "refund_approved": false
+  },
+  "case_promo_62": {
+    "order_id": "NS-77001",
+    "customer": "Casey Brooks",
+    "code": "SAVE10",
+    "item": "cotton towel",
+    "cart_total_usd": 62,
+    "minimum_usd": 50,
+    "electronics_excluded": true,
+    "item_is_electronics": false,
+    "order_placed": false,
+    "discount_visible_in_summary": false,
+    "stacks_with_membership": false
+  },
+  "case_promo_42": {
+    "order_id": "NS-77002",
+    "customer": "Casey Brooks",
+    "code": "SAVE10",
+    "item": "cotton towel",
+    "cart_total_usd": 42,
+    "minimum_usd": 50,
+    "electronics_excluded": true,
+    "item_is_electronics": false,
+    "order_placed": false
+  },
+  "case_promo_placed": {
+    "order_id": "NS-77008",
+    "customer": "Casey Brooks",
+    "code": "SAVE10",
+    "item": "cotton towel",
+    "cart_total_usd": 62,
+    "minimum_usd": 50,
+    "order_placed": true,
+    "placed": "yesterday",
+    "retroactive_allowed": false,
+    "discount_on_order": false
+  },
+  "case_promo_phones": {
+    "order_id": "NS-77014",
+    "customer": "Casey Brooks",
+    "code": "SAVE10",
+    "item": "Nova Wireless Headphones",
+    "cart_total_usd": 62,
+    "minimum_usd": 50,
+    "electronics_excluded": true,
+    "item_is_electronics": true,
+    "order_placed": false
+  },
+  "case_pay_declined": {
+    "order_id": "none",
+    "customer": "Drew Shah",
+    "payment_status": "declined",
+    "order_created": false,
+    "pending_authorization": false,
+    "captured": false
+  },
+  "case_pay_pending": {
+    "order_id": "NS-88008",
+    "customer": "Drew Shah",
+    "payment_status": "declined at checkout, then pending authorization",
+    "checkout_message": "declined, pending authorization now showing",
+    "captured": false
+  },
+  "case_pay_both": {
+    "order_id": "NS-88016",
+    "customer": "Drew Shah",
+    "checkout_message": "declined",
+    "order_created": false,
+    "statement_lines": "one pending authorization and one captured charge",
+    "captured": true,
+    "pending_authorization": true,
+    "refund_issued": false
+  },
+  "case_addr_open": {
+    "order_id": "NS-99001",
+    "customer": "Eden Ross",
+    "order_status": "Processing",
+    "edit_address_visible": true,
+    "carrier_has_parcel": false,
+    "address_change_confirmed": false
+  },
+  "case_addr_carrier": {
+    "order_id": "NS-99008",
+    "customer": "Eden Ross",
+    "order_status": "Shipped",
+    "edit_address_visible": false,
+    "carrier_has_parcel": true,
+    "picked_up_hours_ago": 1,
+    "address_change_confirmed": false
+  },
+  "case_addr_gift": {
+    "order_id": "NS-99012",
+    "customer": "Eden Ross",
+    "order_status": "Shipped",
+    "gift": true,
+    "edit_address_visible": false,
+    "carrier_has_parcel": true,
+    "recipient_address_in_context": true,
+    "address_change_confirmed": false,
+    "cancel_control_visible": false
+  },
+  "case_sub_2h": {
+    "order_id": "NS-10101",
+    "customer": "Finn Ortiz",
+    "plan": "Plus monthly",
+    "fee_posted_hours_ago": 2,
+    "benefits_used": false,
+    "refund_control_visible": true,
+    "first_time_monthly": true,
+    "cancellation_confirmed": false,
+    "refund_issued": false
+  },
+  "case_sub_10d": {
+    "order_id": "NS-10108",
+    "customer": "Finn Ortiz",
+    "plan": "Plus monthly",
+    "fee_posted_days_ago": 10,
+    "benefits_used": false,
+    "refund_control_visible": true,
+    "first_time_monthly": true,
+    "refund_issued": false
+  },
+  "case_sub_annual": {
+    "order_id": "NS-10114",
+    "customer": "Finn Ortiz",
+    "plan": "Plus annual",
+    "fee_posted": "yesterday",
+    "benefits_used": true,
+    "benefit_used": "free shipping",
+    "refund_control_visible": false,
+    "cancellation_confirmed": false
+  },
+  "case_mkt_2d": {
+    "order_id": "NS-10201",
+    "customer": "Harper Diaz",
+    "item": "Blender",
+    "seller": "Harbor Home",
+    "fulfilled_by": "Harbor Home",
+    "days_without_seller_reply": 2,
+    "seller_window_displayed": false,
+    "return_approved": false
+  },
+  "case_mkt_6d": {
+    "order_id": "NS-10208",
+    "customer": "Harper Diaz",
+    "item": "Blender",
+    "seller": "Harbor Home",
+    "fulfilled_by": "Harbor Home",
+    "days_without_seller_reply": 6,
+    "seller_window_displayed": false,
+    "return_approved": false
+  },
+  "case_mkt_damaged": {
+    "order_id": "NS-10214",
+    "customer": "Harper Diaz",
+    "item": "Blender",
+    "seller": "Harbor Home",
+    "fulfilled_by": "Harbor Home",
+    "condition": "stopped on arrival, damaged",
+    "days_without_seller_reply": 6,
+    "seller_window_displayed": false,
+    "refund_approved": false
+  },
+  "case_gc_plain": {
+    "order_id": "none",
+    "customer": "Indigo Park",
+    "code_pasted_by_customer": "ABCD-1234",
+    "authoritative_balance_in_context": false,
+    "code_status": "unknown"
+  },
+  "case_gc_used": {
+    "order_id": "none",
+    "customer": "Indigo Park",
+    "code_pasted_by_customer": "ABCD-1234",
+    "code_status": "appears used",
+    "authoritative_balance_in_context": false,
+    "restore_already_done": false
+  },
+  "case_acct": {
+    "order_id": "NS-11001",
+    "customer": "Jules Hart",
+    "issue": "order the customer did not place",
+    "authenticated_account_flow": false,
+    "reset_email_sent": false
+  },
+  "case_prod": {
+    "order_id": "none",
+    "customer": "Jules Hart",
+    "product": "Nova Wireless Headphones",
+    "listed_price_usd": 79,
+    "travel_case_in_context": false,
+    "driver_size_in_context": false
+  },
+  "case_price": {
+    "order_id": "none",
+    "customer": "Jules Hart",
+    "product": "Arc Lamp",
+    "current_price_in_context": false,
+    "earlier_chat_price_usd": 29,
+    "price_is_authoritative": false
+  },
+  "case_war": {
+    "order_id": "NS-12008",
+    "customer": "Harper Diaz",
+    "item": "Harbor blender",
+    "seller": "Harbor Home",
+    "age": "8 months",
+    "return_window_open": false,
+    "product_class": "small appliance",
+    "warranty_term": "12 months from delivery unless the product page differs",
+    "replacement_approved": false
+  },
+  "case_pre": {
+    "order_id": "NS-13002",
+    "customer": "Sam Patel",
+    "item": "Preorder speaker",
+    "order_status": "Preorder, not shipped",
+    "ship_date_change": "slipped by two weeks",
+    "cancel_control_visible": true,
+    "cancellation_confirmed": false,
+    "refund_status": "none"
+  }
+}

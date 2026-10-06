@@ -1,0 +1,340 @@
+{
+  "store": "Northstar Market",
+  "query_count": 150,
+  "replay_order": "queries.jsonl top to bottom. exact_hit rows assume exact_of was already seen.",
+  "counts": {
+    "expected_cache": {
+      "cold": 29,
+      "exact_hit": 36,
+      "semantic_hit": 36,
+      "miss": 49
+    },
+    "variant": {
+      "cold": 24,
+      "exact": 36,
+      "semantic": 36,
+      "tricky_number": 8,
+      "tricky_negation": 12,
+      "tricky_intent": 12,
+      "tricky_case": 12,
+      "tricky_state": 4,
+      "edge": 6
+    },
+    "context_size": {
+      "large": 111,
+      "small": 39
+    },
+    "difficulty": {
+      "easy": 86,
+      "complex": 64
+    },
+    "suggested_model": {
+      "small": 86,
+      "large": 64
+    }
+  },
+  "context_tokens": {
+    "small_min": 95,
+    "small_max": 191,
+    "large_min": 5365,
+    "large_max": 6235
+  },
+  "trap_query_similarity": {
+    "min": 0.478,
+    "median": 0.706,
+    "max": 0.958
+  },
+  "labels": {
+    "expected_cache": "cold populates the cache. exact_hit is byte-identical to exact_of. semantic_hit paraphrases semantic_of and keeps the same answer. miss is a near neighbor whose reference_answer must not be reused.",
+    "apply_window": "False when attached context is under 1500 approximate tokens. Dropping or reranking is not worth it.",
+    "apply_compression": "False on that same short context. True when the attached policies are long enough that wording, examples, and the repeated reminder can be shortened.",
+    "small_model_ok": "True only for easy queries. Large easy queries are small-model safe after pruning. Complex queries stay on a larger model.",
+    "preserve_case": "The case block is decision-critical and short. Do not drop it during window management."
+  },
+  "documents": {
+    "pol_account": {
+      "title": "Account Access and Privacy",
+      "approx_tokens": 597,
+      "sections": [
+        "overview",
+        "recovery",
+        "privacy",
+        "compromise",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_address": {
+      "title": "Order Changes and Address Updates",
+      "approx_tokens": 732,
+      "sections": [
+        "overview",
+        "rules",
+        "exceptions",
+        "steps",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_cancellation": {
+      "title": "Order Cancellation",
+      "approx_tokens": 719,
+      "sections": [
+        "overview",
+        "rules",
+        "exceptions",
+        "steps",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_damaged": {
+      "title": "Damaged, Defective, or Incorrect Items",
+      "approx_tokens": 764,
+      "sections": [
+        "overview",
+        "rules",
+        "exceptions",
+        "steps",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_delivery": {
+      "title": "Delivery Delays and Missing Packages",
+      "approx_tokens": 809,
+      "sections": [
+        "overview",
+        "rules",
+        "exceptions",
+        "steps",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_escalation": {
+      "title": "Contacting Support and Escalation",
+      "approx_tokens": 541,
+      "sections": [
+        "overview",
+        "rules",
+        "when",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_giftcards": {
+      "title": "Gift Cards and Store Credit",
+      "approx_tokens": 811,
+      "sections": [
+        "overview",
+        "gift_cards",
+        "store_credit",
+        "steps",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_international": {
+      "title": "International Shipping, Duties, and Returns",
+      "approx_tokens": 537,
+      "sections": [
+        "overview",
+        "rules",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_marketplace": {
+      "title": "Marketplace Seller Orders",
+      "approx_tokens": 728,
+      "sections": [
+        "overview",
+        "rules",
+        "exceptions",
+        "steps",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_payments": {
+      "title": "Payment Methods and Failed Payments",
+      "approx_tokens": 741,
+      "sections": [
+        "overview",
+        "rules",
+        "exceptions",
+        "steps",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_pickup": {
+      "title": "Store Pickup",
+      "approx_tokens": 472,
+      "sections": [
+        "overview",
+        "rules",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_preorders": {
+      "title": "Preorders",
+      "approx_tokens": 473,
+      "sections": [
+        "overview",
+        "rules",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_price_match": {
+      "title": "Price Match",
+      "approx_tokens": 497,
+      "sections": [
+        "overview",
+        "rules",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_privacy": {
+      "title": "Privacy Settings and Marketing",
+      "approx_tokens": 468,
+      "sections": [
+        "overview",
+        "rules",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_product": {
+      "title": "Product Information and Availability",
+      "approx_tokens": 630,
+      "sections": [
+        "overview",
+        "listings",
+        "prices",
+        "specs",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_promotions": {
+      "title": "Promotions and Discount Codes",
+      "approx_tokens": 763,
+      "sections": [
+        "overview",
+        "rules",
+        "exceptions",
+        "steps",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_refunds": {
+      "title": "Refunds and Timelines",
+      "approx_tokens": 892,
+      "sections": [
+        "overview",
+        "rules",
+        "stale",
+        "exceptions",
+        "steps",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_returns": {
+      "title": "Returns and Eligibility",
+      "approx_tokens": 916,
+      "sections": [
+        "overview",
+        "eligibility",
+        "exceptions",
+        "steps",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_reviews": {
+      "title": "Product Reviews",
+      "approx_tokens": 459,
+      "sections": [
+        "overview",
+        "rules",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_subscriptions": {
+      "title": "Subscriptions and Memberships",
+      "approx_tokens": 833,
+      "sections": [
+        "overview",
+        "rules",
+        "exceptions",
+        "steps",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_taxes": {
+      "title": "Sales Tax",
+      "approx_tokens": 454,
+      "sections": [
+        "overview",
+        "rules",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_tracking": {
+      "title": "Order Tracking",
+      "approx_tokens": 714,
+      "sections": [
+        "overview",
+        "rules",
+        "exceptions",
+        "steps",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    },
+    "pol_warranty": {
+      "title": "Manufacturer Warranty",
+      "approx_tokens": 575,
+      "sections": [
+        "overview",
+        "rules",
+        "exceptions",
+        "examples",
+        "agent_rules",
+        "repeated_reminders"
+      ]
+    }
+  }
+}
