@@ -1,33 +1,29 @@
 {
   "version": 1,
-  "created": "2026-10-06T23:01:18+0530",
+  "created": "2026-10-04T22:51:47+0530",
   "margin": 5.0,
   "min_n": 30,
   "min_saving": 0.0,
-  "judge": "claude-sonnet-5-5",
+  "judge": "mlx-community/Qwen2.5-7B-Instruct-4bit",
   "metric": "grade diff (cheap - strong), points",
   "subset": "routable",
   "dry_run": false,
   "partial": false,
-  "backend": "anthropic",
+  "backend": "mlx",
   "models": {
-    "strong": "claude-sonnet-5-5",
-    "cheap": "claude-haiku-4-5-20251001"
+    "strong": "mlx-community/Qwen2.5-7B-Instruct-4bit",
+    "cheap": "mlx-community/Qwen2.5-1.5B-Instruct-4bit"
   },
   "billing": {
-    "strong": "claude-sonnet-5.5",
-    "cheap": "claude-haiku-4.5"
+    "strong": "gpt-5.4-mini",
+    "cheap": "gpt-5-nano"
   },
   "data_source": "bitext-sample:bitext/Bitext-customer-support-llm-chatbot-training-dataset+kb-seed",
-  "policy_hash": "392044efcf54",
-  "provider_prompt_cache": false,
+  "policy_hash": "87ebe8de0eea",
+  "provider_prompt_cache": null,
   "min_judge_coverage": 0.95,
-  "allowed": [
-    "shipping",
-    "account",
-    "other"
-  ],
-  "expected_routing_savings_if_deployed": 0.1608,
+  "allowed": [],
+  "expected_routing_savings_if_deployed": 0.0,
   "traffic_source": "trace_v1",
   "categories": {
     "order": {
@@ -38,65 +34,65 @@
       "judge_coverage": 1.0,
       "n_unjudged": 0,
       "hard_share": 0.064,
-      "diff": -1.7,
+      "diff": -15.34,
       "ci": [
-        -6.25,
-        2.84
+        -22.73,
+        -7.95
       ],
-      "sd": 15.62,
-      "reason": "CI lower bound -6.2 < -5",
-      "n_needed": 87,
-      "savings_if_allowed": 0.5985,
+      "sd": 26.53,
+      "reason": "CI lower bound -22.7 < -5",
+      "n_needed": null,
+      "savings_if_allowed": 0.8821,
       "traffic_share": 0.4517,
       "pairwise": {
-        "cheap_wins": 7,
-        "ties": 23,
-        "strong_wins": 14,
+        "cheap_wins": 3,
+        "ties": 33,
+        "strong_wins": 8,
         "errors": 0,
         "coverage": 1.0,
-        "non_inferior_rate": 0.6818,
+        "non_inferior_rate": 0.8182,
         "non_inferior_ci": [
-          0.5344,
-          0.8
+          0.6804,
+          0.9049
         ]
       },
       "diff_pairwise": {
-        "mean": -15.91,
+        "mean": -11.36,
         "ci": [
-          -34.09,
-          4.55
+          -25.0,
+          2.27
         ]
       },
       "all_items_diff": {
         "n": 47,
-        "mean": -1.6,
+        "mean": -15.43,
         "ci": [
-          -5.85,
-          2.66
+          -22.87,
+          -7.98
         ]
       }
     },
     "shipping": {
-      "allow": true,
+      "allow": false,
       "n": 49,
       "n_items": 51,
       "n_routable": 49,
       "judge_coverage": 1.0,
       "n_unjudged": 0,
       "hard_share": 0.039,
-      "diff": 2.04,
+      "diff": -16.33,
       "ci": [
-        -2.55,
-        7.14
+        -24.49,
+        -8.67
       ],
-      "sd": 17.56,
-      "reason": "CI lower bound -2.6 >= -5",
-      "n_needed": 24,
-      "savings_if_allowed": 0.5984,
+      "sd": 27.27,
+      "reason": "CI lower bound -24.5 < -5",
+      "n_needed": null,
+      "savings_if_allowed": 0.8711,
       "traffic_share": 0.09,
       "pairwise": {
-        "cheap_wins": 19,
-        "ties": 16,
+        "cheap_wins": 3,
+        "ties": 32,
         "strong_wins": 14,
         "errors": 0,
         "coverage": 1.0,
@@ -107,18 +103,18 @@
         ]
       },
       "diff_pairwise": {
-        "mean": 10.2,
+        "mean": -22.45,
         "ci": [
-          -12.24,
-          32.65
+          -38.78,
+          -8.16
         ]
       },
       "all_items_diff": {
         "n": 51,
-        "mean": 1.96,
+        "mean": -17.16,
         "ci": [
-          -2.94,
-          6.37
+          -24.51,
+          -9.8
         ]
       }
     },
@@ -130,41 +126,41 @@
       "judge_coverage": 1.0,
       "n_unjudged": 0,
       "hard_share": 0.0,
-      "diff": 0.0,
+      "diff": -13.64,
       "ci": [
-        -15.91,
-        15.91
+        -25.0,
+        -4.55
       ],
-      "sd": 27.39,
+      "sd": 20.5,
       "reason": "n=11 < min_n=30",
-      "n_needed": 116,
-      "savings_if_allowed": 0.6408,
+      "n_needed": null,
+      "savings_if_allowed": 0.9254,
       "traffic_share": 0.0333,
       "pairwise": {
-        "cheap_wins": 1,
-        "ties": 9,
-        "strong_wins": 1,
+        "cheap_wins": 0,
+        "ties": 8,
+        "strong_wins": 3,
         "errors": 0,
         "coverage": 1.0,
-        "non_inferior_rate": 0.9091,
+        "non_inferior_rate": 0.7273,
         "non_inferior_ci": [
-          0.6226,
-          0.9838
+          0.4344,
+          0.9025
         ]
       },
       "diff_pairwise": {
-        "mean": 0.0,
+        "mean": -27.27,
         "ci": [
-          -27.27,
-          27.27
+          -54.55,
+          -9.09
         ]
       },
       "all_items_diff": {
         "n": 11,
-        "mean": 0.0,
+        "mean": -13.64,
         "ci": [
-          -15.91,
-          15.91
+          -25.0,
+          -4.55
         ]
       }
     },
@@ -176,41 +172,41 @@
       "judge_coverage": 1.0,
       "n_unjudged": 0,
       "hard_share": 0.02,
-      "diff": -1.04,
+      "diff": -9.38,
       "ci": [
-        -6.25,
-        3.65
+        -18.75,
+        -0.52
       ],
-      "sd": 17.83,
-      "reason": "CI lower bound -6.2 < -5",
-      "n_needed": 78,
-      "savings_if_allowed": 0.614,
+      "sd": 31.63,
+      "reason": "CI lower bound -18.8 < -5",
+      "n_needed": null,
+      "savings_if_allowed": 0.8603,
       "traffic_share": 0.09,
       "pairwise": {
-        "cheap_wins": 12,
-        "ties": 22,
-        "strong_wins": 14,
+        "cheap_wins": 1,
+        "ties": 37,
+        "strong_wins": 10,
         "errors": 0,
         "coverage": 1.0,
-        "non_inferior_rate": 0.7083,
+        "non_inferior_rate": 0.7917,
         "non_inferior_ci": [
-          0.5682,
-          0.8176
+          0.6574,
+          0.8827
         ]
       },
       "diff_pairwise": {
-        "mean": -4.17,
+        "mean": -18.75,
         "ci": [
-          -25.0,
-          16.67
+          -31.25,
+          -6.25
         ]
       },
       "all_items_diff": {
         "n": 49,
-        "mean": -1.02,
+        "mean": -9.18,
         "ci": [
-          -6.12,
-          3.57
+          -18.37,
+          -0.51
         ]
       }
     },
@@ -222,87 +218,87 @@
       "judge_coverage": 1.0,
       "n_unjudged": 0,
       "hard_share": 0.041,
-      "diff": -0.53,
+      "diff": -24.47,
       "ci": [
-        -5.32,
-        4.26
+        -32.98,
+        -15.96
       ],
-      "sd": 16.88,
-      "reason": "CI lower bound -5.3 < -5",
-      "n_needed": 55,
-      "savings_if_allowed": 0.5941,
+      "sd": 30.17,
+      "reason": "CI lower bound -33.0 < -5",
+      "n_needed": null,
+      "savings_if_allowed": 0.8489,
       "traffic_share": 0.0617,
       "pairwise": {
-        "cheap_wins": 13,
-        "ties": 22,
-        "strong_wins": 12,
+        "cheap_wins": 1,
+        "ties": 33,
+        "strong_wins": 13,
         "errors": 0,
         "coverage": 1.0,
-        "non_inferior_rate": 0.7447,
+        "non_inferior_rate": 0.7234,
         "non_inferior_ci": [
-          0.6049,
-          0.8475
+          0.5824,
+          0.8306
         ]
       },
       "diff_pairwise": {
-        "mean": 2.13,
+        "mean": -25.53,
         "ci": [
-          -19.15,
-          23.4
+          -40.43,
+          -10.64
         ]
       },
       "all_items_diff": {
         "n": 49,
-        "mean": -0.51,
+        "mean": -25.0,
         "ci": [
-          -5.1,
-          4.08
+          -33.67,
+          -16.82
         ]
       }
     },
     "account": {
-      "allow": true,
+      "allow": false,
       "n": 41,
       "n_items": 44,
       "n_routable": 41,
       "judge_coverage": 1.0,
       "n_unjudged": 0,
       "hard_share": 0.068,
-      "diff": 7.32,
+      "diff": -17.07,
       "ci": [
-        1.22,
-        13.41
+        -26.22,
+        -7.32
       ],
-      "sd": 20.34,
-      "reason": "CI lower bound 1.2 >= -5",
-      "n_needed": 11,
-      "savings_if_allowed": 0.5872,
+      "sd": 31.84,
+      "reason": "CI lower bound -26.2 < -5",
+      "n_needed": null,
+      "savings_if_allowed": 0.8841,
       "traffic_share": 0.21,
       "pairwise": {
-        "cheap_wins": 16,
-        "ties": 18,
-        "strong_wins": 7,
+        "cheap_wins": 1,
+        "ties": 30,
+        "strong_wins": 10,
         "errors": 0,
         "coverage": 1.0,
-        "non_inferior_rate": 0.8293,
+        "non_inferior_rate": 0.7561,
         "non_inferior_ci": [
-          0.6874,
-          0.9147
+          0.6066,
+          0.8617
         ]
       },
       "diff_pairwise": {
-        "mean": 21.95,
+        "mean": -21.95,
         "ci": [
-          0.0,
-          43.9
+          -36.59,
+          -7.32
         ]
       },
       "all_items_diff": {
         "n": 44,
-        "mean": 5.68,
+        "mean": -15.91,
         "ci": [
-          0.0,
-          11.36
+          -25.57,
+          -6.82
         ]
       }
     },
@@ -322,25 +318,25 @@
       "sd": 27.95,
       "reason": "n=9 < min_n=30",
       "n_needed": null,
-      "savings_if_allowed": 0.6468,
+      "savings_if_allowed": 0.9309,
       "traffic_share": 0.04,
       "pairwise": {
-        "cheap_wins": 2,
-        "ties": 3,
-        "strong_wins": 4,
+        "cheap_wins": 0,
+        "ties": 7,
+        "strong_wins": 2,
         "errors": 0,
         "coverage": 1.0,
-        "non_inferior_rate": 0.5556,
+        "non_inferior_rate": 0.7778,
         "non_inferior_ci": [
-          0.2667,
-          0.8112
+          0.4526,
+          0.9368
         ]
       },
       "diff_pairwise": {
         "mean": -22.22,
         "ci": [
-          -66.67,
-          33.33
+          -55.56,
+          0.0
         ]
       },
       "all_items_diff": {
@@ -353,48 +349,48 @@
       }
     },
     "other": {
-      "allow": true,
+      "allow": false,
       "n": 38,
       "n_items": 44,
       "n_routable": 38,
       "judge_coverage": 1.0,
       "n_unjudged": 0,
       "hard_share": 0.136,
-      "diff": 1.97,
+      "diff": -30.26,
       "ci": [
-        -3.95,
-        7.24
+        -40.79,
+        -19.74
       ],
-      "sd": 17.8,
-      "reason": "CI lower bound -3.9 >= -5",
-      "n_needed": 26,
-      "savings_if_allowed": 0.5481,
+      "sd": 33.97,
+      "reason": "CI lower bound -40.8 < -5",
+      "n_needed": null,
+      "savings_if_allowed": 0.8302,
       "traffic_share": 0.0233,
       "pairwise": {
-        "cheap_wins": 11,
-        "ties": 17,
-        "strong_wins": 10,
+        "cheap_wins": 3,
+        "ties": 22,
+        "strong_wins": 13,
         "errors": 0,
         "coverage": 1.0,
-        "non_inferior_rate": 0.7368,
+        "non_inferior_rate": 0.6579,
         "non_inferior_ci": [
-          0.5799,
-          0.8503
+          0.4989,
+          0.7879
         ]
       },
       "diff_pairwise": {
-        "mean": 2.63,
+        "mean": -26.32,
         "ci": [
-          -21.05,
-          26.32
+          -44.74,
+          -10.53
         ]
       },
       "all_items_diff": {
         "n": 44,
-        "mean": 1.7,
+        "mean": -28.98,
         "ci": [
-          -3.41,
-          6.82
+          -38.07,
+          -19.32
         ]
       }
     }
@@ -435,69 +431,64 @@
   "estimate": {
     "items": 304,
     "generations_total": 608,
-    "generations_new": {
-      "cheap": 304,
-      "strong": 281
-    },
-    "generations_cached": 23,
+    "generations_new": {},
+    "generations_cached": 608,
     "judge_calls_upper_bound": 1216,
-    "usd_generation_upper_bound": 1.6252,
-    "usd_generation_typical": 1.0709,
-    "usd_judge_upper_bound": 1.6091,
-    "usd_total_upper_bound": 3.2343
+    "usd_generation_upper_bound": 0.0,
+    "usd_generation_typical": 0.0,
+    "usd_judge_upper_bound": 0.5323,
+    "usd_total_upper_bound": 0.5323
   },
   "spend": {
-    "generation_usd_list_price": 1.289742,
+    "generation_usd_list_price": 0.19864,
     "judge": {
-      "judge": "claude-sonnet-5-5",
-      "backend": "anthropic",
+      "judge": "mlx-community/Qwen2.5-7B-Instruct-4bit",
+      "backend": "mlx",
       "stats": {
         "grades": 608,
-        "calls": 1485,
-        "new_calls": 1485,
-        "parse_failures": 269,
+        "calls": 1216,
         "pairwise": 304,
-        "position_inconsistent": 80
+        "position_inconsistent": 202
       },
-      "cost_new_usd": 1.993638,
-      "cost_all_usd": 1.993638
+      "cost_new_usd": 0.0,
+      "cost_all_usd": 0.332806
     }
   },
   "price_gap": {
     "strong": {
-      "billed_as": "claude-sonnet-5.5",
-      "input": 2.0,
-      "output": 10.0,
-      "cached_input": 0.2
+      "billed_as": "gpt-5.4-mini",
+      "input": 0.75,
+      "output": 4.5,
+      "cached_input": 0.075
     },
     "cheap": {
-      "billed_as": "claude-haiku-4.5",
-      "input": 1.0,
-      "output": 5.0,
-      "cached_input": 0.1
+      "billed_as": "gpt-5-nano",
+      "input": 0.05,
+      "output": 0.4,
+      "cached_input": 0.005
     },
     "reference_request": {
       "input_tokens": 1500,
       "output_tokens": 400,
-      "strong_usd": 0.007,
-      "cheap_usd": 0.0035
+      "strong_usd": 0.002925,
+      "cheap_usd": 0.000235
     },
-    "cost_ratio_cheap_over_strong": 0.5,
-    "saving_per_downshifted_request": 0.5,
-    "router_saving_at_50pct_routed": 0.25,
-    "cascade_break_even_escalation": 0.5,
-    "cascade_saving_at_20pct_escalation": 0.3,
-    "measured_ratio": 0.363,
-    "measured_saving_per_downshifted_request": 0.637,
+    "cost_ratio_cheap_over_strong": 0.0803,
+    "saving_per_downshifted_request": 0.9197,
+    "router_saving_at_50pct_routed": 0.4598,
+    "cascade_break_even_escalation": 0.9197,
+    "cascade_saving_at_20pct_escalation": 0.7197,
+    "measured_ratio": 0.0789,
+    "measured_saving_per_downshifted_request": 0.9211,
     "cache_minimum_prefix": {
-      "strong": 512,
-      "cheap": 4096
+      "strong": 1024,
+      "cheap": 1024
     },
     "example_3000_token_cached_prefix": {
       "request": "3,000-token shared prefix (cached where the model allows) + 500 new input + 400 output",
-      "strong_usd": 0.0056,
-      "cheap_usd": 0.0055,
-      "saving_per_downshifted_request": 0.0179
+      "strong_usd": 0.0024,
+      "cheap_usd": 0.0002,
+      "saving_per_downshifted_request": 0.9167
     }
   },
   "price_gap_all_backends": {
@@ -533,20 +524,20 @@
     }
   },
   "economics_summary": [
-    "Price gap (anthropic): strong=claude-sonnet-5.5 $2.0/$10.0 vs cheap=claude-haiku-4.5 $1.0/$5.0 per 1M tokens (configs/prices.yaml).",
-    "  1,500-in/400-out request: strong $0.00700 vs cheap $0.00350 -> cheap costs 50% of strong; each downshifted request saves 50%.",
-    "  Router: savings ~= r x 50% (r = share routed cheap); routing 50% saves ~25% of that traffic's spend.",
-    "  Cascade (cheap first, escalate on failure): cost ~= p_cheap + e x p_strong; breaks even at e = 50% escalation (before verifier cost); at e=20% it saves 30%.",
-    "  Measured on this run (actual tokens, both tiers): each downshifted request saves 64%.",
-    "  Prompt caching: minimum cacheable prefix 512 (strong) vs 4096 (cheap) tokens. With a 3,000-token cached prefix the saving per downshifted request drops to 2%. Today's system prompt is ~126 tokens, below both minimums, so neither tier caches it yet.",
+    "Price gap (mlx): strong=gpt-5.4-mini $0.75/$4.5 vs cheap=gpt-5-nano $0.05/$0.4 per 1M tokens (configs/prices.yaml).",
+    "  1,500-in/400-out request: strong $0.00293 vs cheap $0.00023 -> cheap costs 8% of strong; each downshifted request saves 92%.",
+    "  Router: savings ~= r x 92% (r = share routed cheap); routing 50% saves ~46% of that traffic's spend.",
+    "  Cascade (cheap first, escalate on failure): cost ~= p_cheap + e x p_strong; breaks even at e = 92% escalation (before verifier cost); at e=20% it saves 72%.",
+    "  Measured on this run (actual tokens, both tiers): each downshifted request saves 92%.",
+    "  Prompt caching: minimum cacheable prefix 1024 (strong) vs 1024 (cheap) tokens. With a 3,000-token cached prefix the saving per downshifted request drops to 92%. Today's system prompt is ~110 tokens, below both minimums, so neither tier caches it yet.",
     "  Other configured pairs: anthropic: claude-haiku-4.5/claude-sonnet-5.5 = 50% -> saves 50%; mock: gpt-5-nano/gpt-5.4-mini = 8% -> saves 92%; mlx: gpt-5-nano/gpt-5.4-mini = 8% -> saves 92%; openai: gpt-5-nano/gpt-5.4-mini = 8% -> saves 92%; gemini: gemini-2.5-flash-lite/gemini-2.5-flash = 21% -> saves 79%"
   ],
-  "seconds": 3655.3,
+  "seconds": 9.1,
   "args": {
-    "backend": "anthropic",
+    "backend": "mlx",
     "dry_run": false,
-    "yes": true,
-    "replay": false,
+    "yes": false,
+    "replay": true,
     "limit": null,
     "data": null,
     "source": "bitext+kb",

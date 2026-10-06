@@ -369,6 +369,13 @@ def readme_block() -> str:
                         "false-hit % of requests", "quality retained % [95% CI]"], rows))
     parts.append(f"{m['rows_used']} requests from the frozen trace (sha256 `{str(m['trace_sha256'])[:12]}…`), backend "
                  f"`{m['backend']}`, judge `{judge}`, paired cluster bootstrap. Source: `eval/results/{name}`.")
+    other = load("ab_summary_mlx.json") if name == "ab_summary.json" else None
+    if other and other.get("arms", {}).get("A5"):
+        a5, q5 = other["arms"]["A5"], other["arms"]["A5"].get("quality", {})
+        parts.append(f"Also measured on local stand-in models ({other['meta'].get('backend')}: Qwen2.5-7B / 1.5B, billed at "
+                     f"{_billing(other['meta'].get('billing'))} prices): A5 saved {f(a5.get('savings_pct'), 1)}%"
+                     f"{ci(a5.get('savings_ci'), 1)} at {f(q5.get('retained'), 1)}% quality retained"
+                     f"{ci(q5.get('retained_ci'), 1)}. Source: `eval/results/ab_summary_mlx.json`.")
     r = load("router_gate.json") or load("router_gate_dryrun.json")
     if r:
         allowed = ", ".join(r.get("allowed") or []) or "none"

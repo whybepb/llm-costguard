@@ -1,10 +1,11 @@
 {
   "meta": {
-    "backend": "mock",
+    "backend": "anthropic",
     "judge": "heuristic-mock",
     "subset": "ci_subset.jsonl",
     "subset_sha256": "2f5d554bb85a6e79f6e4ac6bebdbf4a55d9a8d145fe857198f050985405816d4",
-    "generated_at": "2026-10-04T17:00:03+00:00"
+    "provider_prompt_cache": false,
+    "generated_at": "2026-10-06T17:37:22+00:00"
   },
   "passed": true,
   "checks": [
@@ -26,8 +27,8 @@
     },
     {
       "check": "baseline matches backend/judge/subset",
-      "value": "mock/heuristic-mock/2f5d554b",
-      "baseline": "mock/heuristic-mock/2f5d554b",
+      "value": "anthropic/heuristic-mock/2f5d554b",
+      "baseline": "anthropic/heuristic-mock/2f5d554b",
       "limit": "equal",
       "status": "PASS",
       "note": ""
@@ -42,17 +43,17 @@
     },
     {
       "check": "(b) quality, mean grade (0-1)",
-      "value": 0.0483,
-      "baseline": 0.0485,
-      "limit": ">= 0.0185",
+      "value": 0.353,
+      "baseline": 0.353,
+      "limit": ">= 0.323",
       "status": "PASS",
       "note": ""
     },
     {
       "check": "(c) savings vs A0 (%)",
-      "value": 61.15,
-      "baseline": 60.49,
-      "limit": ">= 58.49",
+      "value": 64.47,
+      "baseline": 64.47,
+      "limit": ">= 62.47",
       "status": "PASS",
       "note": ""
     }
@@ -61,28 +62,29 @@
     "n": 78,
     "n_ok": 78,
     "errors": 0,
+    "stage_cassette_misses": 0,
     "error_samples": [],
     "hits": {
-      "exact": 8,
+      "exact": 7,
       "semantic": 0
     },
-    "hit_rate_pct": 10.26,
+    "hit_rate_pct": 8.97,
     "false_hits": 0,
     "trap_false_hits": 0,
     "false_hit_examples": [],
-    "savings_pct": 61.15,
+    "savings_pct": 64.47,
     "savings_ci": [
-      54.3,
-      66.38
+      58.38,
+      69.82
     ],
-    "cost_usd": 0.033897,
-    "a0_cost_usd": 0.087245,
-    "quality_mean": 0.0483,
+    "cost_usd": 0.147142,
+    "a0_cost_usd": 0.414112,
+    "quality_mean": 0.353,
     "ungraded": 0,
-    "quality_retained_pct": 109.89,
-    "n_correct": 0,
+    "quality_retained_pct": 95.28,
+    "n_correct": 1,
     "tau": 0.93,
-    "config_hash": "8dda08fcafaa",
+    "config_hash": "7140cfc9ab3c",
     "overrides": {}
   }
 }
