@@ -28,6 +28,7 @@ class CassetteProvider:
         self.name = f"{inner.name}+cassette"
         self._lock = threading.Lock()
         self._store: dict[str, dict] = {}
+        self._inflight: dict[str, threading.Event] = {}   # key -> set when the first caller has recorded it
         self.hits = self.misses = 0
         if self.path.exists():
             for line in self.path.read_text().splitlines():
@@ -41,24 +42,47 @@ class CassetteProvider:
 
     def complete(self, messages, model, max_tokens, temperature) -> Completion:
         """The returned completion's raw["cassette"] says "replay" or "new" for THIS call; callers running in threads
-        must use it rather than diffing the shared hits/misses counters."""
+        must use it rather than diffing the shared hits/misses counters.
+
+        Single flight per key: when several threads miss the same key at once (two arms, or two judge passes, asking
+        the identical question), one calls the model and the others wait and replay its answer. Without this, a
+        non-deterministic model gives the same input two different answers (and is paid twice)."""
         key = call_key(messages, model, max_tokens, temperature)
+        wait_for = None
         with self._lock:
             rec = self._store.get(key) if self.mode != "record" else None
             if rec is not None:
                 self.hits += 1
+            elif self.mode != "record" and key in self._inflight:
+                wait_for = self._inflight[key]
             else:
                 self.misses += 1
+                if self.mode != "record":
+                    self._inflight[key] = threading.Event()
         if rec is not None:
             return _tagged(Completion(**rec), "replay")
+        if wait_for is not None:
+            wait_for.wait()
+            return self.complete(messages, model, max_tokens, temperature)   # replays, or retries if the first call failed
         if self.mode == "replay":
+            self._release(key)
             raise CassetteMiss(f"no cassette entry for model={model} (key {key[:12]}) in {self.path}")
-        comp = self.inner.complete(messages, model, max_tokens, temperature)
-        with self._lock:
-            self._store[key] = comp.model_dump()
-            with self.path.open("a") as f:
-                f.write(json.dumps({"key": key, "model": model, "completion": comp.model_dump()}, ensure_ascii=False) + "\n")
+        try:
+            comp = self.inner.complete(messages, model, max_tokens, temperature)
+            with self._lock:
+                self._store[key] = comp.model_dump()
+                with self.path.open("a") as f:
+                    f.write(json.dumps({"key": key, "model": model, "completion": comp.model_dump()},
+                                       ensure_ascii=False) + "\n")
+        finally:
+            self._release(key)
         return _tagged(comp, "new")
+
+    def _release(self, key: str) -> None:
+        with self._lock:
+            ev = self._inflight.pop(key, None)
+        if ev is not None:
+            ev.set()
 
 
 def _tagged(comp: Completion, status: str) -> Completion:

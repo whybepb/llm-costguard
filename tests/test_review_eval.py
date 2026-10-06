@@ -402,3 +402,36 @@ def test_local_backends_never_touch_the_prompt_cache_switch(tmp_path, monkeypatc
     monkeypatch.setenv(PROMPT_CACHE_ENV, "sentinel")
     res = _run_gate_router(tmp_path, monkeypatch, _StubJudge())
     assert res["provider_prompt_cache"] is None and os.environ[PROMPT_CACHE_ENV] == "sentinel"
+
+
+def test_cassette_single_flight_calls_the_model_once_per_key(tmp_path):
+    import threading
+    import time as _time
+    from costguard.providers.cassette import CassetteProvider
+    from costguard.schemas import ChatMessage, Completion, Usage
+
+    class SlowCounting:
+        name = "slow"
+        def __init__(self):
+            self.calls = 0
+        def count_tokens(self, messages, model):
+            return 1
+        def complete(self, messages, model, max_tokens, temperature):
+            self.calls += 1
+            n = self.calls
+            _time.sleep(0.2)            # long enough for every thread to miss the cassette at the same time
+            return Completion(text=f"grade {n}", model=model, usage=Usage(input_tokens=1, output_tokens=1), latency_ms=1.0)
+
+    inner = SlowCounting()
+    cas = CassetteProvider(inner, tmp_path / "c.jsonl", "auto")
+    msgs = [ChatMessage(role="user", content="same question")]
+    out = []
+    threads = [threading.Thread(target=lambda: out.append(cas.complete(msgs, "m", 5, 0.0))) for _ in range(6)]
+    for th in threads:
+        th.start()
+    for th in threads:
+        th.join()
+    assert inner.calls == 1                                    # paid once
+    assert {c.text for c in out} == {"grade 1"}                # every caller sees the same answer
+    assert sorted((c.raw or {}).get("cassette") for c in out) == ["new"] + ["replay"] * 5
+    assert len((tmp_path / "c.jsonl").read_text().splitlines()) == 1

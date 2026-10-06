@@ -82,3 +82,22 @@ def test_missing_key_is_a_clear_error(monkeypatch):
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     with pytest.raises(RuntimeError, match="No Anthropic key"):
         AnthropicProvider()
+
+
+def test_spend_cap_refuses_calls_once_the_ledger_reaches_the_cap(tmp_path, monkeypatch):
+    import costguard.providers.anthropic_provider as ap
+    monkeypatch.setattr(ap, "_LEDGERS", {})
+    monkeypatch.setenv("COSTGUARD_SPEND_CAP_USD", "0.0012")
+    monkeypatch.setenv("COSTGUARD_SPEND_LEDGER", str(tmp_path / "spend.jsonl"))
+    fake = NS(messages=FakeMessages())          # each call: 40 in, 12 out, 100 cache-read tokens
+    p = AnthropicProvider(client=fake)
+    msgs = [ChatMessage(role="user", content="Return window?")]
+    for _ in range(2):                           # sonnet: (40*2 + 12*10 + 100*0.2) / 1e6 = $0.00022 per call
+        p.complete(msgs, "claude-sonnet-5-5", 64, 0.0)
+    assert p.ledger.spent == pytest.approx(2 * 0.00022)
+    p.ledger.spent = 0.0012                      # cap reached: the next call is refused before the API is hit
+    with pytest.raises(ap.SpendCapExceeded):
+        p.complete(msgs, "claude-sonnet-5-5", 64, 0.0)
+    assert len(fake.messages.calls) == 2
+    monkeypatch.setattr(ap, "_LEDGERS", {})      # a new process re-reads the ledger file
+    assert ap.spend_ledger().spent == pytest.approx(2 * 0.00022)
