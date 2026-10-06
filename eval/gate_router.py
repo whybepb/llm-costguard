@@ -230,20 +230,17 @@ def estimate(items: list[dict], settings: Settings, policy, prices: PriceBook, s
 
 # ============================================================================================ engine + scoring
 def make_engine(settings: Settings, replay: bool):
-    from costguard.factory import build_engine
-    try:
-        return build_engine(settings, with_logger=False, skip=SKIP)
-    except Exception as e:
-        if not replay:
-            raise
-        # replay without a key: serve from the cassette only (a miss raises and the item is skipped)
+    if replay:
+        # cassette only: never build the real upstream (no key, no MLX weights) and never generate; a miss raises and
+        # the item is skipped. Token counts on local backends come from the cassette (eval.run_ab.keyless_provider):
+        # a real provider that cannot count (mlx-lm not installed) would make the pipeline fail safe to strong.
         from costguard.pipeline import CostGuard
-        from costguard.providers.cassette import CassetteProvider
-        from eval.judge import ReplayOnlyProvider
+        from eval.run_ab import keyless_provider
         policy = load_policy(settings.policy_path)
-        prov = CassetteProvider(ReplayOnlyProvider(settings.backend, str(e)[:100], TOKEN_RATIO.get(settings.backend, 1.0)),
-                                settings.cassette, "replay")
+        prov = keyless_provider(settings.backend, settings.cassette, "replay", policy.default_max_tokens)
         return CostGuard(policy, settings, prov, PriceBook(settings.prices_path, policy.billing_for(settings.backend)))
+    from costguard.factory import build_engine
+    return build_engine(settings, with_logger=False, skip=SKIP)
 
 
 def generate(engine, it: dict, alias: str) -> dict:
@@ -251,6 +248,11 @@ def generate(engine, it: dict, alias: str) -> dict:
                       costguard=CostGuardOptions(mode="off", category=it["category"], context=it["context"],
                                                  arm=f"gate-{alias}", item_id=it["id"], no_cache=True))
     comp, rec = engine.handle(req)
+    if rec.model_used != alias:
+        # e.g. a stage error made the pipeline fail safe to strong: scoring that answer as the cheap tier's would
+        # compare strong with strong and bias the gate towards allowing a downshift
+        raise RuntimeError(f"asked for the {alias} tier but the pipeline served {rec.model_used!r} "
+                           f"({rec.route_reason}; stage errors {dict(rec.stage_errors)})")
     return {"text": comp.text, "model": rec.model_id, "cost_usd": rec.cost_usd, "input_tokens": rec.input_tokens_sent,
             "input_tokens_original": rec.input_tokens_original, "output_tokens": rec.output_tokens,
             "cached_input_tokens": rec.cached_input_tokens, "latency_ms": round(comp.latency_ms, 1)}

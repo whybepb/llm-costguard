@@ -93,7 +93,7 @@ Related documents:
 **13. Our own SQLite log as the source of truth.** We chose a local SQLite TraceRecord log over Langfuse or a SaaS as the system of record.
 
 - **Why:** no quota (Langfuse Hobby is 50k units/month, about 8k requests at ~6 units per request), it is reproducible, and the dashboard, `/v1/stats` and README tables all read the same rows.
-- **Cost:** it is single-host. The core logger writes synchronously (~0.5 ms), and a multi-replica deployment would need Postgres or ClickHouse.
+- **Cost:** it is single-host. The core logger enqueues each row and a background thread writes them in batches (~0.5 ms per insert), and a multi-replica deployment would need Postgres or ClickHouse.
 
 **14. Cassette replay in CI.** We chose to replay recorded upstream responses (cassettes) in CI over calling the live API.
 

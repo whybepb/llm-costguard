@@ -33,6 +33,29 @@ def test_usage_mapping_and_system_cache_breakpoint():
     assert c.text.startswith("Returns")
 
 
+def test_request_shape_per_model():
+    """Sonnet 5.5 rejects non-default sampling parameters (temperature=0 is a 400) and thinks adaptively unless told
+    otherwise; Haiku 4.5 accepts temperature and takes no thinking field."""
+    fake = NS(messages=FakeMessages())
+    p = AnthropicProvider(client=fake)
+    msgs = [ChatMessage(role="system", content="You are ShopNest support."), ChatMessage(role="user", content="Return window?")]
+    pol = load_policy(Settings(backend="anthropic").policy_path)
+    strong, cheap = pol.model_id("anthropic", "strong"), pol.model_id("anthropic", "cheap")
+    p.complete(msgs, strong, 256, 0.0)
+    p.complete(msgs, cheap, 256, 0.0)
+    s, c = fake.messages.calls
+    assert strong == "claude-sonnet-5-5" and "temperature" not in s and s["thinking"] == {"type": "between_tools"}
+    assert c["temperature"] == 0.0 and "thinking" not in c
+
+
+def test_text_is_read_by_block_type():
+    fake = NS(messages=NS(create=lambda **kw: NS(
+        id="m", stop_reason="end_turn", content=[NS(type="thinking", thinking=""), NS(type="text", text="B")],
+        usage=NS(input_tokens=5, output_tokens=1, cache_read_input_tokens=None, cache_creation_input_tokens=None))))
+    c = AnthropicProvider(client=fake).complete([ChatMessage(role="user", content="A or B?")], "claude-sonnet-5-5", 5, 0.0)
+    assert c.text == "B" and c.usage.input_tokens == 5 and c.usage.cached_input_tokens == 0
+
+
 def test_cost_prices_cache_reads_and_writes():
     s = Settings(backend="anthropic")
     pol = load_policy(s.policy_path)

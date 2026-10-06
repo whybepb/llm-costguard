@@ -77,7 +77,8 @@ flowchart LR
   - **Langfuse**, through a background thread;
   - **the SQLite log**, which the dashboard and eval read offline.
 
-  Monitoring never sits between the user and the answer, with one exception: the request-log write is still synchronous (see §4).
+  Monitoring never sits between the user and the answer. The request log is enqueued on the request path and written in
+  batches by a background thread; shutdown drains the queue (see §4).
 
 ---
 
@@ -144,7 +145,7 @@ Budgets are targets set from the non-functional requirements. The measured colum
 | 6 Upstream | provider | 305 ms | 313 ms | mock = 300 ms sleep; a real Sonnet/Haiku completion takes seconds (not measured here) |
 | 7 Write-back | 2 ms | 0.14 ms | 0.8 ms | exact + semantic insert |
 | 8 Hooks: metrics + drift | 0.1 ms | ~0.02 ms | — | micro-benchmark (not saved under `eval/results`): 19 µs + 3 µs per request |
-| 8 Request-log write (SQLite) | 1 ms | ~0.5 ms | — | micro-benchmark (not saved under `eval/results`); synchronous, outside `overhead_ms` |
+| 8 Request-log write (SQLite) | 1 ms | ~0.5 ms | — | micro-benchmark of the insert (not saved under `eval/results`); since the async logger, the request path only enqueues the row, outside `overhead_ms` |
 | **CostGuard overhead, hit path** | **50 ms** | **0.3 ms** | **3.6 ms** | `x-costguard-overhead-ms`, exact + semantic, n = 6,116 |
 | **CostGuard overhead, miss path** | **100 ms** | **11.8 ms** | **94.6 ms** | n = 1,552 |
 | of which RAG requests with 4–6 docs (cache bypass) | 100 ms | 25.9 ms | **105.8 ms** | n = 745; over budget because of the reranker |

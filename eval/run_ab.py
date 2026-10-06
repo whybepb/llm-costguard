@@ -4,6 +4,7 @@
     python -m eval.run_ab --backend anthropic --estimate-only            # pre-flight: new generations + est. $
     python -m eval.run_ab --backend anthropic --yes --workers 4          # the real run (paid; needs --yes)
     python -m eval.run_ab --trace eval/data/trace_v1_dup00.jsonl --arms A0,A5 --backend anthropic --yes
+    python -m eval.run_ab --backend mlx --replay --out-dir /tmp/ab           # reproduce a committed run from cassettes, $0
 
 Arms (cumulative, ordered by quality risk; each is the balanced mode with later levers switched off):
   A0 baseline: everything off, strong tier    A1 + exact cache    A2 + semantic cache (policy tau, guards)
@@ -126,9 +127,29 @@ def make_engine(settings: Settings, provider=None, with_logger: bool = False):
         factory.make_provider = orig
 
 
-def keyless_provider(backend: str, cassette: Path, mode: str = "replay"):
-    """Cassette replay without constructing the real upstream (no key / no MLX needed)."""
-    inner = ReplayOnlyProvider(backend, "replay only", ratio=1.15 if backend == "anthropic" else 1.0)
+class RecordedCountProvider(ReplayOnlyProvider):
+    """Replay-only upstream for a local backend whose token counts come from the cassette. A local provider's pre-call
+    count of a prompt is exactly the input usage recorded for that prompt's call, so the counts (and with them the
+    estimated baseline and the router's hardness signals) replay exactly, with no tokenizer or model weights loaded."""
+
+    def __init__(self, name: str, store: dict[str, dict], max_tokens: int):
+        super().__init__(name, "replay only", ratio=1.0)
+        self.store, self.max_tokens = store, max_tokens
+
+    def count_tokens(self, messages, model):
+        rec = self.store.get(call_key(messages, model, self.max_tokens, 0.0))
+        if rec is not None:
+            return int(rec["usage"]["input_tokens"])
+        return super().count_tokens(messages, model)
+
+
+def keyless_provider(backend: str, cassette: Path, mode: str = "replay", max_tokens: Optional[int] = None):
+    """Cassette replay without constructing the real upstream (no key / no MLX needed). With `max_tokens` (the policy
+    default every eval request uses), a local backend counts tokens from the cassette (RecordedCountProvider)."""
+    if backend in LOCAL_BACKENDS and max_tokens:
+        inner = RecordedCountProvider(backend, _read_cassette(cassette), max_tokens)
+    else:
+        inner = ReplayOnlyProvider(backend, "replay only", ratio=1.15 if backend == "anthropic" else 1.0)
     return CassetteProvider(inner, cassette, mode)
 
 
@@ -551,6 +572,9 @@ def main(argv: Optional[list[str]] = None) -> int:
     ap.add_argument("--out-dir", default=str(RESULTS))
     ap.add_argument("--estimate-only", action="store_true", help="print the pre-flight estimate and exit")
     ap.add_argument("--yes", action="store_true", help="allow spending on a paid backend")
+    ap.add_argument("--replay", action="store_true",
+                    help="cassette replay only ($0): never generates and never builds the real upstream (no key, no "
+                         "MLX); a request or judgment missing from the cassettes fails and marks its arm incomplete")
     ap.add_argument("--no-prefetch", action="store_true", help="don't pre-generate known upstream calls in parallel")
     ap.add_argument("--agreement", action="store_true", help="also report judge-vs-human agreement (human_labels.jsonl)")
     ap.add_argument("--provider-prompt-cache", action="store_true",
@@ -577,11 +601,15 @@ def main(argv: Optional[list[str]] = None) -> int:
     summary_path = Path(args.out) if args.out else out_dir / f"ab_summary{suffix}.json"
     db_path = out_dir / f"ab_{backend}{('_' + tag) if tag else ''}{('_limit' + str(args.limit)) if args.limit else ''}.sqlite"
     cassette = Path(args.cassette) if args.cassette else (None if backend == "mock" else CASSETTES / f"{backend}_ab.jsonl")
+    if args.replay and cassette is None:
+        ap.error("--replay needs a cassette backend (or --cassette)")
 
     settings = Settings.from_env()
     settings.backend = backend
     settings.cassette = cassette
-    settings.cassette_mode = os.environ.get("COSTGUARD_CASSETTE_MODE", "auto")
+    settings.cassette_mode = "replay" if args.replay else os.environ.get("COSTGUARD_CASSETTE_MODE", "auto")
+    if args.replay:
+        os.environ["COSTGUARD_JUDGE_CASSETTE_MODE"] = "replay"
     settings.db_path = db_path
     base, overrides = apply_overrides(load_policy(settings.policy_path))
     print(f"run_ab: backend={backend} trace={trace.name} rows={len(rows)} arms={','.join(arms)} "
@@ -595,8 +623,11 @@ def main(argv: Optional[list[str]] = None) -> int:
         print_preflight(pre)
         if args.estimate_only:
             return 0
+        if args.replay and pre["new_generations"]:
+            print(f"WARNING: --replay: {pre['new_generations']} upstream calls are not in {cassette.name}; those "
+                  "requests will fail and their arms will be marked incomplete", file=sys.stderr)
         spend = pre["est_generation_usd"] + (pre["est_judge_usd_max"] if not math.isnan(pre["est_judge_usd_max"]) else 0)
-        if paid and (pre["new_generations"] > 0 or pre["est_judge_calls_max"] > 0) and not args.yes:
+        if paid and not args.replay and (pre["new_generations"] > 0 or pre["est_judge_calls_max"] > 0) and not args.yes:
             print(f"Paid backend '{backend}': re-run with --yes to spend up to ~${spend:.2f} "
                   "(already-recorded calls and judgements are free).", file=sys.stderr)
             return 2
@@ -610,8 +641,9 @@ def main(argv: Optional[list[str]] = None) -> int:
     prompt_cache = None                 # provider prompt caching: only the anthropic adapter has it
     if "anthropic" in (backend, os.environ.get("COSTGUARD_JUDGE_BACKEND") or backend):
         prompt_cache = set_provider_prompt_cache(args.provider_prompt_cache)
-    engine = make_engine(settings, with_logger=True)
-    if pre and pre["new_calls"] and not args.no_prefetch and workers > 1:
+    replay_provider = keyless_provider(backend, cassette, "replay", base.default_max_tokens) if args.replay else None
+    engine = make_engine(settings, provider=replay_provider, with_logger=True)
+    if pre and pre["new_calls"] and not args.no_prefetch and not args.replay and workers > 1:
         calls = pre["new_calls"]
         print(f"prefetching {len(calls)} upstream generations with {workers} workers ...", flush=True)
         errors, lock = Counter(), threading.Lock()
@@ -682,7 +714,7 @@ def main(argv: Optional[list[str]] = None) -> int:
                  "components": getattr(engine, "component_status", {}),
                  "judge": judge.describe() if judge else None, "judge_mode": args.judge_mode,
                  "pairwise_max": args.pairwise_max, "correct_threshold": CORRECT_AT,
-                 "provider_prompt_cache": prompt_cache,
+                 "provider_prompt_cache": prompt_cache, "replay_only": bool(args.replay),
                  "savings_definition": "1 - sum(arm cost) / sum(A0 actual cost) on the same items (paired); "
                                        "est_savings_pct uses the record-level estimated baseline",
                  "preflight": {k: v for k, v in pre.items() if k != "new_calls"} if pre else None,

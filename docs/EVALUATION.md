@@ -150,9 +150,12 @@ The arms are ordered by quality risk; each arm adds one lever to the previous ar
 - With `--workers N`, the known new calls are generated in parallel first, so the sequential replay is all cassette
   hits.
 - Estimate for the headline trace (anthropic, empty cassettes; console output of `--estimate-only`, not saved under
-  `eval/results`): **684 new Sonnet generations ≈ $2.01, ≤ 2,189 judge
-  calls ≤ $2.48, total ≤ $4.49**. Router downshifts, once the router gate is computed for anthropic, add a few cents
+  `eval/results`, re-run on 2026-10-06): **729 new Sonnet generations ≈ $2.14, ≤ 2,095 judge
+  calls ≤ $2.37, total ≤ $4.51**. Router downshifts, once the router gate is computed for anthropic, add a few cents
   of Haiku calls.
+- `--replay` reproduces a recorded run from the cassettes only: it never generates, needs no key and no MLX, and a
+  request or judgment missing from the cassettes fails and marks its arm incomplete. Local backends take their token
+  counts from the cassette, so the estimated baseline and the route reasons replay exactly too.
 
 ## 4. Definitions
 
@@ -219,6 +222,9 @@ at), so both are reported.
 **Model.**
 - **Default:** the engine backend's strong tier, at temperature 0 with ≤ 5 output tokens. On `anthropic` that is
   `claude-sonnet-5-5`; on `mlx` it is `mlx-community/Qwen2.5-7B-Instruct-4bit`.
+  - Claude Sonnet 5.5 rejects non-default sampling parameters, so the adapter sends no `temperature` to it (it runs
+    at the API default) and turns its thinking off with `thinking: {"type": "between_tools"}`, so that thinking
+    tokens never eat the 5-token budget. The cassette makes the recorded verdicts replayable all the same.
 - **Override:** `COSTGUARD_JUDGE_BACKEND` / `COSTGUARD_JUDGE_MODEL`.
 - **Cassette:** every call is cassette-backed (`COSTGUARD_JUDGE_CASSETTE`, `COSTGUARD_JUDGE_CASSETTE_MODE`).
 - **Without a key or MLX:** the judge runs replay-only.
@@ -339,17 +345,19 @@ False hits are listed as "request ← served the cached answer of".
 
 **Maintenance.**
 - Changing the subset or the eval set: rebuild the subset, then run `python -m eval.ci_gate --update-baseline`.
-- Real-model CI: `python -m eval.ci_gate --record --backend anthropic --yes`, roughly $0.2–0.5. It records A0, the
-  balanced pass and the no-cache miss path of every row, so a PR that *raises* τ still replays.
+- Real-model CI: `python -m eval.ci_gate --record --backend anthropic --yes`. It records A0, the balanced pass and
+  the no-cache miss path of every row, so a PR that *raises* τ still replays. `--record --estimate-only` prints the
+  new calls and their estimated cost first, with no key (2026-10-06, empty cassette: 115 Sonnet calls ≈ $0.41).
 
 **The demo PR.** `COSTGUARD_TAU_OVERRIDE=0.6 python -m eval.ci_gate`, or a PR that lowers `tau` in `policy.yaml`:
-- savings rise from 60.5% to 72.7%;
-- 11 trap false hits and 22 false hits overall appear;
+- savings rise from 61.2% (60.5% in the committed baseline) to 64.1%;
+- 7 trap false hits and 7 false hits overall appear;
 - the gate fails (exit 1).
 
-These figures come from the mock backend with every real stage component, on 2026-10-04. Only the 60.5% baseline is
-saved (`ci_gate.json` → `metrics.savings_pct`). The τ = 0.6 run's output was not saved, so re-run it and keep its
-output before quoting 72.7% / 11 / 22.
+These figures come from the mock backend with every real stage component, at `cd67fe5` on 2026-10-06. The run's
+output is not saved under `eval/results`, so re-run it before quoting the numbers. They are lower than the
+2026-10-04 figures (72.7%, 11 trap and 22 false hits), most likely because the later guard fixes (currency, whole
+alphanumeric IDs, number roles) refuse more of the τ = 0.6 near-misses; the cause was not isolated.
 
 At the calibrated τ it passes with zero false hits. The mock backend is enough for this, because the cache decision
 depends only on the queries.
@@ -389,6 +397,7 @@ $PY -m eval.build_trace --all-variants                 # trace_v1 (+ dup00/15/50
 $PY -m eval.build_trace --ci-subset                    # eval/data/ci_subset.jsonl
 $PY -m eval.run_ab --backend mock --limit 50           # smoke test: seconds, $0
 $PY -m eval.run_ab --backend anthropic --estimate-only # pre-flight: new generations + estimated $
+$PY -m eval.run_ab --backend mlx --replay --out-dir /tmp/ab   # reproduce the committed MLX A/B from cassettes, $0
 $PY -m eval.run_ab --backend anthropic --yes --workers 4            # headline A/B (A0..A5)
 $PY -m eval.run_ab --backend anthropic --yes --arms A0,A5 --trace eval/data/trace_v1_dup00.jsonl   # sensitivity
 $PY -m eval.judge export --db eval/results/ab_anthropic.sqlite --arm A5 --n 50 --out eval/data/human_labels_todo.jsonl

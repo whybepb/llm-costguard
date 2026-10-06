@@ -65,7 +65,8 @@ class _GateEngine:
         cheap = req.model == "cheap"
         comp = Completion(text=f"{req.model} answer", model=req.model, usage=Usage(), latency_ms=1.0)
         rec = types.SimpleNamespace(model_id=req.model, cost_usd=0.001 if cheap else 0.01, input_tokens_sent=50,
-                                    input_tokens_original=50, output_tokens=10, cached_input_tokens=0)
+                                    input_tokens_original=50, output_tokens=10, cached_input_tokens=0,
+                                    model_used=req.model, route_reason="router-off", stage_errors={})
         return comp, rec
 
 

@@ -24,6 +24,17 @@ from ..schemas import ChatMessage, Completion, Usage
 from ..tokens import count_messages
 
 DEFAULT_BASE_URL = "https://api.anthropic.com"
+# Models that reject non-default sampling parameters with a 400 (temperature, top_p, top_k): Claude Sonnet 5 / 5.5,
+# Opus 4.7 and later, Fable / Mythos 5. Haiku 4.5 and the 4.6 models still accept temperature.
+NO_SAMPLING_PREFIXES = ("claude-sonnet-5", "claude-opus-4-7", "claude-opus-4-8", "claude-opus-5", "claude-fable-5",
+                        "claude-mythos-5")
+# Claude Sonnet 5.5 runs adaptive thinking unless told otherwise, and thinking tokens count toward max_tokens (256 for
+# answers, 5 for the judge). `between_tools` is its lowest setting: no extended thinking ("disabled" is a 400 there).
+THINKING_OFF = {"claude-sonnet-5-5": {"type": "between_tools"}}
+
+
+def accepts_sampling(model: str) -> bool:
+    return not model.startswith(NO_SAMPLING_PREFIXES)
 
 
 def _api_key() -> str | None:
@@ -73,8 +84,12 @@ class AnthropicProvider:
     def complete(self, messages, model, max_tokens, temperature) -> Completion:
         sys_param, msgs = self._split(messages)
         kw = {"system": sys_param} if sys_param else {}
+        if accepts_sampling(model):        # on the others even temperature=0 is a 400; they run at the API default
+            kw["temperature"] = temperature
+        if model in THINKING_OFF:
+            kw["thinking"] = THINKING_OFF[model]
         t0 = time.perf_counter()
-        r = self.client.messages.create(model=model, messages=msgs, max_tokens=max_tokens, temperature=temperature, **kw)
+        r = self.client.messages.create(model=model, messages=msgs, max_tokens=max_tokens, **kw)
         dt = (time.perf_counter() - t0) * 1000
         u = r.usage
         read = int(getattr(u, "cache_read_input_tokens", 0) or 0)

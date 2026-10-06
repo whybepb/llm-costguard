@@ -2,6 +2,7 @@
 
     python -m eval.ci_gate                         # gate against eval/results/ci_baseline.json (exit 1 on regression)
     python -m eval.ci_gate --update-baseline       # rewrite the baseline (do this in the PR that changes the subset)
+    python -m eval.ci_gate --record --backend anthropic --estimate-only   # pre-flight: new calls + est. $, no key
     python -m eval.ci_gate --record --backend anthropic --yes   # (re)record the CI cassette with a real model
 
 Input: eval/data/ci_subset.jsonl (~30 eval-set rows + ~20 trap pairs + a few legitimate repeats), replayed twice in
@@ -242,6 +243,43 @@ def run_gate(subset: Path = CI_SUBSET, baseline: Path = CI_BASELINE, out: Option
     return (0 if passed else 1), result
 
 
+def estimate_record(subset: Path, backend: str) -> dict:
+    """Pre-flight for `--record`: the calls the three recording passes make (A0, balanced as configured, balanced with
+    no cache) that the backend's CI cassette lacks, with a list-price estimate. Runs the real pipeline on a stand-in
+    upstream (eval.run_ab.DryRunProvider), so it needs no key and calls nothing."""
+    from costguard.pricing import PriceBook
+
+    from .run_ab import DryRunProvider, _alias_for, _read_cassette
+    rows = _load(subset)
+    settings = Settings.from_env()
+    settings.backend = backend
+    cassette = CASSETTES / f"{backend}_ci.jsonl"
+    store = _read_cassette(cassette)
+    seen: dict[str, list[int]] = {}
+    for c in store.values():
+        seen.setdefault(c.get("model", ""), []).append(int(c.get("usage", {}).get("output_tokens", 0)))
+
+    def out_est(model: str, max_tokens: int) -> int:     # same rule as run_ab's pre-flight
+        xs = seen.get(model, [])
+        return int(sum(xs) / len(xs)) if len(xs) >= 5 else int(0.6 * max_tokens)
+
+    dry = DryRunProvider(backend, store, out_est)
+    engine = make_engine(settings, provider=dry)
+    base, _ = apply_overrides(engine.policy)
+    mode_a0, pol_a0 = arm_policy(base, "A0")
+    run_rows(engine, pol_a0, mode_a0, "ci-A0", rows)
+    run_rows(engine, base, "balanced", "ci-balanced", rows)
+    run_rows(engine, base, "balanced", "ci-record-nocache", rows, no_cache=True)
+    prices = PriceBook(settings.prices_path, base.billing_for(backend))
+    by_model: dict[str, list] = {}
+    for _, model, _, _, n_in, n_out in dry.new.values():
+        n, usd = by_model.get(model, [0, 0.0])
+        by_model[model] = [n + 1, usd + prices.cost(_alias_for(base, backend, model), n_in, n_out)]
+    return {"backend": backend, "rows": len(rows), "cassette": cassette.name, "cassette_entries": len(store),
+            "new_generations": len(dry.new), "est_usd": round(sum(v[1] for v in by_model.values()), 4),
+            "by_model": {m: {"calls": v[0], "est_usd": round(v[1], 4)} for m, v in by_model.items()}}
+
+
 def main(argv: Optional[list[str]] = None) -> int:
     ap = argparse.ArgumentParser(description="CI eval gate (see module docstring).")
     ap.add_argument("--subset", default=str(CI_SUBSET))
@@ -253,14 +291,24 @@ def main(argv: Optional[list[str]] = None) -> int:
     ap.add_argument("--update-baseline", action="store_true")
     ap.add_argument("--record", action="store_true", help="record eval/cassettes/<backend>_ci.jsonl with a real model")
     ap.add_argument("--yes", action="store_true", help="allow --record on a paid backend")
+    ap.add_argument("--estimate-only", action="store_true",
+                    help="with --record: print the new generations and estimated $ for --backend, call nothing")
     ap.add_argument("--quality-margin", type=float, default=QUALITY_MARGIN)
     ap.add_argument("--savings-margin", type=float, default=SAVINGS_MARGIN)
     ap.add_argument("--provider-prompt-cache", action="store_true",
                     help="keep Anthropic prompt caching on when recording (default off; docs/EVALUATION.md section 2)")
     args = ap.parse_args(argv)
+    if args.estimate_only:
+        if not args.record or args.backend in ("auto", "mock"):
+            ap.error("--estimate-only goes with --record --backend <real backend>")
+        est = estimate_record(Path(args.subset), args.backend)
+        print(f"CI cassette pre-flight ({est['backend']}, {est['rows']} subset rows, {est['cassette']} has "
+              f"{est['cassette_entries']} entries): NEW generations {est['new_generations']}, est. ${est['est_usd']:.4f} "
+              f"{est['by_model']}; judge: heuristic, no API calls (unless --judge model)")
+        return 0
     if args.record and args.backend not in LOCAL_BACKENDS and not args.yes:
-        print(f"--record on paid backend {args.backend!r} costs roughly $0.2-0.5 for the subset; add --yes",
-              file=sys.stderr)
+        print(f"--record on paid backend {args.backend!r} spends money; see the estimate with --estimate-only, "
+              "then add --yes", file=sys.stderr)
         return 2
     code, _ = run_gate(Path(args.subset), Path(args.baseline), Path(args.out) if args.out else None, args.backend,
                        args.judge, update_baseline=args.update_baseline or args.record,

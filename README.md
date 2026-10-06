@@ -100,7 +100,7 @@ Every response carries `x-costguard-*` headers (cache status, similarity, route,
 | Piece | Where | What it does |
 |---|---|---|
 | Frozen trace | `eval/data/trace_v1.jsonl` + sha256 | 600 requests: ~62 % Bitext support queries, ~28 % KB questions with retrieved context, 10 % trap pairs; 30 % exact or near duplicates |
-| Record / replay | `eval/cassettes/` | Model outputs are recorded once and replayed, so re-runs and CI are free and deterministic |
+| Record / replay | `eval/cassettes/` | Model outputs are recorded once and replayed, so re-runs and CI are free and deterministic. `python -m eval.run_ab --backend mlx --replay --out-dir /tmp/ab` reproduces the headline table at $0, with no MLX or key |
 | Judge | `eval/judge.py` | Pairwise comparison in both orders (disagreement = tie) plus an absolute grade against a reference |
 | Statistics | `eval/stats.py` | Paired cluster bootstrap 95 % CIs; Wilson intervals for rates |
 | Ablation | `python -m eval.run_ab` | A0 baseline → A1 exact cache → … → A5 all levers, cumulative, so each lever's increment is visible |
