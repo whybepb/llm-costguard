@@ -1,7 +1,7 @@
 """Replay demo_data/queries.jsonl through ExactCache and score it.
 
 Usage: python3 -m cache.replay_exact  (from the repo root)
-Writes results/exact_cache_rows.csv and results/exact_cache_summary.json.
+Writes results/exact__per_query.csv and results/exact__summary.json.
 """
 
 import csv
@@ -96,11 +96,11 @@ def main():
     }
 
     OUT.mkdir(exist_ok=True)
-    with (OUT / "exact_cache_rows.csv").open("w", newline="") as f:
+    with (OUT / "exact__per_query.csv").open("w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(out_rows[0]))
         w.writeheader()
         w.writerows(out_rows)
-    (OUT / "exact_cache_summary.json").write_text(json.dumps(summary, indent=2))
+    (OUT / "exact__summary.json").write_text(json.dumps(summary, indent=2))
     print(json.dumps(summary, indent=2))
 
 
