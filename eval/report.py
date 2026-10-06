@@ -337,6 +337,12 @@ def build() -> str:
     return "\n\n".join(p for p in parts if p) + "\n"
 
 
+def _billing(b: Any) -> str:
+    if isinstance(b, dict):
+        return " / ".join(str(b[k]) for k in ("strong", "cheap") if k in b) + " (strong / cheap)"
+    return str(b)
+
+
 def readme_block() -> str:
     """Compact headline for the README: the A/B arms, the router gate verdict and proxy overhead. Generated, never typed."""
     ab, name = pick_ab()
@@ -349,7 +355,7 @@ def readme_block() -> str:
                      "replace this block.")
     elif m.get("backend") == "mlx":
         parts.append("> **Local stand-in models.** Qwen2.5-7B (strong) and Qwen2.5-1.5B (cheap) on Apple silicon, billed "
-                     f"at {m.get('billing')} list prices (a ~12× price gap; Sonnet 5.5 → Haiku 4.5 is 2×, so router "
+                     f"at {_billing(m.get('billing'))} list prices (a ~12× price gap; Sonnet 5.5 → Haiku 4.5 is 2×, so router "
                      "savings on Anthropic will be smaller). Cache savings do not depend on the model pair.")
     judge = (m.get("judge") or {}).get("judge", "–")
     rows = []
