@@ -1,0 +1,47 @@
+# CostGuard demo infrastructure. The app itself runs on the host (./run_demo.sh),
+# because it needs the local embedding model; Prometheus scrapes it via host.docker.internal.
+#
+#   Redis Stack     localhost:6379  (exact + vector cache)   RedisInsight UI: http://localhost:8001
+#   Prometheus      http://localhost:9090
+#   Grafana         http://localhost:3000  (anonymous viewer; admin/admin to edit)
+
+services:
+  redis:
+    image: redis/redis-stack:7.4.0-v3
+    ports: ["6379:6379", "8001:8001"]
+    environment:
+      REDIS_ARGS: "--appendonly yes"
+    volumes: [redis-data:/data]
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    ports: ["9090:9090"]
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.retention.time=30d
+    volumes:
+      - ./infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    extra_hosts: ["host.docker.internal:host-gateway"]
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    ports: ["3000:3000"]
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/costguard.json
+    volumes:
+      - ./infra/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./infra/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    depends_on: [prometheus]
+    restart: unless-stopped
+
+volumes:
+  redis-data:
+  prometheus-data:
+  grafana-data:

@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CostGuard Demo</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --panel: #fff; --text: #1b1f24; --muted: #5d6673; --border: #dde1e6;
+    --accent: #2457d6; --good: #18794e; --warn: #a15c00; --bad: #c4291c; --chip: #eef1f5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #111418; --panel: #1a1e24; --text: #e6e9ee; --muted: #9aa3ae; --border: #2c323a;
+      --accent: #6d95ff; --good: #4cc38a; --warn: #f0a640; --bad: #ff6b5e; --chip: #232931; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.45 -apple-system, system-ui, sans-serif; }
+  header { display: flex; align-items: center; gap: 16px; padding: 12px 20px; border-bottom: 1px solid var(--border); background: var(--panel); flex-wrap: wrap; }
+  header h1 { font-size: 17px; margin: 0; }
+  header nav { display: flex; gap: 14px; margin-left: auto; flex-wrap: wrap; }
+  a { color: var(--accent); }
+  main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; padding: 16px 20px; }
+  @media (max-width: 1000px) { main { grid-template-columns: 1fr; padding: 12px 16px; } }
+  section { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; min-width: 0; }
+  h2 { font-size: 14px; margin: 0 0 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+  label { display: block; font-weight: 600; margin: 10px 0 4px; }
+  textarea, input[type=text], select { width: 100%; padding: 7px 9px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text); font: inherit; }
+  textarea { resize: vertical; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: end; }
+  .row > * { flex: 1 1 140px; }
+  .docs { max-height: 190px; overflow: auto; border: 1px solid var(--border); border-radius: 6px; padding: 6px 8px; columns: 2 220px; background: var(--bg); }
+  .docs label { font-weight: 400; margin: 2px 0; display: flex; gap: 6px; align-items: center; break-inside: avoid; }
+  .toggles { display: flex; gap: 18px; margin-top: 12px; flex-wrap: wrap; }
+  .toggles label { font-weight: 400; margin: 0; display: flex; gap: 6px; align-items: center; }
+  button { padding: 8px 14px; border-radius: 6px; border: 1px solid var(--border); background: var(--chip); color: var(--text); font: inherit; cursor: pointer; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+  button:disabled { opacity: .6; cursor: wait; }
+  .actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; align-items: center; }
+  .muted { color: var(--muted); }
+  .small { font-size: 12px; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin: 10px 0; }
+  .stat { background: var(--chip); border-radius: 6px; padding: 8px 10px; }
+  .stat b { display: block; font-size: 18px; }
+  .stat span { font-size: 12px; color: var(--muted); }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; background: var(--chip); }
+  .good { color: var(--good); } .warn { color: var(--warn); } .bad { color: var(--bad); }
+  .answer { white-space: pre-wrap; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; }
+  details { margin-top: 10px; } summary { cursor: pointer; font-weight: 600; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  td, th { text-align: left; padding: 5px 6px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .tablewrap { overflow-x: auto; }
+  .full { grid-column: 1 / -1; }
+  .err { color: var(--bad); white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<header>
+  <h1>LLM CostGuard: live demo</h1>
+  <span class="muted small" id="cachecount"></span>
+  <nav>
+    <a href="http://localhost:3000" target="_blank">Grafana</a>
+    <a href="http://localhost:9090" target="_blank">Prometheus</a>
+    <a href="http://localhost:8001" target="_blank">RedisInsight</a>
+    <a href="/metrics" target="_blank">/metrics</a>
+  </nav>
+</header>
+<main>
+  <section>
+    <h2>Request</h2>
+    <div class="row">
+      <div><label for="demo">Load a demo query</label><select id="demo"><option value="">(none)</option></select></div>
+      <div style="flex:0 1 160px"><label for="tenant">Tenant</label><input type="text" id="tenant" value="northstar"></div>
+    </div>
+    <label for="query">Customer query</label>
+    <textarea id="query" rows="3" placeholder="Can I return my headphones? They were delivered 10 days ago."></textarea>
+
+    <label>Policy docs (demo corpus)</label>
+    <div class="docs" id="docs"></div>
+    <div class="actions" style="margin-top:6px">
+      <button type="button" id="all">Select all</button><button type="button" id="none">Clear</button>
+    </div>
+
+    <details>
+      <summary>Add your own policy doc</summary>
+      <label for="cdtitle">Title</label><input type="text" id="cdtitle" placeholder="Warranty policy">
+      <label for="cdtext">Text (use "## Heading" lines for sections)</label>
+      <textarea id="cdtext" rows="6"></textarea>
+    </details>
+
+    <label for="caseSel">Case</label>
+    <select id="caseSel"><option value="">(no case)</option><option value="__custom">Custom text…</option></select>
+    <textarea id="caseText" rows="5" style="margin-top:6px" placeholder="Case details (order, status, dates…)"></textarea>
+
+    <div class="row">
+      <div><label for="budget">Window budget (tokens)</label>
+        <select id="budget"><option>800</option><option>1200</option><option>2000</option></select></div>
+      <div><label for="mode">LLM mode</label>
+        <select id="mode">
+          <option value="live">live (real API calls)</option>
+          <option value="replay">replay (saved eval answers, free)</option>
+          <option value="mock">mock (no API, canned answer)</option>
+        </select></div>
+    </div>
+    <div class="toggles">
+      <label><input type="checkbox" id="shadow" checked> Shadow mode: also run baseline and judge quality (about 2× cost)</label>
+      <label><input type="checkbox" id="usecache" checked> Use cache</label>
+    </div>
+    <div class="actions">
+      <button class="primary" id="go">Generate response</button>
+      <button id="clear" title="Delete this tenant's exact and semantic cache entries">Clear tenant cache</button>
+      <span class="muted small" id="status"></span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Result</h2>
+    <div id="result" class="muted">Submit a request to see the answer, which layer served it, cost vs baseline and quality.</div>
+  </section>
+
+  <section class="full">
+    <h2>Recent requests</h2>
+    <div class="tablewrap"><table id="recent"><thead><tr>
+      <th>Time</th><th>Tenant</th><th>Query</th><th>Layer</th><th>Model</th><th>Cost</th><th>Baseline</th><th>Saved</th><th>Quality</th><th>Latency</th>
+    </tr></thead><tbody></tbody></table></div>
+  </section>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+let DEMO = {docs: [], cases: {}, queries: []};
+const usd = v => v == null ? "–" : "$" + (v < 0.01 ? v.toFixed(5) : v.toFixed(4));
+const pct = v => (v * 100).toFixed(1) + "%";
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const layerName = {exact_cache: "Exact cache", semantic_cache: "Semantic cache", llm: "LLM"};
+const qClass = v => v === "worse" ? "bad" : v === "unparsed" ? "warn" : "good";
+
+function renderCase(c) {
+  const lines = [`Order ${c.order_id} for ${c.customer || "the signed-in customer"}.`];
+  for (const [k, v] of Object.entries(c)) if (!["id", "order_id", "customer"].includes(k)) lines.push(`- ${k}: ${v}`);
+  return lines.join("\n");
+}
+
+async function loadDemo() {
+  DEMO = await (await fetch("/api/demo")).json();
+  $("docs").innerHTML = DEMO.docs.map(d =>
+    `<label><input type="checkbox" value="${esc(d.id)}"> ${esc(d.title)} <span class="muted small">${esc(d.id)}</span></label>`).join("");
+  for (const id of Object.keys(DEMO.cases)) $("caseSel").insertAdjacentHTML("beforeend", `<option value="${esc(id)}">${esc(id)}</option>`);
+  for (const q of DEMO.queries)
+    $("demo").insertAdjacentHTML("beforeend", `<option value="${esc(q.id)}">${esc(q.id)} · ${esc(q.variant)} · ${esc(q.query.slice(0, 70))}</option>`);
+}
+
+$("demo").onchange = () => {
+  const q = DEMO.queries.find(x => x.id === $("demo").value);
+  if (!q) return;
+  $("query").value = q.query;
+  document.querySelectorAll("#docs input").forEach(cb => cb.checked = q.doc_ids.includes(cb.value));
+  $("caseSel").value = q.case_id || "";
+  $("caseSel").onchange();
+};
+$("caseSel").onchange = () => {
+  const v = $("caseSel").value;
+  $("caseText").value = v && v !== "__custom" ? renderCase(DEMO.cases[v]) : (v === "__custom" ? $("caseText").value : "");
+  $("caseText").readOnly = v !== "__custom" && v !== "";
+};
+$("all").onclick = () => document.querySelectorAll("#docs input").forEach(cb => cb.checked = true);
+$("none").onclick = () => document.querySelectorAll("#docs input").forEach(cb => cb.checked = false);
+
+async function refreshSide() {
+  try {
+    const c = await (await fetch("/api/cache")).json();
+    $("cachecount").textContent = `cache: ${c.exact} exact · ${c.semantic} semantic entries`;
+    const rows = await (await fetch("/api/recent?n=25")).json();
+    $("recent").querySelector("tbody").innerHTML = rows.map(r => `<tr>
+      <td>${new Date(r.created * 1000).toLocaleTimeString()}</td><td>${esc(r.tenant)}</td><td>${esc(r.query.slice(0, 90))}</td>
+      <td>${esc(layerName[r.layer] || r.layer)}</td><td>${esc(r.model || "–")}</td><td>${usd(r.cost_usd)}</td><td>${usd(r.baseline_cost_usd)}</td>
+      <td>${pct(r.savings_pct)}</td><td class="${r.quality ? qClass(r.quality) : "muted"}">${esc(r.quality || "not checked")}</td><td>${r.latency_s}s</td></tr>`).join("");
+  } catch (e) { /* the service may still be starting */ }
+}
+
+$("go").onclick = async () => {
+  const doc_ids = [...document.querySelectorAll("#docs input:checked")].map(cb => cb.value);
+  const custom_docs = $("cdtext").value.trim() ? [{title: $("cdtitle").value, text: $("cdtext").value}] : [];
+  const cs = $("caseSel").value;
+  const body = {
+    query: $("query").value, tenant: $("tenant").value || "default", doc_ids, custom_docs,
+    case: cs && cs !== "__custom" ? DEMO.cases[cs] : ($("caseText").value.trim() || null),
+    window_budget: +$("budget").value, shadow: $("shadow").checked, use_cache: $("usecache").checked,
+    llm_mode: $("mode").value,
+  };
+  $("go").disabled = true;
+  $("status").textContent = body.shadow ? "Running pipeline + shadow baseline…" : "Running pipeline…";
+  const t0 = performance.now();
+  try {
+    const res = await fetch("/v1/answer", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)});
+    const r = await res.json();
+    if (!res.ok) throw new Error(r.detail || res.statusText);
+    showResult(r);
+    $("status").textContent = `Done in ${((performance.now() - t0) / 1000).toFixed(1)}s`;
+  } catch (e) {
+    $("result").innerHTML = `<div class="err">${esc(e.message)}</div>`;
+    $("status").textContent = "";
+  } finally {
+    $("go").disabled = false;
+    refreshSide();
+  }
+};
+
+$("clear").onclick = async () => {
+  const t = $("tenant").value || "default";
+  if (!confirm(`Delete all cached answers for tenant "${t}"?`)) return;
+  const r = await (await fetch(`/api/cache?tenant=${encodeURIComponent(t)}`, {method: "DELETE"})).json();
+  $("status").textContent = `Deleted ${r.deleted} cache keys`;
+  refreshSide();
+};
+
+function showResult(r) {
+  const q = r.quality;
+  const w = r.window, ro = r.router;
+  let html = `<div><span class="badge">${esc(layerName[r.layer])}</span> ${r.llm_mode !== "live" ? `<span class="badge warn">${esc(r.llm_mode)}</span>` : ""} ${r.model ? `<span class="badge">${esc(r.model)}</span>` : ""}
+    ${q ? `<span class="badge ${qClass(q.verdict)}">quality: ${esc(q.verdict)}</span>` : `<span class="badge muted">quality not checked</span>`}</div>
+  <div class="stats">
+    <div class="stat"><b>${usd(r.cost_usd)}</b><span>Actual cost</span></div>
+    <div class="stat"><b>${usd(r.baseline_cost_usd)}</b><span>Baseline (Sonnet, full context, ${esc(r.baseline_source)})</span></div>
+    <div class="stat"><b class="${r.savings_pct >= 0 ? "good" : "bad"}">${pct(r.savings_pct)}</b><span>Saved (${usd(r.savings_usd)})</span></div>
+    <div class="stat"><b>${r.input_tokens.toLocaleString()} / ${r.baseline_input_tokens.toLocaleString()}</b><span>Input tokens sent / baseline</span></div>
+    <div class="stat"><b>${r.latency_s}s</b><span>Latency (optimized path)</span></div>
+  </div>
+  <label>Answer</label><div class="answer">${esc(r.answer)}</div>`;
+  if (q) html += `<p class="small"><b>Quality judge (Sonnet 5.5):</b> ${esc(q.reason)}</p>`;
+  const rows = [];
+  if (r.served_from_query) rows.push(["Served from cached query", esc(r.served_from_query) + (r.semantic_score ? ` (cosine ${r.semantic_score})` : "")]);
+  if (r.semantic_rejections.length) rows.push(["Semantic candidates rejected", esc(r.semantic_rejections.join(", "))]);
+  if (w) rows.push(["Window", w.applied ? `${w.tokens_before.toLocaleString()} → ${w.tokens_after.toLocaleString()} tokens (budget ${w.budget}); kept ${esc(w.docs_kept.join(", "))}` : `not applied (${w.tokens_before} tokens, under the minimum)`]);
+  if (ro) rows.push(["Router", `P(needs large) = ${ro.p_large} vs threshold ${ro.threshold} → ${esc(ro.model)}`]);
+  const oh = Object.entries(r.overhead_usd).map(([k, v]) => `${k} ${usd(v)}`).join(", ");
+  if (oh) rows.push(["Overhead (not in savings unless cache judge)", esc(oh)]);
+  rows.push(["Stage timings", esc(Object.entries(r.timings).map(([k, v]) => `${k} ${v}s`).join(", "))]);
+  html += `<table style="margin-top:10px">${rows.map(([a, b]) => `<tr><th>${a}</th><td>${b}</td></tr>`).join("")}</table>`;
+  if (w && w.sections_kept.length) html += `<details><summary>Sections sent (${w.sections_kept.length})</summary><p class="small">${esc(w.sections_kept.join(", "))}</p></details>`;
+  if (r.baseline_answer != null) html += `<details><summary>Baseline answer (Sonnet 5.5, full context)</summary><div class="answer">${esc(r.baseline_answer)}</div></details>`;
+  $("result").innerHTML = html;
+}
+
+loadDemo().then(refreshSide);
+setInterval(refreshSide, 10000);
+</script>
+</body>
+</html>
