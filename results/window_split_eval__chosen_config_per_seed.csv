@@ -1,0 +1,16 @@
+seed,approach,chosen_config,train_clusters,train_all_facts_kept_pct,test_queries,test_all_facts_kept_pct,test_gold_docs_kept_pct,test_avg_docs_kept,test_avg_tokens_after,test_tokens_saved_pct
+0,section_first,section_first(budget=800),address_change|edge_international|edge_warranty|gift_cards|marketplace_seller|promo_codes|tracking_scans,0.9574,64,0.8906,0.9531,3.23,821,0.8567
+0,doc_first,"doc_first(method=max,gap=0.15)",address_change|edge_international|edge_warranty|gift_cards|marketplace_seller|promo_codes|tracking_scans,0.9787,64,0.9688,0.9219,2.94,1519,0.7347
+0,hybrid,"hybrid(method=max,budget=700)",address_change|edge_international|edge_warranty|gift_cards|marketplace_seller|promo_codes|tracking_scans,1.0,64,0.8438,0.9219,2.33,711,0.8758
+1,section_first,section_first(budget=1200),address_change|edge_international|edge_warranty|marketplace_seller|order_cancellation|subscription_cancel|tracking_scans,0.9574,64,0.9844,0.9844,4.55,1220,0.7816
+1,doc_first,"doc_first(method=mean,gap=0.1)",address_change|edge_international|edge_warranty|marketplace_seller|order_cancellation|subscription_cancel|tracking_scans,1.0,64,0.9375,0.9219,2.52,1377,0.7535
+1,hybrid,"hybrid(method=max,budget=700)",address_change|edge_international|edge_warranty|marketplace_seller|order_cancellation|subscription_cancel|tracking_scans,1.0,64,0.8438,0.9219,2.52,718,0.8716
+2,section_first,section_first(budget=1200),address_change|edge_international|edge_preorder|edge_warranty|gift_cards|marketplace_seller|missing_package,0.9487,72,0.9861,1.0,4.43,1221,0.786
+2,doc_first,"doc_first(method=max,gap=0.15)",address_change|edge_international|edge_preorder|edge_warranty|gift_cards|marketplace_seller|missing_package,0.9744,72,0.9722,0.9306,2.72,1373,0.7592
+2,hybrid,"hybrid(method=max,budget=800)",address_change|edge_international|edge_preorder|edge_warranty|gift_cards|marketplace_seller|missing_package,1.0,72,0.9583,0.9444,3.18,827,0.8551
+3,section_first,section_first(budget=1200),address_change|edge_international|edge_preorder|edge_warranty|missing_package|subscription_cancel|tracking_scans,0.9744,72,0.9722,0.9861,4.9,1219,0.7852
+3,doc_first,"doc_first(method=max,gap=0.15)",address_change|edge_international|edge_preorder|edge_warranty|missing_package|subscription_cancel|tracking_scans,1.0,72,0.9583,0.9028,2.51,1275,0.7752
+3,hybrid,"hybrid(method=max,budget=800)",address_change|edge_international|edge_preorder|edge_warranty|missing_package|subscription_cancel|tracking_scans,1.0,72,0.9583,0.9167,3.32,822,0.8552
+4,section_first,section_first(budget=1200),damaged_item|edge_international|edge_warranty|marketplace_seller|order_cancellation|returns_eligibility|tracking_scans,0.9362,64,1.0,0.9844,4.12,1217,0.784
+4,doc_first,"doc_first(method=max,gap=0.08)",damaged_item|edge_international|edge_warranty|marketplace_seller|order_cancellation|returns_eligibility|tracking_scans,0.9574,64,0.9531,0.9062,1.52,885,0.8429
+4,hybrid,"hybrid(method=max,budget=1200)",damaged_item|edge_international|edge_warranty|marketplace_seller|order_cancellation|returns_eligibility|tracking_scans,0.9787,64,1.0,0.9844,4.16,1220,0.7836

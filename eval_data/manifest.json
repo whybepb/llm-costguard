@@ -1,0 +1,37 @@
+{
+  "store": "Northstar Market",
+  "purpose": "held-out evaluation; never used for tuning",
+  "query_count": 40,
+  "replay_order": "queries.jsonl top to bottom",
+  "counts": {
+    "expected_cache": {
+      "cold": 20,
+      "exact_hit": 5,
+      "miss": 9,
+      "semantic_hit": 6
+    },
+    "variant": {
+      "cold": 20,
+      "exact": 5,
+      "semantic": 6,
+      "tricky_case": 1,
+      "tricky_date": 1,
+      "tricky_intent": 2,
+      "tricky_negation": 1,
+      "tricky_number": 2,
+      "tricky_source": 1,
+      "tricky_state": 1
+    },
+    "context_size": {
+      "large": 29,
+      "small": 11
+    },
+    "difficulty": {
+      "complex": 15,
+      "easy": 25
+    }
+  },
+  "new_topic_cold": 13,
+  "multi_doc_gold": 6,
+  "gold_doc_first_in_bundle": 20
+}

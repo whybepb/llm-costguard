@@ -1,0 +1,228 @@
+{
+  "ev_pm_4d": {
+    "order_id": "NS-40104",
+    "customer": "Jordan Lee",
+    "item": "Arc Lamp",
+    "seller": "Northstar",
+    "fulfilled_by": "Northstar",
+    "order_status": "Delivered",
+    "delivered_days_ago": 4,
+    "price_match_terms_open": true,
+    "return_requested": false
+  },
+  "ev_pm_12d": {
+    "order_id": "NS-40112",
+    "customer": "Jordan Lee",
+    "item": "Arc Lamp",
+    "seller": "Northstar",
+    "fulfilled_by": "Northstar",
+    "order_status": "Delivered",
+    "delivered_days_ago": 12,
+    "price_match_terms_open": true,
+    "return_requested": false
+  },
+  "ev_pickup_ready": {
+    "order_id": "NS-40201",
+    "customer": "Sam Rivera",
+    "item": "Arc Lamp",
+    "fulfillment": "Store pickup",
+    "pickup_store": "Northstar Elm Street",
+    "pickup_status": "Ready for pickup",
+    "hold_until": "2026-10-21 (printed on order)",
+    "pickup_code_in_context": false,
+    "refund_status": "none"
+  },
+  "ev_pickup_12d": {
+    "order_id": "NS-40202",
+    "customer": "Sam Rivera",
+    "item": "Arc Lamp",
+    "fulfillment": "Store pickup",
+    "seller": "Northstar",
+    "pickup_status": "Picked up",
+    "picked_up_days_ago": 12,
+    "final_sale": false,
+    "condition": "unused, original packaging"
+  },
+  "ev_ret_30d": {
+    "order_id": "NS-40301",
+    "customer": "Mia Chen",
+    "item": "Juniper Rain Jacket",
+    "seller": "Northstar",
+    "fulfilled_by": "Northstar",
+    "order_status": "Delivered",
+    "delivered_days_ago": 30,
+    "final_sale": false,
+    "condition": "unused, tags attached"
+  },
+  "ev_ret_31d": {
+    "order_id": "NS-40331",
+    "customer": "Mia Chen",
+    "item": "Juniper Rain Jacket",
+    "seller": "Northstar",
+    "fulfilled_by": "Northstar",
+    "order_status": "Delivered",
+    "delivered_days_ago": 31,
+    "final_sale": false,
+    "condition": "unused, tags attached"
+  },
+  "ev_ret_30d_final": {
+    "order_id": "NS-40302",
+    "customer": "Mia Chen",
+    "item": "Juniper Rain Jacket",
+    "seller": "Northstar",
+    "fulfilled_by": "Northstar",
+    "order_status": "Delivered",
+    "delivered_days_ago": 30,
+    "final_sale": true,
+    "condition": "unused, tags attached"
+  },
+  "ev_war_5m": {
+    "order_id": "NS-40401",
+    "customer": "Priya Nair",
+    "item": "Steelbrew Electric Kettle",
+    "seller": "Northstar",
+    "product_class": "small appliance",
+    "delivered_months_ago": 5,
+    "warranty_term": "not stated on product (general term applies)",
+    "misuse_reported": false
+  },
+  "ev_war_14m": {
+    "order_id": "NS-40414",
+    "customer": "Priya Nair",
+    "item": "Steelbrew Electric Kettle",
+    "seller": "Northstar",
+    "product_class": "small appliance",
+    "delivered_months_ago": 14,
+    "warranty_term": "not stated on product (general term applies)",
+    "misuse_reported": false
+  },
+  "ev_ref_10bd": {
+    "order_id": "NS-40501",
+    "customer": "Leo Park",
+    "item": "Juniper Rain Jacket",
+    "return_received": true,
+    "refund_status": "Issued",
+    "payment_method": "card",
+    "business_days_since_issued": 10,
+    "status_changed_since_issue": false
+  },
+  "ev_rev_9d": {
+    "order_id": "NS-40601",
+    "customer": "Ana Silva",
+    "item": "Ember Mug",
+    "review_posted_days_ago": 9,
+    "review_stars": 1
+  },
+  "ev_tax": {
+    "order_id": "NS-40701",
+    "customer": "Omar Haddad",
+    "order_placed_days_ago": 7,
+    "sales_tax_charged": true,
+    "tax_exemption_on_account": false,
+    "international": false
+  },
+  "ev_tax_intl": {
+    "order_id": "NS-40702",
+    "customer": "Omar Haddad",
+    "order_placed_days_ago": 7,
+    "international": true,
+    "destination": "Canada",
+    "duties_included_in_price": false,
+    "duty_amount_shown": false,
+    "tax_exemption_on_account": false
+  },
+  "ev_preorder_shipped": {
+    "order_id": "NS-40801",
+    "customer": "Kai Morgan",
+    "item": "Halo Smart Speaker",
+    "preorder": true,
+    "ship_date_changes": 2,
+    "order_status": "Shipped",
+    "shipped_days_ago": 1,
+    "cancel_control_visible": false
+  },
+  "ev_customs": {
+    "order_id": "NS-40901",
+    "customer": "Elena Rossi",
+    "item": "Ember Mug",
+    "international": true,
+    "destination": "Canada",
+    "tracking_status": "Held by customs",
+    "days_in_customs": 3,
+    "duties_included_in_price": false,
+    "duty_amount_shown": false
+  },
+  "ev_product": {
+    "order_id": "NS-41001",
+    "customer": "the signed-in customer",
+    "product": "Arc Lamp",
+    "listed_price_usd": 45,
+    "dimensions_in_context": false,
+    "bulb_included_in_context": false
+  },
+  "ev_plus_order": {
+    "order_id": "NS-30412",
+    "customer": "Noah Kim",
+    "plan": "Plus monthly",
+    "membership_status": "Active",
+    "order_status": "Processing",
+    "cancel_control_visible": true,
+    "cancellation_confirmed": false
+  },
+  "ev_addr_carrier": {
+    "order_id": "NS-41201",
+    "customer": "Grace Liu",
+    "order_status": "Shipped",
+    "carrier_has_parcel": true,
+    "carrier_pickup_hours_ago": 2,
+    "edit_address_visible": false,
+    "address_change_confirmed": false
+  },
+  "ev_two_lines": {
+    "order_id": "NS-41301",
+    "customer": "Ivy Brooks",
+    "order_created": true,
+    "statement_lines": "1 pending authorization and 1 captured charge, same amount",
+    "captured": true
+  },
+  "ev_mkt_dmg": {
+    "order_id": "NS-41401",
+    "customer": "Zoe Adams",
+    "item": "Blender",
+    "seller": "Harbor Home",
+    "fulfilled_by": "Harbor Home",
+    "issue": "cracked jug",
+    "photos_submitted": true,
+    "days_without_seller_reply": 5,
+    "seller_window_displayed": false,
+    "refund_approved": false
+  },
+  "ev_credit": {
+    "order_id": "NS-41501",
+    "customer": "Ben Torres",
+    "refund_destination": "store credit",
+    "store_credit_balance_in_context": false
+  },
+  "ev_plus_annual": {
+    "order_id": "NS-41601",
+    "customer": "Ruth Ellis",
+    "plan": "Plus annual",
+    "fee_posted_hours_ago": 20,
+    "benefits_used": false,
+    "refund_control_visible": false,
+    "first_time_monthly": false
+  },
+  "ev_privacy_pending": {
+    "order_id": "NS-41701",
+    "customer": "Lena Fischer",
+    "privacy_request_submitted_days_ago": 7,
+    "privacy_request_result_in_context": false
+  },
+  "ev_escalated": {
+    "order_id": "NS-41801",
+    "customer": "Theo Grant",
+    "escalated": true,
+    "escalated_days_ago": 1,
+    "refund_status": "requested, not issued"
+  }
+}

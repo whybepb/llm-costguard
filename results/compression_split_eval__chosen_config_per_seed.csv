@@ -1,0 +1,11 @@
+seed,window_budget,chosen_config,train_coverage_no_compression,train_coverage_chosen,test_coverage_no_compression,test_queries,test_all_facts_kept_pct,test_avg_tokens_after_window,test_avg_tokens_after_compression,test_compression_saved_pct_of_windowed,test_total_saved_pct_of_original
+0,800,"window=800,keep=0.8,neighbors=1",1.0,1.0,0.9531,64,0.9531,824,808,0.0199,0.8589
+0,1200,"window=1200,keep=0.7,neighbors=1",1.0,1.0,0.9844,64,0.9688,1220,1160,0.0494,0.7974
+1,800,"window=800,keep=0.8,neighbors=1",1.0,1.0,0.9531,64,0.9531,825,803,0.0255,0.8562
+1,1200,"window=1200,keep=0.7,neighbors=1",1.0,1.0,0.9844,64,0.9688,1221,1147,0.0602,0.7947
+2,800,"window=800,keep=0.7,neighbors=1",1.0,1.0,0.9583,72,0.9306,827,791,0.0427,0.8613
+2,1200,"window=1200,keep=0.6,neighbors=1",1.0,1.0,0.9861,72,0.9583,1223,1110,0.092,0.8054
+3,800,"window=800,keep=0.8,neighbors=1",1.0,1.0,0.9583,72,0.9583,822,805,0.0203,0.8581
+3,1200,"window=1200,keep=0.7,neighbors=1",1.0,1.0,0.9861,72,0.9722,1218,1155,0.0519,0.7964
+4,800,"window=800,keep=0.8,neighbors=1",0.9574,0.9574,0.9844,64,0.9844,821,807,0.0173,0.8569
+4,1200,"window=1200,keep=0.8,neighbors=1",0.9787,0.9787,1.0,64,1.0,1220,1196,0.0196,0.7878

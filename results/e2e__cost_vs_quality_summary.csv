@@ -1,0 +1,5 @@
+pipeline,queries,total_cost_usd,cost_per_1k_queries_usd,cache_judge_cost_usd,correct_pct,partial_pct,wrong_pct,unparsed,mean_score,served_by_cache,routed_haiku,routed_sonnet,input_tokens_total,cost_vs_baseline_pct
+baseline,150,2.2238,14.825,0,0.98,0.02,0.0,0,4.873,0,0,150,928044,1.0
+optimized_w800,150,0.3867,2.578,0.0086,0.9733,0.02,0.0,1,4.832,68,14,68,100669,0.1739
+optimized_w1200,150,0.436,2.907,0.0086,0.9867,0.0133,0.0,0,4.88,68,20,62,140888,0.1961
+optimized_w800_lingua0.7,150,0.3709,2.473,0.0086,0.98,0.02,0.0,0,4.84,68,14,68,83738,0.1668

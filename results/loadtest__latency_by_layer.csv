@@ -1,0 +1,13 @@
+traffic,concurrency,layer,requests,p50_ms,p95_ms,p99_ms,mock_llm_latency_s
+trace_mix,1,exact_cache,436,2.8,3.6,10.8,0.0
+trace_mix,1,llm,32,6.6,8.0,8.3,0.0
+trace_mix,1,semantic_cache,32,4.3,5.9,10.2,0.0
+trace_mix,8,exact_cache,435,8.0,13.1,20.1,0.0
+trace_mix,8,llm,33,21.4,38.6,42.2,0.0
+trace_mix,8,semantic_cache,32,9.7,15.9,20.7,0.0
+trace_mix,32,exact_cache,434,34.0,51.5,89.0,0.0
+trace_mix,32,llm,34,68.7,95.1,109.5,0.0
+trace_mix,32,semantic_cache,32,40.0,56.3,98.5,0.0
+all_unique,1,llm,300,21.0,31.6,71.4,0.0
+all_unique,8,llm,300,23.9,31.7,36.9,0.0
+all_unique,32,llm,300,93.2,127.1,136.5,0.0

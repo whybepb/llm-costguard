@@ -1,0 +1,376 @@
+seed,id,cluster_id,difficulty,label,p_large,threshold,routed,correct,input_tokens,query
+0,q013,refund_timeline,easy,claude-haiku-5-5,0.6509,0.05,claude-sonnet-5-5,0,1063,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+0,q014,refund_timeline,easy,claude-haiku-5-5,0.6509,0.05,claude-sonnet-5-5,0,1063,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+0,q015,refund_timeline,easy,claude-haiku-5-5,0.6509,0.05,claude-sonnet-5-5,0,1063,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+0,q016,refund_timeline,easy,claude-haiku-5-5,0.6628,0.05,claude-sonnet-5-5,0,1041,My refund shows issued 3 business days ago and the status has not changed. Has the money already posted to my card?
+0,q017,refund_timeline,easy,claude-haiku-5-5,0.6514,0.05,claude-sonnet-5-5,0,1063,My refund shows issued 3 business days ago and the status has not changed. Is the credit already on my card?
+0,q018,refund_timeline,complex,claude-sonnet-5-5,0.6551,0.05,claude-sonnet-5-5,1,1063,My refund shows issued 12 business days ago and the status has not changed. Is the money already on my card?
+0,q019,refund_timeline,complex,claude-sonnet-5-5,0.9864,0.05,claude-sonnet-5-5,1,1042,"My refund shows issued 3 business days ago and the status has not changed. The money is not already on my card, right?"
+0,q020,refund_timeline,complex,claude-sonnet-5-5,0.4957,0.05,claude-sonnet-5-5,1,1062,My refund shows issued 3 business days ago and the status has not changed. Can I start a new return?
+0,q021,refund_timeline,easy,claude-haiku-5-5,0.0547,0.05,claude-sonnet-5-5,0,313,How long do card refunds take after Northstar issues them?
+0,q022,refund_timeline,easy,claude-haiku-5-5,0.0547,0.05,claude-sonnet-5-5,0,313,How long do card refunds take after Northstar issues them?
+0,q023,refund_timeline,easy,claude-haiku-5-5,0.055,0.05,claude-sonnet-5-5,0,313,How long do card refunds take once Northstar issues them?
+0,q024,refund_timeline,complex,claude-sonnet-5-5,0.8521,0.05,claude-sonnet-5-5,1,1062,My refund shows issued 3 business days ago and the status has not changed. I never sent the item back. Is the money already on my card?
+0,q037,tracking_scans,easy,claude-haiku-5-5,0.5026,0.05,claude-sonnet-5-5,0,1060,My order was handed to the carrier 6 hours ago and there are no scans. Should I keep waiting?
+0,q038,tracking_scans,easy,claude-haiku-5-5,0.5026,0.05,claude-sonnet-5-5,0,1060,My order was handed to the carrier 6 hours ago and there are no scans. Should I keep waiting?
+0,q039,tracking_scans,easy,claude-haiku-5-5,0.5026,0.05,claude-sonnet-5-5,0,1060,My order was handed to the carrier 6 hours ago and there are no scans. Should I keep waiting?
+0,q040,tracking_scans,easy,claude-haiku-5-5,0.5313,0.05,claude-sonnet-5-5,0,1030,The carrier got my parcel 6 hours ago and tracking is still blank. Should I keep waiting?
+0,q041,tracking_scans,easy,claude-haiku-5-5,0.626,0.05,claude-sonnet-5-5,0,1061,My order was handed to the carrier 6 hours ago and there are still no scans. Should I keep waiting?
+0,q042,tracking_scans,complex,claude-sonnet-5-5,0.4938,0.05,claude-sonnet-5-5,1,1058,My order was handed to the carrier 30 hours ago and there are no scans. Should I keep waiting?
+0,q043,tracking_scans,complex,claude-sonnet-5-5,0.9751,0.05,claude-sonnet-5-5,1,1062,"My order was handed to the carrier 6 hours ago and there are no scans. I should not keep waiting, right?"
+0,q044,tracking_scans,complex,claude-sonnet-5-5,0.4908,0.05,claude-sonnet-5-5,1,1027,My order was handed to the carrier 6 hours ago and tracking now says delivered. Should I keep waiting?
+0,q045,tracking_scans,easy,claude-haiku-5-5,0.0619,0.05,claude-sonnet-5-5,0,317,How long can a new tracking scan take to appear after the carrier gets the parcel?
+0,q046,tracking_scans,easy,claude-haiku-5-5,0.0619,0.05,claude-sonnet-5-5,0,317,How long can a new tracking scan take to appear after the carrier gets the parcel?
+0,q047,tracking_scans,easy,claude-haiku-5-5,0.0615,0.05,claude-sonnet-5-5,0,317,How long can a new tracking scan take to appear after the carrier receives the parcel?
+0,q048,tracking_scans,complex,claude-sonnet-5-5,0.9752,0.05,claude-sonnet-5-5,1,1065,"My order was handed to the carrier 6 hours ago and there are no scans. It is moving through Austin today, right?"
+0,q061,damaged_item,easy,claude-haiku-5-5,0.2808,0.05,claude-sonnet-5-5,0,1045,My mug arrived cracked 10 days ago. Will you replace it today?
+0,q062,damaged_item,easy,claude-haiku-5-5,0.2808,0.05,claude-sonnet-5-5,0,1045,My mug arrived cracked 10 days ago. Will you replace it today?
+0,q063,damaged_item,easy,claude-haiku-5-5,0.2808,0.05,claude-sonnet-5-5,0,1045,My mug arrived cracked 10 days ago. Will you replace it today?
+0,q064,damaged_item,easy,claude-haiku-5-5,0.3171,0.05,claude-sonnet-5-5,0,1031,The mug showed up cracked 10 days ago. Are you sending a replacement today?
+0,q065,damaged_item,easy,claude-haiku-5-5,0.3071,0.05,claude-sonnet-5-5,0,1047,I received a cracked mug 10 days ago. Will a replacement go out today?
+0,q066,damaged_item,complex,claude-sonnet-5-5,0.5007,0.05,claude-sonnet-5-5,1,1048,My mug arrived intact 10 days ago. I changed my mind. Will you replace it today?
+0,q067,damaged_item,complex,claude-sonnet-5-5,0.94,0.05,claude-sonnet-5-5,1,1022,"My mug arrived cracked 10 days ago. You won't necessarily replace it today, right?"
+0,q068,damaged_item,complex,claude-sonnet-5-5,0.5321,0.05,claude-sonnet-5-5,1,1052,"My mug arrived cracked 10 days ago. Will you replace it today, or refund the SAVE10 difference instead?"
+0,q069,damaged_item,easy,claude-haiku-5-5,0.0467,0.05,claude-haiku-5-5,1,311,Should I throw away a damaged item before support replies?
+0,q070,damaged_item,easy,claude-haiku-5-5,0.0467,0.05,claude-haiku-5-5,1,311,Should I throw away a damaged item before support replies?
+0,q071,damaged_item,easy,claude-haiku-5-5,0.0502,0.05,claude-sonnet-5-5,0,312,Should I throw away a damaged item before support has replied?
+0,q072,damaged_item,complex,claude-sonnet-5-5,0.675,0.05,claude-sonnet-5-5,1,1063,My mug arrived cracked 10 days ago. Will you refund me today if it is final sale and Harbor Home sold it?
+0,q073,promo_codes,easy,claude-haiku-5-5,0.6958,0.05,claude-sonnet-5-5,0,1072,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+0,q074,promo_codes,easy,claude-haiku-5-5,0.6958,0.05,claude-sonnet-5-5,0,1072,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+0,q075,promo_codes,easy,claude-haiku-5-5,0.6958,0.05,claude-sonnet-5-5,0,1072,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+0,q076,promo_codes,easy,claude-haiku-5-5,0.2276,0.05,claude-sonnet-5-5,0,1050,Does SAVE10 qualify on a $62 cotton towel if I have not checked out yet?
+0,q077,promo_codes,easy,claude-haiku-5-5,0.4183,0.05,claude-sonnet-5-5,0,1042,I have not placed the order. The cart is a $62 towel. Does SAVE10 qualify?
+0,q078,promo_codes,complex,claude-sonnet-5-5,0.6916,0.05,claude-sonnet-5-5,1,1064,"SAVE10 should work. My cart is $42, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+0,q079,promo_codes,complex,claude-sonnet-5-5,0.9892,0.05,claude-sonnet-5-5,1,1075,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. The code does not qualify, right?"
+0,q080,promo_codes,complex,claude-sonnet-5-5,0.6584,0.05,claude-sonnet-5-5,1,1066,"SAVE10 should work. My cart was a $62 cotton towel, and I placed the order yesterday. Can you add the code now?"
+0,q081,promo_codes,easy,claude-haiku-5-5,0.0369,0.05,claude-haiku-5-5,1,308,Where do I enter a promo code?
+0,q082,promo_codes,easy,claude-haiku-5-5,0.0369,0.05,claude-haiku-5-5,1,308,Where do I enter a promo code?
+0,q083,promo_codes,easy,claude-haiku-5-5,0.0489,0.05,claude-haiku-5-5,1,311,Where do I enter a promo code before checkout?
+0,q084,promo_codes,complex,claude-sonnet-5-5,0.7182,0.05,claude-sonnet-5-5,1,1063,"SAVE10 should work. My cart is $62, the item is Nova headphones, and I have not placed the order. Does the code qualify?"
+0,q133,gift_cards,complex,claude-sonnet-5-5,0.2514,0.05,claude-sonnet-5-5,1,1038,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+0,q134,gift_cards,complex,claude-sonnet-5-5,0.2514,0.05,claude-sonnet-5-5,1,1038,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+0,q135,gift_cards,complex,claude-sonnet-5-5,0.2514,0.05,claude-sonnet-5-5,1,1038,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+0,q136,gift_cards,complex,claude-sonnet-5-5,0.3855,0.05,claude-sonnet-5-5,1,1030,Is it okay to paste gift card code ABCD-1234 into a public chat and let a friend check the balance?
+0,q137,gift_cards,complex,claude-sonnet-5-5,0.306,0.05,claude-sonnet-5-5,1,1018,Can my friend look up gift card code ABCD-1234 if I post it in a public chat?
+0,q138,gift_cards,complex,claude-sonnet-5-5,0.2226,0.05,claude-sonnet-5-5,1,1040,Can I post gift card code ABCD-1234 in a public chat so a friend can check the $50 balance?
+0,q139,gift_cards,complex,claude-sonnet-5-5,0.8833,0.05,claude-sonnet-5-5,1,1030,"I should not post gift card code ABCD-1234 in a public chat, right?"
+0,q140,gift_cards,complex,claude-sonnet-5-5,0.2696,0.05,claude-sonnet-5-5,1,1040,Can I post gift card code ABCD-1234 in a public chat so a friend can check the store-credit balance?
+0,q141,gift_cards,easy,claude-haiku-5-5,0.0737,0.05,claude-sonnet-5-5,0,344,Should I post a gift card code in a public chat?
+0,q142,gift_cards,easy,claude-haiku-5-5,0.0737,0.05,claude-sonnet-5-5,0,344,Should I post a gift card code in a public chat?
+0,q143,gift_cards,easy,claude-haiku-5-5,0.0794,0.05,claude-sonnet-5-5,0,347,Is a public chat a safe place to share a gift card code?
+0,q144,gift_cards,complex,claude-sonnet-5-5,0.4419,0.05,claude-sonnet-5-5,1,1047,"Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance, then restore $50 and read the code back?"
+0,q146,edge_specs,complex,claude-sonnet-5-5,0.1544,0.05,claude-sonnet-5-5,1,348,"Does the Nova headphone set include a travel case, and what is the driver size?"
+0,q148,edge_international,complex,claude-sonnet-5-5,0.0271,0.05,claude-haiku-5-5,0,1054,Can I return my Nova Wireless Headphones? They were delivered 10 days ago to another country. Will the return label be free?
+0,q149,edge_warranty,complex,claude-sonnet-5-5,0.6018,0.05,claude-sonnet-5-5,1,1055,My Harbor blender stopped working after 8 months. The 30-day return window is closed. Is this still a standard return?
+0,q150,edge_preorder,complex,claude-sonnet-5-5,0.9957,0.05,claude-sonnet-5-5,1,1064,"My preorder ship date moved by two weeks and the cancel button is still showing. That already cancelled the order and refunded me, right?"
+1,q001,returns_eligibility,easy,claude-haiku-5-5,0.2364,0.1,claude-sonnet-5-5,0,1050,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+1,q002,returns_eligibility,easy,claude-haiku-5-5,0.2364,0.1,claude-sonnet-5-5,0,1050,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+1,q003,returns_eligibility,easy,claude-haiku-5-5,0.2364,0.1,claude-sonnet-5-5,0,1050,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+1,q004,returns_eligibility,easy,claude-haiku-5-5,0.2398,0.1,claude-sonnet-5-5,0,1050,Could I return my Nova Wireless Headphones? They were delivered 10 days ago.
+1,q005,returns_eligibility,easy,claude-haiku-5-5,0.3306,0.1,claude-sonnet-5-5,0,1062,Can I return my Nova Wireless Headphones if they were delivered 10 days ago?
+1,q006,returns_eligibility,complex,claude-sonnet-5-5,0.2394,0.1,claude-sonnet-5-5,1,1059,Can I return my Nova Wireless Headphones? They were delivered 40 days ago.
+1,q007,returns_eligibility,complex,claude-sonnet-5-5,0.8859,0.1,claude-sonnet-5-5,1,1059,"I can't return my Nova Wireless Headphones that were delivered 10 days ago, right?"
+1,q008,returns_eligibility,complex,claude-sonnet-5-5,0.4025,0.1,claude-sonnet-5-5,1,1063,Can I get my money back for my Nova Wireless Headphones? They were delivered 10 days ago.
+1,q009,returns_eligibility,easy,claude-haiku-5-5,0.0638,0.1,claude-haiku-5-5,1,338,How many days do I have to return most items?
+1,q010,returns_eligibility,easy,claude-haiku-5-5,0.0638,0.1,claude-haiku-5-5,1,338,How many days do I have to return most items?
+1,q011,returns_eligibility,easy,claude-haiku-5-5,0.074,0.1,claude-haiku-5-5,1,339,How many days do I have to return most normal items?
+1,q012,returns_eligibility,complex,claude-sonnet-5-5,0.6238,0.1,claude-sonnet-5-5,1,1068,"Can I return my Nova Wireless Headphones? They were delivered 5 days ago, but the product page said final sale."
+1,q013,refund_timeline,easy,claude-haiku-5-5,0.7269,0.1,claude-sonnet-5-5,0,1063,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+1,q014,refund_timeline,easy,claude-haiku-5-5,0.7269,0.1,claude-sonnet-5-5,0,1063,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+1,q015,refund_timeline,easy,claude-haiku-5-5,0.7269,0.1,claude-sonnet-5-5,0,1063,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+1,q016,refund_timeline,easy,claude-haiku-5-5,0.7535,0.1,claude-sonnet-5-5,0,1041,My refund shows issued 3 business days ago and the status has not changed. Has the money already posted to my card?
+1,q017,refund_timeline,easy,claude-haiku-5-5,0.7314,0.1,claude-sonnet-5-5,0,1063,My refund shows issued 3 business days ago and the status has not changed. Is the credit already on my card?
+1,q018,refund_timeline,complex,claude-sonnet-5-5,0.7297,0.1,claude-sonnet-5-5,1,1063,My refund shows issued 12 business days ago and the status has not changed. Is the money already on my card?
+1,q019,refund_timeline,complex,claude-sonnet-5-5,0.9878,0.1,claude-sonnet-5-5,1,1042,"My refund shows issued 3 business days ago and the status has not changed. The money is not already on my card, right?"
+1,q020,refund_timeline,complex,claude-sonnet-5-5,0.5895,0.1,claude-sonnet-5-5,1,1062,My refund shows issued 3 business days ago and the status has not changed. Can I start a new return?
+1,q021,refund_timeline,easy,claude-haiku-5-5,0.0686,0.1,claude-haiku-5-5,1,313,How long do card refunds take after Northstar issues them?
+1,q022,refund_timeline,easy,claude-haiku-5-5,0.0686,0.1,claude-haiku-5-5,1,313,How long do card refunds take after Northstar issues them?
+1,q023,refund_timeline,easy,claude-haiku-5-5,0.0686,0.1,claude-haiku-5-5,1,313,How long do card refunds take once Northstar issues them?
+1,q024,refund_timeline,complex,claude-sonnet-5-5,0.879,0.1,claude-sonnet-5-5,1,1062,My refund shows issued 3 business days ago and the status has not changed. I never sent the item back. Is the money already on my card?
+1,q061,damaged_item,easy,claude-haiku-5-5,0.1999,0.1,claude-sonnet-5-5,0,1045,My mug arrived cracked 10 days ago. Will you replace it today?
+1,q062,damaged_item,easy,claude-haiku-5-5,0.1999,0.1,claude-sonnet-5-5,0,1045,My mug arrived cracked 10 days ago. Will you replace it today?
+1,q063,damaged_item,easy,claude-haiku-5-5,0.1999,0.1,claude-sonnet-5-5,0,1045,My mug arrived cracked 10 days ago. Will you replace it today?
+1,q064,damaged_item,easy,claude-haiku-5-5,0.26,0.1,claude-sonnet-5-5,0,1031,The mug showed up cracked 10 days ago. Are you sending a replacement today?
+1,q065,damaged_item,easy,claude-haiku-5-5,0.252,0.1,claude-sonnet-5-5,0,1047,I received a cracked mug 10 days ago. Will a replacement go out today?
+1,q066,damaged_item,complex,claude-sonnet-5-5,0.3264,0.1,claude-sonnet-5-5,1,1048,My mug arrived intact 10 days ago. I changed my mind. Will you replace it today?
+1,q067,damaged_item,complex,claude-sonnet-5-5,0.8849,0.1,claude-sonnet-5-5,1,1022,"My mug arrived cracked 10 days ago. You won't necessarily replace it today, right?"
+1,q068,damaged_item,complex,claude-sonnet-5-5,0.5109,0.1,claude-sonnet-5-5,1,1052,"My mug arrived cracked 10 days ago. Will you replace it today, or refund the SAVE10 difference instead?"
+1,q069,damaged_item,easy,claude-haiku-5-5,0.0543,0.1,claude-haiku-5-5,1,311,Should I throw away a damaged item before support replies?
+1,q070,damaged_item,easy,claude-haiku-5-5,0.0543,0.1,claude-haiku-5-5,1,311,Should I throw away a damaged item before support replies?
+1,q071,damaged_item,easy,claude-haiku-5-5,0.0632,0.1,claude-haiku-5-5,1,312,Should I throw away a damaged item before support has replied?
+1,q072,damaged_item,complex,claude-sonnet-5-5,0.7453,0.1,claude-sonnet-5-5,1,1063,My mug arrived cracked 10 days ago. Will you refund me today if it is final sale and Harbor Home sold it?
+1,q073,promo_codes,easy,claude-haiku-5-5,0.677,0.1,claude-sonnet-5-5,0,1072,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+1,q074,promo_codes,easy,claude-haiku-5-5,0.677,0.1,claude-sonnet-5-5,0,1072,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+1,q075,promo_codes,easy,claude-haiku-5-5,0.677,0.1,claude-sonnet-5-5,0,1072,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+1,q076,promo_codes,easy,claude-haiku-5-5,0.297,0.1,claude-sonnet-5-5,0,1050,Does SAVE10 qualify on a $62 cotton towel if I have not checked out yet?
+1,q077,promo_codes,easy,claude-haiku-5-5,0.2449,0.1,claude-sonnet-5-5,0,1042,I have not placed the order. The cart is a $62 towel. Does SAVE10 qualify?
+1,q078,promo_codes,complex,claude-sonnet-5-5,0.6722,0.1,claude-sonnet-5-5,1,1064,"SAVE10 should work. My cart is $42, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+1,q079,promo_codes,complex,claude-sonnet-5-5,0.9846,0.1,claude-sonnet-5-5,1,1075,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. The code does not qualify, right?"
+1,q080,promo_codes,complex,claude-sonnet-5-5,0.5986,0.1,claude-sonnet-5-5,1,1066,"SAVE10 should work. My cart was a $62 cotton towel, and I placed the order yesterday. Can you add the code now?"
+1,q081,promo_codes,easy,claude-haiku-5-5,0.0345,0.1,claude-haiku-5-5,1,308,Where do I enter a promo code?
+1,q082,promo_codes,easy,claude-haiku-5-5,0.0345,0.1,claude-haiku-5-5,1,308,Where do I enter a promo code?
+1,q083,promo_codes,easy,claude-haiku-5-5,0.0541,0.1,claude-haiku-5-5,1,311,Where do I enter a promo code before checkout?
+1,q084,promo_codes,complex,claude-sonnet-5-5,0.6848,0.1,claude-sonnet-5-5,1,1063,"SAVE10 should work. My cart is $62, the item is Nova headphones, and I have not placed the order. Does the code qualify?"
+1,q109,subscription_cancel,easy,claude-haiku-5-5,0.7983,0.1,claude-sonnet-5-5,0,1059,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+1,q110,subscription_cancel,easy,claude-haiku-5-5,0.7983,0.1,claude-sonnet-5-5,0,1059,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+1,q111,subscription_cancel,easy,claude-haiku-5-5,0.7983,0.1,claude-sonnet-5-5,0,1059,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+1,q112,subscription_cancel,easy,claude-haiku-5-5,0.7452,0.1,claude-sonnet-5-5,0,1061,"Plus charged me 2 hours ago, no benefit was used, and I can see the refund control. Does the narrow fee exception apply?"
+1,q113,subscription_cancel,easy,claude-haiku-5-5,0.7076,0.1,claude-sonnet-5-5,0,1060,The membership fee posted 2 hours ago with no benefits used and the refund button visible. Is the narrow full-fee case met?
+1,q114,subscription_cancel,complex,claude-sonnet-5-5,0.805,0.1,claude-sonnet-5-5,1,1055,"The Plus fee posted 10 days ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+1,q115,subscription_cancel,complex,claude-sonnet-5-5,0.992,0.1,claude-sonnet-5-5,1,1062,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. The narrow full-fee exception does not apply, right?"
+1,q116,subscription_cancel,complex,claude-sonnet-5-5,0.8995,0.1,claude-sonnet-5-5,1,1052,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does Plus end the moment I ask you to cancel it?"
+1,q117,subscription_cancel,easy,claude-haiku-5-5,0.109,0.1,claude-sonnet-5-5,0,385,Where do I manage or cancel a Northstar Plus membership?
+1,q118,subscription_cancel,easy,claude-haiku-5-5,0.109,0.1,claude-sonnet-5-5,0,385,Where do I manage or cancel a Northstar Plus membership?
+1,q119,subscription_cancel,easy,claude-haiku-5-5,0.1067,0.1,claude-sonnet-5-5,0,385,Where do I manage or cancel my Northstar Plus membership?
+1,q120,subscription_cancel,complex,claude-sonnet-5-5,0.7851,0.1,claude-sonnet-5-5,1,1053,"The Plus fee posted yesterday, I have used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+1,q133,gift_cards,complex,claude-sonnet-5-5,0.4431,0.1,claude-sonnet-5-5,1,1038,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+1,q134,gift_cards,complex,claude-sonnet-5-5,0.4431,0.1,claude-sonnet-5-5,1,1038,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+1,q135,gift_cards,complex,claude-sonnet-5-5,0.4431,0.1,claude-sonnet-5-5,1,1038,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+1,q136,gift_cards,complex,claude-sonnet-5-5,0.6155,0.1,claude-sonnet-5-5,1,1030,Is it okay to paste gift card code ABCD-1234 into a public chat and let a friend check the balance?
+1,q137,gift_cards,complex,claude-sonnet-5-5,0.4603,0.1,claude-sonnet-5-5,1,1018,Can my friend look up gift card code ABCD-1234 if I post it in a public chat?
+1,q138,gift_cards,complex,claude-sonnet-5-5,0.4045,0.1,claude-sonnet-5-5,1,1040,Can I post gift card code ABCD-1234 in a public chat so a friend can check the $50 balance?
+1,q139,gift_cards,complex,claude-sonnet-5-5,0.8797,0.1,claude-sonnet-5-5,1,1030,"I should not post gift card code ABCD-1234 in a public chat, right?"
+1,q140,gift_cards,complex,claude-sonnet-5-5,0.4912,0.1,claude-sonnet-5-5,1,1040,Can I post gift card code ABCD-1234 in a public chat so a friend can check the store-credit balance?
+1,q141,gift_cards,easy,claude-haiku-5-5,0.091,0.1,claude-haiku-5-5,1,344,Should I post a gift card code in a public chat?
+1,q142,gift_cards,easy,claude-haiku-5-5,0.091,0.1,claude-haiku-5-5,1,344,Should I post a gift card code in a public chat?
+1,q143,gift_cards,easy,claude-haiku-5-5,0.1187,0.1,claude-sonnet-5-5,0,347,Is a public chat a safe place to share a gift card code?
+1,q144,gift_cards,complex,claude-sonnet-5-5,0.7606,0.1,claude-sonnet-5-5,1,1047,"Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance, then restore $50 and read the code back?"
+1,q147,edge_price,complex,claude-sonnet-5-5,0.1207,0.1,claude-sonnet-5-5,1,356,Yesterday's chat said the Arc Lamp was $29. Is that still the price?
+1,q148,edge_international,complex,claude-sonnet-5-5,0.0275,0.1,claude-haiku-5-5,0,1054,Can I return my Nova Wireless Headphones? They were delivered 10 days ago to another country. Will the return label be free?
+1,q150,edge_preorder,complex,claude-sonnet-5-5,0.9959,0.1,claude-sonnet-5-5,1,1064,"My preorder ship date moved by two weeks and the cancel button is still showing. That already cancelled the order and refunded me, right?"
+2,q001,returns_eligibility,easy,claude-haiku-5-5,0.0669,0.15,claude-haiku-5-5,1,1050,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+2,q002,returns_eligibility,easy,claude-haiku-5-5,0.0669,0.15,claude-haiku-5-5,1,1050,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+2,q003,returns_eligibility,easy,claude-haiku-5-5,0.0669,0.15,claude-haiku-5-5,1,1050,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+2,q004,returns_eligibility,easy,claude-haiku-5-5,0.0675,0.15,claude-haiku-5-5,1,1050,Could I return my Nova Wireless Headphones? They were delivered 10 days ago.
+2,q005,returns_eligibility,easy,claude-haiku-5-5,0.0475,0.15,claude-haiku-5-5,1,1062,Can I return my Nova Wireless Headphones if they were delivered 10 days ago?
+2,q006,returns_eligibility,complex,claude-sonnet-5-5,0.0656,0.15,claude-haiku-5-5,0,1059,Can I return my Nova Wireless Headphones? They were delivered 40 days ago.
+2,q007,returns_eligibility,complex,claude-sonnet-5-5,0.3926,0.15,claude-sonnet-5-5,1,1059,"I can't return my Nova Wireless Headphones that were delivered 10 days ago, right?"
+2,q008,returns_eligibility,complex,claude-sonnet-5-5,0.1167,0.15,claude-haiku-5-5,0,1063,Can I get my money back for my Nova Wireless Headphones? They were delivered 10 days ago.
+2,q009,returns_eligibility,easy,claude-haiku-5-5,0.0821,0.15,claude-haiku-5-5,1,338,How many days do I have to return most items?
+2,q010,returns_eligibility,easy,claude-haiku-5-5,0.0821,0.15,claude-haiku-5-5,1,338,How many days do I have to return most items?
+2,q011,returns_eligibility,easy,claude-haiku-5-5,0.0945,0.15,claude-haiku-5-5,1,339,How many days do I have to return most normal items?
+2,q012,returns_eligibility,complex,claude-sonnet-5-5,0.5407,0.15,claude-sonnet-5-5,1,1068,"Can I return my Nova Wireless Headphones? They were delivered 5 days ago, but the product page said final sale."
+2,q013,refund_timeline,easy,claude-haiku-5-5,0.5333,0.15,claude-sonnet-5-5,0,1063,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+2,q014,refund_timeline,easy,claude-haiku-5-5,0.5333,0.15,claude-sonnet-5-5,0,1063,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+2,q015,refund_timeline,easy,claude-haiku-5-5,0.5333,0.15,claude-sonnet-5-5,0,1063,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+2,q016,refund_timeline,easy,claude-haiku-5-5,0.6557,0.15,claude-sonnet-5-5,0,1041,My refund shows issued 3 business days ago and the status has not changed. Has the money already posted to my card?
+2,q017,refund_timeline,easy,claude-haiku-5-5,0.5267,0.15,claude-sonnet-5-5,0,1063,My refund shows issued 3 business days ago and the status has not changed. Is the credit already on my card?
+2,q018,refund_timeline,complex,claude-sonnet-5-5,0.5352,0.15,claude-sonnet-5-5,1,1063,My refund shows issued 12 business days ago and the status has not changed. Is the money already on my card?
+2,q019,refund_timeline,complex,claude-sonnet-5-5,0.981,0.15,claude-sonnet-5-5,1,1042,"My refund shows issued 3 business days ago and the status has not changed. The money is not already on my card, right?"
+2,q020,refund_timeline,complex,claude-sonnet-5-5,0.3527,0.15,claude-sonnet-5-5,1,1062,My refund shows issued 3 business days ago and the status has not changed. Can I start a new return?
+2,q021,refund_timeline,easy,claude-haiku-5-5,0.0891,0.15,claude-haiku-5-5,1,313,How long do card refunds take after Northstar issues them?
+2,q022,refund_timeline,easy,claude-haiku-5-5,0.0891,0.15,claude-haiku-5-5,1,313,How long do card refunds take after Northstar issues them?
+2,q023,refund_timeline,easy,claude-haiku-5-5,0.0888,0.15,claude-haiku-5-5,1,313,How long do card refunds take once Northstar issues them?
+2,q024,refund_timeline,complex,claude-sonnet-5-5,0.8902,0.15,claude-sonnet-5-5,1,1062,My refund shows issued 3 business days ago and the status has not changed. I never sent the item back. Is the money already on my card?
+2,q025,order_cancellation,easy,claude-haiku-5-5,0.2877,0.15,claude-sonnet-5-5,0,1036,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+2,q026,order_cancellation,easy,claude-haiku-5-5,0.2877,0.15,claude-sonnet-5-5,0,1036,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+2,q027,order_cancellation,easy,claude-haiku-5-5,0.2877,0.15,claude-sonnet-5-5,0,1036,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+2,q028,order_cancellation,easy,claude-haiku-5-5,0.492,0.15,claude-sonnet-5-5,0,1039,NS-22011 still shows processing and I can see Cancel order. Can this order still be cancelled?
+2,q029,order_cancellation,easy,claude-haiku-5-5,0.217,0.15,claude-sonnet-5-5,0,1038,The cancel button is visible on NS-22011 and it has not shipped. Is cancellation available?
+2,q030,order_cancellation,complex,claude-sonnet-5-5,0.3209,0.15,claude-sonnet-5-5,1,1044,Order NS-22018 is already shipped and the cancel button is not there. Is cancellation available?
+2,q031,order_cancellation,complex,claude-sonnet-5-5,0.9592,0.15,claude-sonnet-5-5,1,1039,"Order NS-22011 is still processing and the cancel button is there. You already cancelled it, right?"
+2,q032,order_cancellation,complex,claude-sonnet-5-5,0.5143,0.15,claude-sonnet-5-5,1,1039,Order NS-22011 is still processing and the cancel button is there. Should I return it instead?
+2,q033,order_cancellation,easy,claude-haiku-5-5,0.0494,0.15,claude-haiku-5-5,1,298,When can an order be cancelled?
+2,q034,order_cancellation,easy,claude-haiku-5-5,0.0494,0.15,claude-haiku-5-5,1,298,When can an order be cancelled?
+2,q035,order_cancellation,easy,claude-haiku-5-5,0.096,0.15,claude-haiku-5-5,1,299,When can an order still be cancelled?
+2,q036,order_cancellation,complex,claude-sonnet-5-5,0.4415,0.15,claude-sonnet-5-5,1,1051,Order NS-22019 is still processing on one item and the cancel button is there. Is cancellation available for the whole order?
+2,q049,missing_package,easy,claude-haiku-5-5,0.3058,0.15,claude-sonnet-5-5,0,1040,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+2,q050,missing_package,easy,claude-haiku-5-5,0.3058,0.15,claude-sonnet-5-5,0,1040,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+2,q051,missing_package,easy,claude-haiku-5-5,0.3058,0.15,claude-sonnet-5-5,0,1040,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+2,q052,missing_package,easy,claude-haiku-5-5,0.2762,0.15,claude-sonnet-5-5,0,1039,The estimated delivery date was yesterday and nothing has arrived. Should I contact support now?
+2,q053,missing_package,easy,claude-haiku-5-5,0.3713,0.15,claude-sonnet-5-5,0,1033,It is one day past the delivery estimate and the parcel is missing. Should I contact support now?
+2,q054,missing_package,complex,claude-sonnet-5-5,0.3553,0.15,claude-sonnet-5-5,1,1045,The delivery estimate was 4 days ago and the package is not here. Should I contact support now?
+2,q055,missing_package,complex,claude-sonnet-5-5,0.9048,0.15,claude-sonnet-5-5,1,1046,"The delivery estimate was yesterday and the package is not here. I should not contact support yet, right?"
+2,q056,missing_package,complex,claude-sonnet-5-5,0.252,0.15,claude-sonnet-5-5,1,1036,The delivery estimate was yesterday and tracking says delivered. Should I contact support now?
+2,q057,missing_package,easy,claude-haiku-5-5,0.3503,0.15,claude-sonnet-5-5,0,342,What should I check first if tracking says delivered but the box is not here?
+2,q058,missing_package,easy,claude-haiku-5-5,0.3503,0.15,claude-sonnet-5-5,0,342,What should I check first if tracking says delivered but the box is not here?
+2,q059,missing_package,easy,claude-haiku-5-5,0.4121,0.15,claude-sonnet-5-5,0,340,Tracking says delivered and I cannot find the parcel. What do I check first?
+2,q060,missing_package,complex,claude-sonnet-5-5,0.7129,0.15,claude-sonnet-5-5,1,1065,The delivery estimate was yesterday and the package is not here. Harbor Home hasn't replied for 6 days. Should I contact support now?
+2,q061,damaged_item,easy,claude-haiku-5-5,0.0983,0.15,claude-haiku-5-5,1,1045,My mug arrived cracked 10 days ago. Will you replace it today?
+2,q062,damaged_item,easy,claude-haiku-5-5,0.0983,0.15,claude-haiku-5-5,1,1045,My mug arrived cracked 10 days ago. Will you replace it today?
+2,q063,damaged_item,easy,claude-haiku-5-5,0.0983,0.15,claude-haiku-5-5,1,1045,My mug arrived cracked 10 days ago. Will you replace it today?
+2,q064,damaged_item,easy,claude-haiku-5-5,0.1306,0.15,claude-haiku-5-5,1,1031,The mug showed up cracked 10 days ago. Are you sending a replacement today?
+2,q065,damaged_item,easy,claude-haiku-5-5,0.1212,0.15,claude-haiku-5-5,1,1047,I received a cracked mug 10 days ago. Will a replacement go out today?
+2,q066,damaged_item,complex,claude-sonnet-5-5,0.3606,0.15,claude-sonnet-5-5,1,1048,My mug arrived intact 10 days ago. I changed my mind. Will you replace it today?
+2,q067,damaged_item,complex,claude-sonnet-5-5,0.7761,0.15,claude-sonnet-5-5,1,1022,"My mug arrived cracked 10 days ago. You won't necessarily replace it today, right?"
+2,q068,damaged_item,complex,claude-sonnet-5-5,0.4395,0.15,claude-sonnet-5-5,1,1052,"My mug arrived cracked 10 days ago. Will you replace it today, or refund the SAVE10 difference instead?"
+2,q069,damaged_item,easy,claude-haiku-5-5,0.0876,0.15,claude-haiku-5-5,1,311,Should I throw away a damaged item before support replies?
+2,q070,damaged_item,easy,claude-haiku-5-5,0.0876,0.15,claude-haiku-5-5,1,311,Should I throw away a damaged item before support replies?
+2,q071,damaged_item,easy,claude-haiku-5-5,0.0996,0.15,claude-haiku-5-5,1,312,Should I throw away a damaged item before support has replied?
+2,q072,damaged_item,complex,claude-sonnet-5-5,0.6143,0.15,claude-sonnet-5-5,1,1063,My mug arrived cracked 10 days ago. Will you refund me today if it is final sale and Harbor Home sold it?
+2,q085,failed_payment,complex,claude-sonnet-5-5,0.2036,0.15,claude-sonnet-5-5,1,1036,Checkout declined my card and no order was created. Should I submit the payment again?
+2,q086,failed_payment,complex,claude-sonnet-5-5,0.2036,0.15,claude-sonnet-5-5,1,1036,Checkout declined my card and no order was created. Should I submit the payment again?
+2,q087,failed_payment,complex,claude-sonnet-5-5,0.2036,0.15,claude-sonnet-5-5,1,1036,Checkout declined my card and no order was created. Should I submit the payment again?
+2,q088,failed_payment,complex,claude-sonnet-5-5,0.2804,0.15,claude-sonnet-5-5,1,1018,My card was declined and there is no order. Should I try the payment again?
+2,q089,failed_payment,complex,claude-sonnet-5-5,0.1705,0.15,claude-sonnet-5-5,1,1039,Checkout failed with a decline and did not create an order. Should I submit payment again?
+2,q090,failed_payment,complex,claude-sonnet-5-5,0.2173,0.15,claude-sonnet-5-5,1,1018,Checkout left a pending authorization and no order was created. Should I submit the payment again?
+2,q091,failed_payment,complex,claude-sonnet-5-5,0.9007,0.15,claude-sonnet-5-5,1,1040,"Checkout declined my card and a pending authorization is showing. I should not submit the payment again, right?"
+2,q092,failed_payment,complex,claude-sonnet-5-5,0.4683,0.15,claude-sonnet-5-5,1,1041,"Checkout declined my card and no order was created. Should I submit the payment again, or refund that charge?"
+2,q093,failed_payment,easy,claude-haiku-5-5,0.0797,0.15,claude-haiku-5-5,1,317,Is a pending authorization the same as a completed charge?
+2,q094,failed_payment,easy,claude-haiku-5-5,0.0797,0.15,claude-haiku-5-5,1,317,Is a pending authorization the same as a completed charge?
+2,q095,failed_payment,easy,claude-haiku-5-5,0.0919,0.15,claude-haiku-5-5,1,318,Is a pending authorization the same thing as a completed charge?
+2,q096,failed_payment,complex,claude-sonnet-5-5,0.8447,0.15,claude-sonnet-5-5,1,1038,Checkout declined my card and no order was created. Should I submit the payment again and refund both the pending authorization and the captured charge?
+2,q133,gift_cards,complex,claude-sonnet-5-5,0.0533,0.15,claude-haiku-5-5,0,1038,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+2,q134,gift_cards,complex,claude-sonnet-5-5,0.0533,0.15,claude-haiku-5-5,0,1038,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+2,q135,gift_cards,complex,claude-sonnet-5-5,0.0533,0.15,claude-haiku-5-5,0,1038,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+2,q136,gift_cards,complex,claude-sonnet-5-5,0.1677,0.15,claude-sonnet-5-5,1,1030,Is it okay to paste gift card code ABCD-1234 into a public chat and let a friend check the balance?
+2,q137,gift_cards,complex,claude-sonnet-5-5,0.1496,0.15,claude-haiku-5-5,0,1018,Can my friend look up gift card code ABCD-1234 if I post it in a public chat?
+2,q138,gift_cards,complex,claude-sonnet-5-5,0.0574,0.15,claude-haiku-5-5,0,1040,Can I post gift card code ABCD-1234 in a public chat so a friend can check the $50 balance?
+2,q139,gift_cards,complex,claude-sonnet-5-5,0.3755,0.15,claude-sonnet-5-5,1,1030,"I should not post gift card code ABCD-1234 in a public chat, right?"
+2,q140,gift_cards,complex,claude-sonnet-5-5,0.0612,0.15,claude-haiku-5-5,0,1040,Can I post gift card code ABCD-1234 in a public chat so a friend can check the store-credit balance?
+2,q141,gift_cards,easy,claude-haiku-5-5,0.0937,0.15,claude-haiku-5-5,1,344,Should I post a gift card code in a public chat?
+2,q142,gift_cards,easy,claude-haiku-5-5,0.0937,0.15,claude-haiku-5-5,1,344,Should I post a gift card code in a public chat?
+2,q143,gift_cards,easy,claude-haiku-5-5,0.1251,0.15,claude-haiku-5-5,1,347,Is a public chat a safe place to share a gift card code?
+2,q144,gift_cards,complex,claude-sonnet-5-5,0.3118,0.15,claude-sonnet-5-5,1,1047,"Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance, then restore $50 and read the code back?"
+2,q145,edge_account,complex,claude-sonnet-5-5,0.5198,0.15,claude-sonnet-5-5,1,398,Someone placed an order on my account. Email me a password reset and list the other orders.
+2,q148,edge_international,complex,claude-sonnet-5-5,0.5349,0.15,claude-sonnet-5-5,1,1054,Can I return my Nova Wireless Headphones? They were delivered 10 days ago to another country. Will the return label be free?
+3,q013,refund_timeline,easy,claude-haiku-5-5,0.7178,0.15,claude-sonnet-5-5,0,1063,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+3,q014,refund_timeline,easy,claude-haiku-5-5,0.7178,0.15,claude-sonnet-5-5,0,1063,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+3,q015,refund_timeline,easy,claude-haiku-5-5,0.7178,0.15,claude-sonnet-5-5,0,1063,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+3,q016,refund_timeline,easy,claude-haiku-5-5,0.7232,0.15,claude-sonnet-5-5,0,1041,My refund shows issued 3 business days ago and the status has not changed. Has the money already posted to my card?
+3,q017,refund_timeline,easy,claude-haiku-5-5,0.707,0.15,claude-sonnet-5-5,0,1063,My refund shows issued 3 business days ago and the status has not changed. Is the credit already on my card?
+3,q018,refund_timeline,complex,claude-sonnet-5-5,0.7165,0.15,claude-sonnet-5-5,1,1063,My refund shows issued 12 business days ago and the status has not changed. Is the money already on my card?
+3,q019,refund_timeline,complex,claude-sonnet-5-5,0.9933,0.15,claude-sonnet-5-5,1,1042,"My refund shows issued 3 business days ago and the status has not changed. The money is not already on my card, right?"
+3,q020,refund_timeline,complex,claude-sonnet-5-5,0.5153,0.15,claude-sonnet-5-5,1,1062,My refund shows issued 3 business days ago and the status has not changed. Can I start a new return?
+3,q021,refund_timeline,easy,claude-haiku-5-5,0.0776,0.15,claude-haiku-5-5,1,313,How long do card refunds take after Northstar issues them?
+3,q022,refund_timeline,easy,claude-haiku-5-5,0.0776,0.15,claude-haiku-5-5,1,313,How long do card refunds take after Northstar issues them?
+3,q023,refund_timeline,easy,claude-haiku-5-5,0.0767,0.15,claude-haiku-5-5,1,313,How long do card refunds take once Northstar issues them?
+3,q024,refund_timeline,complex,claude-sonnet-5-5,0.9445,0.15,claude-sonnet-5-5,1,1062,My refund shows issued 3 business days ago and the status has not changed. I never sent the item back. Is the money already on my card?
+3,q025,order_cancellation,easy,claude-haiku-5-5,0.5542,0.15,claude-sonnet-5-5,0,1036,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+3,q026,order_cancellation,easy,claude-haiku-5-5,0.5542,0.15,claude-sonnet-5-5,0,1036,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+3,q027,order_cancellation,easy,claude-haiku-5-5,0.5542,0.15,claude-sonnet-5-5,0,1036,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+3,q028,order_cancellation,easy,claude-haiku-5-5,0.7613,0.15,claude-sonnet-5-5,0,1039,NS-22011 still shows processing and I can see Cancel order. Can this order still be cancelled?
+3,q029,order_cancellation,easy,claude-haiku-5-5,0.4026,0.15,claude-sonnet-5-5,0,1038,The cancel button is visible on NS-22011 and it has not shipped. Is cancellation available?
+3,q030,order_cancellation,complex,claude-sonnet-5-5,0.5823,0.15,claude-sonnet-5-5,1,1044,Order NS-22018 is already shipped and the cancel button is not there. Is cancellation available?
+3,q031,order_cancellation,complex,claude-sonnet-5-5,0.9942,0.15,claude-sonnet-5-5,1,1039,"Order NS-22011 is still processing and the cancel button is there. You already cancelled it, right?"
+3,q032,order_cancellation,complex,claude-sonnet-5-5,0.774,0.15,claude-sonnet-5-5,1,1039,Order NS-22011 is still processing and the cancel button is there. Should I return it instead?
+3,q033,order_cancellation,easy,claude-haiku-5-5,0.0492,0.15,claude-haiku-5-5,1,298,When can an order be cancelled?
+3,q034,order_cancellation,easy,claude-haiku-5-5,0.0492,0.15,claude-haiku-5-5,1,298,When can an order be cancelled?
+3,q035,order_cancellation,easy,claude-haiku-5-5,0.1086,0.15,claude-haiku-5-5,1,299,When can an order still be cancelled?
+3,q036,order_cancellation,complex,claude-sonnet-5-5,0.7234,0.15,claude-sonnet-5-5,1,1051,Order NS-22019 is still processing on one item and the cancel button is there. Is cancellation available for the whole order?
+3,q037,tracking_scans,easy,claude-haiku-5-5,0.4679,0.15,claude-sonnet-5-5,0,1060,My order was handed to the carrier 6 hours ago and there are no scans. Should I keep waiting?
+3,q038,tracking_scans,easy,claude-haiku-5-5,0.4679,0.15,claude-sonnet-5-5,0,1060,My order was handed to the carrier 6 hours ago and there are no scans. Should I keep waiting?
+3,q039,tracking_scans,easy,claude-haiku-5-5,0.4679,0.15,claude-sonnet-5-5,0,1060,My order was handed to the carrier 6 hours ago and there are no scans. Should I keep waiting?
+3,q040,tracking_scans,easy,claude-haiku-5-5,0.5743,0.15,claude-sonnet-5-5,0,1030,The carrier got my parcel 6 hours ago and tracking is still blank. Should I keep waiting?
+3,q041,tracking_scans,easy,claude-haiku-5-5,0.6776,0.15,claude-sonnet-5-5,0,1061,My order was handed to the carrier 6 hours ago and there are still no scans. Should I keep waiting?
+3,q042,tracking_scans,complex,claude-sonnet-5-5,0.4676,0.15,claude-sonnet-5-5,1,1058,My order was handed to the carrier 30 hours ago and there are no scans. Should I keep waiting?
+3,q043,tracking_scans,complex,claude-sonnet-5-5,0.9823,0.15,claude-sonnet-5-5,1,1062,"My order was handed to the carrier 6 hours ago and there are no scans. I should not keep waiting, right?"
+3,q044,tracking_scans,complex,claude-sonnet-5-5,0.4728,0.15,claude-sonnet-5-5,1,1027,My order was handed to the carrier 6 hours ago and tracking now says delivered. Should I keep waiting?
+3,q045,tracking_scans,easy,claude-haiku-5-5,0.1291,0.15,claude-haiku-5-5,1,317,How long can a new tracking scan take to appear after the carrier gets the parcel?
+3,q046,tracking_scans,easy,claude-haiku-5-5,0.1291,0.15,claude-haiku-5-5,1,317,How long can a new tracking scan take to appear after the carrier gets the parcel?
+3,q047,tracking_scans,easy,claude-haiku-5-5,0.1295,0.15,claude-haiku-5-5,1,317,How long can a new tracking scan take to appear after the carrier receives the parcel?
+3,q048,tracking_scans,complex,claude-sonnet-5-5,0.9846,0.15,claude-sonnet-5-5,1,1065,"My order was handed to the carrier 6 hours ago and there are no scans. It is moving through Austin today, right?"
+3,q085,failed_payment,complex,claude-sonnet-5-5,0.3786,0.15,claude-sonnet-5-5,1,1036,Checkout declined my card and no order was created. Should I submit the payment again?
+3,q086,failed_payment,complex,claude-sonnet-5-5,0.3786,0.15,claude-sonnet-5-5,1,1036,Checkout declined my card and no order was created. Should I submit the payment again?
+3,q087,failed_payment,complex,claude-sonnet-5-5,0.3786,0.15,claude-sonnet-5-5,1,1036,Checkout declined my card and no order was created. Should I submit the payment again?
+3,q088,failed_payment,complex,claude-sonnet-5-5,0.3711,0.15,claude-sonnet-5-5,1,1018,My card was declined and there is no order. Should I try the payment again?
+3,q089,failed_payment,complex,claude-sonnet-5-5,0.4184,0.15,claude-sonnet-5-5,1,1039,Checkout failed with a decline and did not create an order. Should I submit payment again?
+3,q090,failed_payment,complex,claude-sonnet-5-5,0.4014,0.15,claude-sonnet-5-5,1,1018,Checkout left a pending authorization and no order was created. Should I submit the payment again?
+3,q091,failed_payment,complex,claude-sonnet-5-5,0.9771,0.15,claude-sonnet-5-5,1,1040,"Checkout declined my card and a pending authorization is showing. I should not submit the payment again, right?"
+3,q092,failed_payment,complex,claude-sonnet-5-5,0.6745,0.15,claude-sonnet-5-5,1,1041,"Checkout declined my card and no order was created. Should I submit the payment again, or refund that charge?"
+3,q093,failed_payment,easy,claude-haiku-5-5,0.0683,0.15,claude-haiku-5-5,1,317,Is a pending authorization the same as a completed charge?
+3,q094,failed_payment,easy,claude-haiku-5-5,0.0683,0.15,claude-haiku-5-5,1,317,Is a pending authorization the same as a completed charge?
+3,q095,failed_payment,easy,claude-haiku-5-5,0.0757,0.15,claude-haiku-5-5,1,318,Is a pending authorization the same thing as a completed charge?
+3,q096,failed_payment,complex,claude-sonnet-5-5,0.8877,0.15,claude-sonnet-5-5,1,1038,Checkout declined my card and no order was created. Should I submit the payment again and refund both the pending authorization and the captured charge?
+3,q097,address_change,easy,claude-haiku-5-5,0.8384,0.15,claude-sonnet-5-5,0,1037,I need to change the delivery address. The order still lets me edit it. Can I change it on the page?
+3,q098,address_change,easy,claude-haiku-5-5,0.8384,0.15,claude-sonnet-5-5,0,1037,I need to change the delivery address. The order still lets me edit it. Can I change it on the page?
+3,q099,address_change,easy,claude-haiku-5-5,0.8384,0.15,claude-sonnet-5-5,0,1037,I need to change the delivery address. The order still lets me edit it. Can I change it on the page?
+3,q100,address_change,easy,claude-haiku-5-5,0.4366,0.15,claude-sonnet-5-5,0,1021,The order still shows an address edit. Can I update the delivery address on the page?
+3,q101,address_change,easy,claude-haiku-5-5,0.3404,0.15,claude-sonnet-5-5,0,1037,Edit address is still available. Can I change the delivery address there?
+3,q102,address_change,complex,claude-sonnet-5-5,0.7249,0.15,claude-sonnet-5-5,1,1043,I need to change the delivery address. The order does not let me edit it. Can I change it on the page?
+3,q103,address_change,complex,claude-sonnet-5-5,0.9979,0.15,claude-sonnet-5-5,1,1041,"I need to change the delivery address. The order still lets me edit it. You already changed it, right?"
+3,q104,address_change,complex,claude-sonnet-5-5,0.9162,0.15,claude-sonnet-5-5,1,1028,I need to change the delivery address. The order still lets me edit it. Should I cancel the whole order instead?
+3,q105,address_change,easy,claude-haiku-5-5,0.0856,0.15,claude-haiku-5-5,1,316,Can the shipping address be updated after the carrier has the package?
+3,q106,address_change,easy,claude-haiku-5-5,0.0856,0.15,claude-haiku-5-5,1,316,Can the shipping address be updated after the carrier has the package?
+3,q107,address_change,easy,claude-haiku-5-5,0.0884,0.15,claude-haiku-5-5,1,316,Can the shipping address be changed after the carrier has the package?
+3,q108,address_change,complex,claude-sonnet-5-5,0.9103,0.15,claude-sonnet-5-5,1,1048,I need to change the delivery address. The order does not let me edit it. Can you read the recipient's full address back and cancel the order?
+3,q121,marketplace_seller,easy,claude-haiku-5-5,0.6685,0.15,claude-sonnet-5-5,0,1026,Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Do I escalate now?
+3,q122,marketplace_seller,easy,claude-haiku-5-5,0.6685,0.15,claude-sonnet-5-5,0,1026,Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Do I escalate now?
+3,q123,marketplace_seller,easy,claude-haiku-5-5,0.6685,0.15,claude-sonnet-5-5,0,1026,Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Do I escalate now?
+3,q124,marketplace_seller,easy,claude-haiku-5-5,0.5861,0.15,claude-sonnet-5-5,0,1041,"It has been 2 days with no reply from Harbor Home, and the order lists no different window. Do I escalate now?"
+3,q125,marketplace_seller,easy,claude-haiku-5-5,0.6685,0.15,claude-sonnet-5-5,0,1026,Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Should I escalate now?
+3,q126,marketplace_seller,complex,claude-sonnet-5-5,0.6824,0.15,claude-sonnet-5-5,1,1026,Harbor Home hasn't replied for 6 days on my return. The order shows no other response window. Do I escalate now?
+3,q127,marketplace_seller,complex,claude-sonnet-5-5,0.9921,0.15,claude-sonnet-5-5,1,1029,"Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. I should not escalate yet, right?"
+3,q128,marketplace_seller,complex,claude-sonnet-5-5,0.993,0.15,claude-sonnet-5-5,1,1035,"Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Seller items always use Northstar's 30-day window, right?"
+3,q129,marketplace_seller,easy,claude-haiku-5-5,0.065,0.15,claude-haiku-5-5,1,296,Where do I see who sold an item?
+3,q130,marketplace_seller,easy,claude-haiku-5-5,0.065,0.15,claude-haiku-5-5,1,296,Where do I see who sold an item?
+3,q131,marketplace_seller,easy,claude-haiku-5-5,0.0718,0.15,claude-haiku-5-5,1,298,Where do I see who sold a particular item?
+3,q132,marketplace_seller,complex,claude-sonnet-5-5,0.7409,0.15,claude-sonnet-5-5,1,1054,Harbor Home hasn't replied for 6 days on my return. The order shows no other response window. Will you confirm the refund now?
+3,q133,gift_cards,complex,claude-sonnet-5-5,0.1051,0.15,claude-haiku-5-5,0,1038,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+3,q134,gift_cards,complex,claude-sonnet-5-5,0.1051,0.15,claude-haiku-5-5,0,1038,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+3,q135,gift_cards,complex,claude-sonnet-5-5,0.1051,0.15,claude-haiku-5-5,0,1038,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+3,q136,gift_cards,complex,claude-sonnet-5-5,0.228,0.15,claude-sonnet-5-5,1,1030,Is it okay to paste gift card code ABCD-1234 into a public chat and let a friend check the balance?
+3,q137,gift_cards,complex,claude-sonnet-5-5,0.1671,0.15,claude-sonnet-5-5,1,1018,Can my friend look up gift card code ABCD-1234 if I post it in a public chat?
+3,q138,gift_cards,complex,claude-sonnet-5-5,0.099,0.15,claude-haiku-5-5,0,1040,Can I post gift card code ABCD-1234 in a public chat so a friend can check the $50 balance?
+3,q139,gift_cards,complex,claude-sonnet-5-5,0.7764,0.15,claude-sonnet-5-5,1,1030,"I should not post gift card code ABCD-1234 in a public chat, right?"
+3,q140,gift_cards,complex,claude-sonnet-5-5,0.1109,0.15,claude-haiku-5-5,0,1040,Can I post gift card code ABCD-1234 in a public chat so a friend can check the store-credit balance?
+3,q141,gift_cards,easy,claude-haiku-5-5,0.078,0.15,claude-haiku-5-5,1,344,Should I post a gift card code in a public chat?
+3,q142,gift_cards,easy,claude-haiku-5-5,0.078,0.15,claude-haiku-5-5,1,344,Should I post a gift card code in a public chat?
+3,q143,gift_cards,easy,claude-haiku-5-5,0.0955,0.15,claude-haiku-5-5,1,347,Is a public chat a safe place to share a gift card code?
+3,q144,gift_cards,complex,claude-sonnet-5-5,0.317,0.15,claude-sonnet-5-5,1,1047,"Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance, then restore $50 and read the code back?"
+3,q149,edge_warranty,complex,claude-sonnet-5-5,0.7901,0.15,claude-sonnet-5-5,1,1055,My Harbor blender stopped working after 8 months. The 30-day return window is closed. Is this still a standard return?
+3,q150,edge_preorder,complex,claude-sonnet-5-5,0.999,0.15,claude-sonnet-5-5,1,1064,"My preorder ship date moved by two weeks and the cancel button is still showing. That already cancelled the order and refunded me, right?"
+4,q001,returns_eligibility,easy,claude-haiku-5-5,0.4691,0.05,claude-sonnet-5-5,0,1050,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+4,q002,returns_eligibility,easy,claude-haiku-5-5,0.4691,0.05,claude-sonnet-5-5,0,1050,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+4,q003,returns_eligibility,easy,claude-haiku-5-5,0.4691,0.05,claude-sonnet-5-5,0,1050,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+4,q004,returns_eligibility,easy,claude-haiku-5-5,0.4701,0.05,claude-sonnet-5-5,0,1050,Could I return my Nova Wireless Headphones? They were delivered 10 days ago.
+4,q005,returns_eligibility,easy,claude-haiku-5-5,0.6007,0.05,claude-sonnet-5-5,0,1062,Can I return my Nova Wireless Headphones if they were delivered 10 days ago?
+4,q006,returns_eligibility,complex,claude-sonnet-5-5,0.457,0.05,claude-sonnet-5-5,1,1059,Can I return my Nova Wireless Headphones? They were delivered 40 days ago.
+4,q007,returns_eligibility,complex,claude-sonnet-5-5,0.9782,0.05,claude-sonnet-5-5,1,1059,"I can't return my Nova Wireless Headphones that were delivered 10 days ago, right?"
+4,q008,returns_eligibility,complex,claude-sonnet-5-5,0.6397,0.05,claude-sonnet-5-5,1,1063,Can I get my money back for my Nova Wireless Headphones? They were delivered 10 days ago.
+4,q009,returns_eligibility,easy,claude-haiku-5-5,0.041,0.05,claude-haiku-5-5,1,338,How many days do I have to return most items?
+4,q010,returns_eligibility,easy,claude-haiku-5-5,0.041,0.05,claude-haiku-5-5,1,338,How many days do I have to return most items?
+4,q011,returns_eligibility,easy,claude-haiku-5-5,0.0482,0.05,claude-haiku-5-5,1,339,How many days do I have to return most normal items?
+4,q012,returns_eligibility,complex,claude-sonnet-5-5,0.5733,0.05,claude-sonnet-5-5,1,1068,"Can I return my Nova Wireless Headphones? They were delivered 5 days ago, but the product page said final sale."
+4,q013,refund_timeline,easy,claude-haiku-5-5,0.5406,0.05,claude-sonnet-5-5,0,1063,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+4,q014,refund_timeline,easy,claude-haiku-5-5,0.5406,0.05,claude-sonnet-5-5,0,1063,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+4,q015,refund_timeline,easy,claude-haiku-5-5,0.5406,0.05,claude-sonnet-5-5,0,1063,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+4,q016,refund_timeline,easy,claude-haiku-5-5,0.5182,0.05,claude-sonnet-5-5,0,1041,My refund shows issued 3 business days ago and the status has not changed. Has the money already posted to my card?
+4,q017,refund_timeline,easy,claude-haiku-5-5,0.5475,0.05,claude-sonnet-5-5,0,1063,My refund shows issued 3 business days ago and the status has not changed. Is the credit already on my card?
+4,q018,refund_timeline,complex,claude-sonnet-5-5,0.54,0.05,claude-sonnet-5-5,1,1063,My refund shows issued 12 business days ago and the status has not changed. Is the money already on my card?
+4,q019,refund_timeline,complex,claude-sonnet-5-5,0.9737,0.05,claude-sonnet-5-5,1,1042,"My refund shows issued 3 business days ago and the status has not changed. The money is not already on my card, right?"
+4,q020,refund_timeline,complex,claude-sonnet-5-5,0.4927,0.05,claude-sonnet-5-5,1,1062,My refund shows issued 3 business days ago and the status has not changed. Can I start a new return?
+4,q021,refund_timeline,easy,claude-haiku-5-5,0.0318,0.05,claude-haiku-5-5,1,313,How long do card refunds take after Northstar issues them?
+4,q022,refund_timeline,easy,claude-haiku-5-5,0.0318,0.05,claude-haiku-5-5,1,313,How long do card refunds take after Northstar issues them?
+4,q023,refund_timeline,easy,claude-haiku-5-5,0.0313,0.05,claude-haiku-5-5,1,313,How long do card refunds take once Northstar issues them?
+4,q024,refund_timeline,complex,claude-sonnet-5-5,0.6951,0.05,claude-sonnet-5-5,1,1062,My refund shows issued 3 business days ago and the status has not changed. I never sent the item back. Is the money already on my card?
+4,q049,missing_package,easy,claude-haiku-5-5,0.2854,0.05,claude-sonnet-5-5,0,1040,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+4,q050,missing_package,easy,claude-haiku-5-5,0.2854,0.05,claude-sonnet-5-5,0,1040,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+4,q051,missing_package,easy,claude-haiku-5-5,0.2854,0.05,claude-sonnet-5-5,0,1040,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+4,q052,missing_package,easy,claude-haiku-5-5,0.2429,0.05,claude-sonnet-5-5,0,1039,The estimated delivery date was yesterday and nothing has arrived. Should I contact support now?
+4,q053,missing_package,easy,claude-haiku-5-5,0.3705,0.05,claude-sonnet-5-5,0,1033,It is one day past the delivery estimate and the parcel is missing. Should I contact support now?
+4,q054,missing_package,complex,claude-sonnet-5-5,0.3599,0.05,claude-sonnet-5-5,1,1045,The delivery estimate was 4 days ago and the package is not here. Should I contact support now?
+4,q055,missing_package,complex,claude-sonnet-5-5,0.9559,0.05,claude-sonnet-5-5,1,1046,"The delivery estimate was yesterday and the package is not here. I should not contact support yet, right?"
+4,q056,missing_package,complex,claude-sonnet-5-5,0.2295,0.05,claude-sonnet-5-5,1,1036,The delivery estimate was yesterday and tracking says delivered. Should I contact support now?
+4,q057,missing_package,easy,claude-haiku-5-5,0.0951,0.05,claude-sonnet-5-5,0,342,What should I check first if tracking says delivered but the box is not here?
+4,q058,missing_package,easy,claude-haiku-5-5,0.0951,0.05,claude-sonnet-5-5,0,342,What should I check first if tracking says delivered but the box is not here?
+4,q059,missing_package,easy,claude-haiku-5-5,0.0509,0.05,claude-sonnet-5-5,0,340,Tracking says delivered and I cannot find the parcel. What do I check first?
+4,q060,missing_package,complex,claude-sonnet-5-5,0.5195,0.05,claude-sonnet-5-5,1,1065,The delivery estimate was yesterday and the package is not here. Harbor Home hasn't replied for 6 days. Should I contact support now?
+4,q061,damaged_item,easy,claude-haiku-5-5,0.2393,0.05,claude-sonnet-5-5,0,1045,My mug arrived cracked 10 days ago. Will you replace it today?
+4,q062,damaged_item,easy,claude-haiku-5-5,0.2393,0.05,claude-sonnet-5-5,0,1045,My mug arrived cracked 10 days ago. Will you replace it today?
+4,q063,damaged_item,easy,claude-haiku-5-5,0.2393,0.05,claude-sonnet-5-5,0,1045,My mug arrived cracked 10 days ago. Will you replace it today?
+4,q064,damaged_item,easy,claude-haiku-5-5,0.3109,0.05,claude-sonnet-5-5,0,1031,The mug showed up cracked 10 days ago. Are you sending a replacement today?
+4,q065,damaged_item,easy,claude-haiku-5-5,0.2983,0.05,claude-sonnet-5-5,0,1047,I received a cracked mug 10 days ago. Will a replacement go out today?
+4,q066,damaged_item,complex,claude-sonnet-5-5,0.2976,0.05,claude-sonnet-5-5,1,1048,My mug arrived intact 10 days ago. I changed my mind. Will you replace it today?
+4,q067,damaged_item,complex,claude-sonnet-5-5,0.924,0.05,claude-sonnet-5-5,1,1022,"My mug arrived cracked 10 days ago. You won't necessarily replace it today, right?"
+4,q068,damaged_item,complex,claude-sonnet-5-5,0.4373,0.05,claude-sonnet-5-5,1,1052,"My mug arrived cracked 10 days ago. Will you replace it today, or refund the SAVE10 difference instead?"
+4,q069,damaged_item,easy,claude-haiku-5-5,0.0391,0.05,claude-haiku-5-5,1,311,Should I throw away a damaged item before support replies?
+4,q070,damaged_item,easy,claude-haiku-5-5,0.0391,0.05,claude-haiku-5-5,1,311,Should I throw away a damaged item before support replies?
+4,q071,damaged_item,easy,claude-haiku-5-5,0.0436,0.05,claude-haiku-5-5,1,312,Should I throw away a damaged item before support has replied?
+4,q072,damaged_item,complex,claude-sonnet-5-5,0.6178,0.05,claude-sonnet-5-5,1,1063,My mug arrived cracked 10 days ago. Will you refund me today if it is final sale and Harbor Home sold it?
+4,q085,failed_payment,complex,claude-sonnet-5-5,0.3207,0.05,claude-sonnet-5-5,1,1036,Checkout declined my card and no order was created. Should I submit the payment again?
+4,q086,failed_payment,complex,claude-sonnet-5-5,0.3207,0.05,claude-sonnet-5-5,1,1036,Checkout declined my card and no order was created. Should I submit the payment again?
+4,q087,failed_payment,complex,claude-sonnet-5-5,0.3207,0.05,claude-sonnet-5-5,1,1036,Checkout declined my card and no order was created. Should I submit the payment again?
+4,q088,failed_payment,complex,claude-sonnet-5-5,0.2654,0.05,claude-sonnet-5-5,1,1018,My card was declined and there is no order. Should I try the payment again?
+4,q089,failed_payment,complex,claude-sonnet-5-5,0.4097,0.05,claude-sonnet-5-5,1,1039,Checkout failed with a decline and did not create an order. Should I submit payment again?
+4,q090,failed_payment,complex,claude-sonnet-5-5,0.3371,0.05,claude-sonnet-5-5,1,1018,Checkout left a pending authorization and no order was created. Should I submit the payment again?
+4,q091,failed_payment,complex,claude-sonnet-5-5,0.9576,0.05,claude-sonnet-5-5,1,1040,"Checkout declined my card and a pending authorization is showing. I should not submit the payment again, right?"
+4,q092,failed_payment,complex,claude-sonnet-5-5,0.4823,0.05,claude-sonnet-5-5,1,1041,"Checkout declined my card and no order was created. Should I submit the payment again, or refund that charge?"
+4,q093,failed_payment,easy,claude-haiku-5-5,0.0285,0.05,claude-haiku-5-5,1,317,Is a pending authorization the same as a completed charge?
+4,q094,failed_payment,easy,claude-haiku-5-5,0.0285,0.05,claude-haiku-5-5,1,317,Is a pending authorization the same as a completed charge?
+4,q095,failed_payment,easy,claude-haiku-5-5,0.0338,0.05,claude-haiku-5-5,1,318,Is a pending authorization the same thing as a completed charge?
+4,q096,failed_payment,complex,claude-sonnet-5-5,0.6567,0.05,claude-sonnet-5-5,1,1038,Checkout declined my card and no order was created. Should I submit the payment again and refund both the pending authorization and the captured charge?
+4,q146,edge_specs,complex,claude-sonnet-5-5,0.1322,0.05,claude-sonnet-5-5,1,348,"Does the Nova headphone set include a travel case, and what is the driver size?"
+4,q147,edge_price,complex,claude-sonnet-5-5,0.048,0.05,claude-haiku-5-5,0,356,Yesterday's chat said the Arc Lamp was $29. Is that still the price?
+4,q149,edge_warranty,complex,claude-sonnet-5-5,0.4496,0.05,claude-sonnet-5-5,1,1055,My Harbor blender stopped working after 8 months. The 30-day return window is closed. Is this still a standard return?
+4,q150,edge_preorder,complex,claude-sonnet-5-5,0.9884,0.05,claude-sonnet-5-5,1,1064,"My preorder ship date moved by two weeks and the cancel button is still showing. That already cancelled the order and refunded me, right?"

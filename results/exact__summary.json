@@ -1,0 +1,20 @@
+{
+  "queries": 150,
+  "expected_exact_hits": 36,
+  "hits": 36,
+  "misses": 114,
+  "true_hits": 36,
+  "false_hits": 0,
+  "wrong_source": 0,
+  "missed_hits": 0,
+  "true_misses": 114,
+  "recall": 1.0,
+  "precision": 1.0,
+  "hit_rate": 0.24,
+  "cache_entries": 114,
+  "context_tokens_total": 653531,
+  "context_tokens_saved": 141849,
+  "tokens_saved_pct": 0.2171,
+  "llm_calls_avoided": 36,
+  "passed": true
+}

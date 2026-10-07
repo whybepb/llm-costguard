@@ -1,0 +1,41 @@
+id,variant,layer,model,offline_layer,layer_matches_offline,cost_usd,baseline_cost_usd,baseline_source,savings_pct,input_tokens,baseline_input_tokens,quality,latency_s,query
+e001,cold,llm,claude-sonnet-5-5,llm,1,0.00481,0.016844,measured,0.7144,1435,7172,equivalent,0.071,My Arc Lamp was delivered 4 days ago and I just saw the same lamp listed cheaper on Northstar. Can I get a price match?
+e002,cold,llm,claude-sonnet-5-5,llm,1,0.009362,0.018812,measured,0.5023,1516,7796,equivalent,0.032,I couldn't make it to the store yesterday to pick up my Arc Lamp. Can you just refund me now? And what's my pickup code?
+e003,cold,llm,claude-sonnet-5-5,llm,1,0.001452,0.001566,measured,0.0728,216,223,equivalent,0.055,I forgot my password. Can you send me a reset link?
+e004,cold,llm,claude-sonnet-5-5,llm,1,0.006222,0.018238,measured,0.6588,1376,7684,equivalent,0.026,My Juniper Rain Jacket was delivered exactly 30 days ago. Is today too late to start a return?
+e005,cold,llm,claude-sonnet-5-5,llm,1,0.002712,0.00219,measured,-0.2384,246,255,equivalent,0.023,Please delete all of my personal data and confirm once it's done.
+e006,cold,llm,claude-sonnet-5-5,llm,1,0.005742,0.017328,measured,0.6686,1511,7299,equivalent,0.027,My Steelbrew kettle stopped heating 5 months after delivery. What are my options?
+e007,exact,exact_cache,,exact_cache,1,0.0,0.016844,measured,1.0,0,7172,equivalent,0.001,My Arc Lamp was delivered 4 days ago and I just saw the same lamp listed cheaper on Northstar. Can I get a price match?
+e008,cold,llm,claude-sonnet-5-5,llm,1,0.00405,0.019316,measured,0.7903,1360,8453,equivalent,0.024,My refund was issued 10 business days ago and the status still hasn't changed. What should I do?
+e009,cold,llm,claude-sonnet-5-5,llm,1,0.001962,0.00154,measured,-0.274,286,295,equivalent,0.022,Can I still edit the review I posted for my Ember Mug? I posted it 9 days ago.
+e010,cold,llm,claude-sonnet-5-5,llm,1,0.004558,0.019038,measured,0.7606,1349,8224,worse,0.034,I'm tax exempt. Can you remove the sales tax from the order I placed last week?
+e011,semantic,llm,claude-sonnet-5-5,llm,1,0.001528,0.001462,measured,-0.0451,219,226,equivalent,0.025,I can't remember my password. Could you email me a link to reset it?
+e012,cold,llm,claude-sonnet-5-5,llm,1,0.006206,0.019208,measured,0.6769,1373,7994,worse,0.024,I picked up my Arc Lamp at the store 12 days ago and haven't used it. Can I still return it?
+e013,tricky_number,llm,claude-sonnet-5-5,llm,1,0.0052,0.018884,measured,0.7246,1435,7172,equivalent,0.016,My Arc Lamp was delivered 12 days ago and I just saw the same lamp listed cheaper on Northstar. Can I get a price match?
+e014,cold,llm,claude-sonnet-5-5,llm,1,0.005338,0.01891,measured,0.7177,1449,7500,equivalent,0.027,"My Halo Smart Speaker preorder finally shipped yesterday after the date slipped twice, and the cancel button is gone. Can I still cancel since the delays were your fault?"
+e015,exact,exact_cache,,exact_cache,1,0.0,0.018238,measured,1.0,0,7684,equivalent,0.001,My Juniper Rain Jacket was delivered exactly 30 days ago. Is today too late to start a return?
+e016,cold,llm,claude-sonnet-5-5,llm,1,0.002166,0.00227,measured,0.0458,393,390,equivalent,0.017,I escalated my refund case yesterday. Does that mean my refund is approved?
+e017,cold,llm,claude-sonnet-5-5,llm,1,0.006676,0.01795,measured,0.6281,1513,7370,equivalent,0.018,"My order to Canada has been held in customs for 3 days. Is it lost, and do I have to pay duties?"
+e018,tricky_number,llm,claude-sonnet-5-5,llm,1,0.005202,0.017838,measured,0.7084,1376,7684,equivalent,0.021,My Juniper Rain Jacket was delivered exactly 31 days ago. Is today too late to start a return?
+e019,semantic,semantic_cache,,semantic_cache,1,0.0,0.01804,measured,1.0,0,7300,equivalent,0.023,My Steelbrew kettle quit heating about 5 months after it arrived. What can I do?
+e020,cold,llm,claude-sonnet-5-5,llm,1,0.003882,0.017596,measured,0.7794,1356,8218,equivalent,0.018,"What are the dimensions of the Arc Lamp, and does it come with a bulb?"
+e021,exact,exact_cache,,exact_cache,1,0.0,0.00219,measured,1.0,0,255,equivalent,0.0,Please delete all of my personal data and confirm once it's done.
+e022,cold,llm,claude-sonnet-5-5,llm,1,0.005196,0.019294,measured,0.7307,1438,8137,equivalent,0.02,Cancel my Plus membership. Will that also cancel my order NS-30412 that's still processing?
+e023,tricky_intent,llm,claude-sonnet-5-5,llm,1,0.001584,0.001962,measured,0.1927,297,306,equivalent,0.027,"I posted a 1-star review of my Ember Mug 9 days ago. If I change it to 5 stars, can I get a discount?"
+e024,semantic,semantic_cache,,semantic_cache,1,0.0,0.01861,measured,1.0,0,8450,equivalent,0.015,It's been 10 business days since my refund was issued and nothing has changed. What now?
+e025,cold,llm,claude-sonnet-5-5,llm,1,0.004912,0.018232,measured,0.7306,1391,8126,equivalent,0.027,The carrier picked up my package 2 hours ago but I typed the wrong apartment number. Can you fix it?
+e026,tricky_source,semantic_cache,,semantic_cache,1,0.0,0.01967,measured,1.0,0,7170,equivalent,0.014,My Arc Lamp was delivered 4 days ago and I just saw the same lamp listed cheaper at another store. Can I get a price match?
+e027,cold,llm,claude-sonnet-5-5,llm,1,0.005316,0.01877,measured,0.7168,1353,7900,equivalent,0.018,"My bank shows two lines for the same order, one pending and one posted. Was I charged twice?"
+e028,semantic,semantic_cache,,semantic_cache,1,0.0,0.019434,measured,1.0,0,8222,worse,0.014,I have tax-exempt status. Could you take the sales tax off my order from last week?
+e029,exact,exact_cache,,exact_cache,1,0.0,0.001566,measured,1.0,0,223,equivalent,0.0,I forgot my password. Can you send me a reset link?
+e030,cold,llm,claude-sonnet-5-5,llm,1,0.004844,0.01755,measured,0.724,1572,7480,equivalent,0.032,My Harbor Home blender arrived with a cracked jug. I sent photos through Get help 5 days ago and the seller still hasn't replied. The order shows no response window. What now?
+e031,tricky_negation,llm,claude-sonnet-5-5,llm,1,0.004068,0.018264,measured,0.7773,1369,8462,equivalent,0.016,"My refund was issued 10 business days ago and the status still hasn't changed. I shouldn't contact support yet, right?"
+e032,cold,llm,claude-sonnet-5-5,llm,1,0.002266,0.002736,measured,0.1718,303,313,equivalent,0.014,My return was refunded as store credit. Can you turn it into a gift card code so I can give it to my sister?
+e033,tricky_date,llm,claude-sonnet-5-5,llm,1,0.006742,0.017708,measured,0.6193,1511,7299,equivalent,0.021,My Steelbrew kettle stopped heating 14 months after delivery. What are my options?
+e034,semantic,semantic_cache,,semantic_cache,1,0.0,0.002464,measured,1.0,0,387,equivalent,0.023,I escalated my refund yesterday. Does that mean it got approved?
+e035,cold,llm,claude-sonnet-5-5,llm,1,0.006264,0.01822,measured,0.6562,1452,7870,equivalent,0.019,I paid the annual Plus fee yesterday and haven't used any benefits. Can I get it refunded?
+e036,tricky_state,llm,claude-sonnet-5-5,llm,1,0.002504,0.002082,measured,-0.2027,307,316,equivalent,0.017,I submitted the privacy request form last week. Has my data been deleted yet?
+e037,semantic,semantic_cache,,semantic_cache,1,0.0,0.016176,measured,1.0,0,7163,equivalent,0.024,The same Arc Lamp I got 4 days ago is now cheaper on Northstar. Can I ask for a price match?
+e038,tricky_case,llm,claude-sonnet-5-5,llm,1,0.005736,0.017942,measured,0.6803,1383,7691,worse,0.02,My Juniper Rain Jacket was delivered exactly 30 days ago and was marked final sale. Is today too late to start a return?
+e039,exact,exact_cache,,exact_cache,1,0.0,0.019316,measured,1.0,0,8453,equivalent,0.001,My refund was issued 10 business days ago and the status still hasn't changed. What should I do?
+e040,tricky_intent,llm,claude-sonnet-5-5,llm,1,0.008638,0.02365,measured,0.6348,1429,8245,equivalent,0.019,I'm tax exempt. Can you refund the import duties on my order to Canada from last week?

@@ -1,0 +1,151 @@
+id,cluster_id,expected_cache,variant,hit,outcome,served_from,exact_of,context_tokens,tokens_saved,lookup_us,query
+q001,returns_eligibility,cold,cold,0,true_miss,,,5548,0,1.0,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+q002,returns_eligibility,exact_hit,exact,1,true_hit,q001,q001,5548,5548,0.79,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+q003,returns_eligibility,exact_hit,exact,1,true_hit,q001,q001,5548,5548,0.5,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+q004,returns_eligibility,semantic_hit,semantic,0,true_miss,,,5548,0,0.46,Could I return my Nova Wireless Headphones? They were delivered 10 days ago.
+q005,returns_eligibility,semantic_hit,semantic,0,true_miss,,,5548,0,0.29,Can I return my Nova Wireless Headphones if they were delivered 10 days ago?
+q006,returns_eligibility,miss,tricky_number,0,true_miss,,,5548,0,0.17,Can I return my Nova Wireless Headphones? They were delivered 40 days ago.
+q007,returns_eligibility,miss,tricky_negation,0,true_miss,,,5548,0,0.21,"I can't return my Nova Wireless Headphones that were delivered 10 days ago, right?"
+q008,returns_eligibility,miss,tricky_intent,0,true_miss,,,5548,0,0.13,Can I get my money back for my Nova Wireless Headphones? They were delivered 10 days ago.
+q009,returns_eligibility,cold,cold,0,true_miss,,,134,0,0.13,How many days do I have to return most items?
+q010,returns_eligibility,exact_hit,exact,1,true_hit,q009,q009,134,134,0.25,How many days do I have to return most items?
+q011,returns_eligibility,semantic_hit,semantic,0,true_miss,,,134,0,0.17,How many days do I have to return most normal items?
+q012,returns_eligibility,miss,tricky_case,0,true_miss,,,5548,0,0.21,"Can I return my Nova Wireless Headphones? They were delivered 5 days ago, but the product page said final sale."
+q013,refund_timeline,cold,cold,0,true_miss,,,6087,0,0.17,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+q014,refund_timeline,exact_hit,exact,1,true_hit,q013,q013,6087,6087,0.21,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+q015,refund_timeline,exact_hit,exact,1,true_hit,q013,q013,6087,6087,0.21,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+q016,refund_timeline,semantic_hit,semantic,0,true_miss,,,6087,0,0.17,My refund shows issued 3 business days ago and the status has not changed. Has the money already posted to my card?
+q017,refund_timeline,semantic_hit,semantic,0,true_miss,,,6087,0,0.17,My refund shows issued 3 business days ago and the status has not changed. Is the credit already on my card?
+q018,refund_timeline,miss,tricky_number,0,true_miss,,,6087,0,0.13,My refund shows issued 12 business days ago and the status has not changed. Is the money already on my card?
+q019,refund_timeline,miss,tricky_negation,0,true_miss,,,6087,0,0.21,"My refund shows issued 3 business days ago and the status has not changed. The money is not already on my card, right?"
+q020,refund_timeline,miss,tricky_intent,0,true_miss,,,6087,0,0.13,My refund shows issued 3 business days ago and the status has not changed. Can I start a new return?
+q021,refund_timeline,cold,cold,0,true_miss,,,109,0,0.13,How long do card refunds take after Northstar issues them?
+q022,refund_timeline,exact_hit,exact,1,true_hit,q021,q021,109,109,0.17,How long do card refunds take after Northstar issues them?
+q023,refund_timeline,semantic_hit,semantic,0,true_miss,,,109,0,0.17,How long do card refunds take once Northstar issues them?
+q024,refund_timeline,miss,tricky_case,0,true_miss,,,6079,0,0.17,My refund shows issued 3 business days ago and the status has not changed. I never sent the item back. Is the money already on my card?
+q025,order_cancellation,cold,cold,0,true_miss,,,6226,0,0.21,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+q026,order_cancellation,exact_hit,exact,1,true_hit,q025,q025,6226,6226,0.21,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+q027,order_cancellation,exact_hit,exact,1,true_hit,q025,q025,6226,6226,0.21,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+q028,order_cancellation,semantic_hit,semantic,0,true_miss,,,6226,0,0.08,NS-22011 still shows processing and I can see Cancel order. Can this order still be cancelled?
+q029,order_cancellation,semantic_hit,semantic,0,true_miss,,,6226,0,0.17,The cancel button is visible on NS-22011 and it has not shipped. Is cancellation available?
+q030,order_cancellation,miss,tricky_state,0,true_miss,,,6230,0,0.17,Order NS-22018 is already shipped and the cancel button is not there. Is cancellation available?
+q031,order_cancellation,miss,tricky_negation,0,true_miss,,,6226,0,0.12,"Order NS-22011 is still processing and the cancel button is there. You already cancelled it, right?"
+q032,order_cancellation,miss,tricky_intent,0,true_miss,,,6226,0,0.13,Order NS-22011 is still processing and the cancel button is there. Should I return it instead?
+q033,order_cancellation,cold,cold,0,true_miss,,,98,0,0.13,When can an order be cancelled?
+q034,order_cancellation,exact_hit,exact,1,true_hit,q033,q033,98,98,0.21,When can an order be cancelled?
+q035,order_cancellation,semantic_hit,semantic,0,true_miss,,,98,0,0.17,When can an order still be cancelled?
+q036,order_cancellation,miss,tricky_case,0,true_miss,,,6235,0,0.17,Order NS-22019 is still processing on one item and the cancel button is there. Is cancellation available for the whole order?
+q037,tracking_scans,cold,cold,0,true_miss,,,5672,0,0.17,My order was handed to the carrier 6 hours ago and there are no scans. Should I keep waiting?
+q038,tracking_scans,exact_hit,exact,1,true_hit,q037,q037,5672,5672,0.17,My order was handed to the carrier 6 hours ago and there are no scans. Should I keep waiting?
+q039,tracking_scans,exact_hit,exact,1,true_hit,q037,q037,5672,5672,0.17,My order was handed to the carrier 6 hours ago and there are no scans. Should I keep waiting?
+q040,tracking_scans,semantic_hit,semantic,0,true_miss,,,5672,0,0.17,The carrier got my parcel 6 hours ago and tracking is still blank. Should I keep waiting?
+q041,tracking_scans,semantic_hit,semantic,0,true_miss,,,5672,0,0.17,My order was handed to the carrier 6 hours ago and there are still no scans. Should I keep waiting?
+q042,tracking_scans,miss,tricky_number,0,true_miss,,,5671,0,0.17,My order was handed to the carrier 30 hours ago and there are no scans. Should I keep waiting?
+q043,tracking_scans,miss,tricky_negation,0,true_miss,,,5672,0,0.17,"My order was handed to the carrier 6 hours ago and there are no scans. I should not keep waiting, right?"
+q044,tracking_scans,miss,tricky_intent,0,true_miss,,,5667,0,0.17,My order was handed to the carrier 6 hours ago and tracking now says delivered. Should I keep waiting?
+q045,tracking_scans,cold,cold,0,true_miss,,,104,0,0.12,How long can a new tracking scan take to appear after the carrier gets the parcel?
+q046,tracking_scans,exact_hit,exact,1,true_hit,q045,q045,104,104,0.17,How long can a new tracking scan take to appear after the carrier gets the parcel?
+q047,tracking_scans,semantic_hit,semantic,0,true_miss,,,104,0,0.17,How long can a new tracking scan take to appear after the carrier receives the parcel?
+q048,tracking_scans,miss,tricky_case,0,true_miss,,,5673,0,0.17,"My order was handed to the carrier 6 hours ago and there are no scans. It is moving through Austin today, right?"
+q049,missing_package,cold,cold,0,true_miss,,,5829,0,0.13,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+q050,missing_package,exact_hit,exact,1,true_hit,q049,q049,5829,5829,0.17,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+q051,missing_package,exact_hit,exact,1,true_hit,q049,q049,5829,5829,0.17,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+q052,missing_package,semantic_hit,semantic,0,true_miss,,,5829,0,0.17,The estimated delivery date was yesterday and nothing has arrived. Should I contact support now?
+q053,missing_package,semantic_hit,semantic,0,true_miss,,,5829,0,0.17,It is one day past the delivery estimate and the parcel is missing. Should I contact support now?
+q054,missing_package,miss,tricky_number,0,true_miss,,,5832,0,0.17,The delivery estimate was 4 days ago and the package is not here. Should I contact support now?
+q055,missing_package,miss,tricky_negation,0,true_miss,,,5829,0,0.17,"The delivery estimate was yesterday and the package is not here. I should not contact support yet, right?"
+q056,missing_package,miss,tricky_intent,0,true_miss,,,5828,0,0.17,The delivery estimate was yesterday and tracking says delivered. Should I contact support now?
+q057,missing_package,cold,cold,0,true_miss,,,134,0,0.21,What should I check first if tracking says delivered but the box is not here?
+q058,missing_package,exact_hit,exact,1,true_hit,q057,q057,134,134,0.21,What should I check first if tracking says delivered but the box is not here?
+q059,missing_package,semantic_hit,semantic,0,true_miss,,,134,0,0.17,Tracking says delivered and I cannot find the parcel. What do I check first?
+q060,missing_package,miss,tricky_case,0,true_miss,,,5844,0,0.13,The delivery estimate was yesterday and the package is not here. Harbor Home hasn't replied for 6 days. Should I contact support now?
+q061,damaged_item,cold,cold,0,true_miss,,,5867,0,0.13,My mug arrived cracked 10 days ago. Will you replace it today?
+q062,damaged_item,exact_hit,exact,1,true_hit,q061,q061,5867,5867,0.17,My mug arrived cracked 10 days ago. Will you replace it today?
+q063,damaged_item,exact_hit,exact,1,true_hit,q061,q061,5867,5867,0.21,My mug arrived cracked 10 days ago. Will you replace it today?
+q064,damaged_item,semantic_hit,semantic,0,true_miss,,,5867,0,0.21,The mug showed up cracked 10 days ago. Are you sending a replacement today?
+q065,damaged_item,semantic_hit,semantic,0,true_miss,,,5867,0,0.17,I received a cracked mug 10 days ago. Will a replacement go out today?
+q066,damaged_item,miss,tricky_state,0,true_miss,,,5866,0,0.13,My mug arrived intact 10 days ago. I changed my mind. Will you replace it today?
+q067,damaged_item,miss,tricky_negation,0,true_miss,,,5867,0,0.13,"My mug arrived cracked 10 days ago. You won't necessarily replace it today, right?"
+q068,damaged_item,miss,tricky_intent,0,true_miss,,,5867,0,0.17,"My mug arrived cracked 10 days ago. Will you replace it today, or refund the SAVE10 difference instead?"
+q069,damaged_item,cold,cold,0,true_miss,,,109,0,0.17,Should I throw away a damaged item before support replies?
+q070,damaged_item,exact_hit,exact,1,true_hit,q069,q069,109,109,0.17,Should I throw away a damaged item before support replies?
+q071,damaged_item,semantic_hit,semantic,0,true_miss,,,109,0,0.17,Should I throw away a damaged item before support has replied?
+q072,damaged_item,miss,tricky_case,0,true_miss,,,5870,0,0.17,My mug arrived cracked 10 days ago. Will you refund me today if it is final sale and Harbor Home sold it?
+q073,promo_codes,cold,cold,0,true_miss,,,5889,0,0.13,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+q074,promo_codes,exact_hit,exact,1,true_hit,q073,q073,5889,5889,0.21,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+q075,promo_codes,exact_hit,exact,1,true_hit,q073,q073,5889,5889,0.17,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+q076,promo_codes,semantic_hit,semantic,0,true_miss,,,5889,0,0.17,Does SAVE10 qualify on a $62 cotton towel if I have not checked out yet?
+q077,promo_codes,semantic_hit,semantic,0,true_miss,,,5889,0,0.13,I have not placed the order. The cart is a $62 towel. Does SAVE10 qualify?
+q078,promo_codes,miss,tricky_number,0,true_miss,,,5881,0,0.17,"SAVE10 should work. My cart is $42, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+q079,promo_codes,miss,tricky_negation,0,true_miss,,,5889,0,0.13,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. The code does not qualify, right?"
+q080,promo_codes,miss,tricky_intent,0,true_miss,,,5885,0,0.13,"SAVE10 should work. My cart was a $62 cotton towel, and I placed the order yesterday. Can you add the code now?"
+q081,promo_codes,cold,cold,0,true_miss,,,109,0,0.21,Where do I enter a promo code?
+q082,promo_codes,exact_hit,exact,1,true_hit,q081,q081,109,109,0.25,Where do I enter a promo code?
+q083,promo_codes,semantic_hit,semantic,0,true_miss,,,109,0,0.13,Where do I enter a promo code before checkout?
+q084,promo_codes,miss,tricky_case,0,true_miss,,,5882,0,0.12,"SAVE10 should work. My cart is $62, the item is Nova headphones, and I have not placed the order. Does the code qualify?"
+q085,failed_payment,cold,cold,0,true_miss,,,5741,0,0.13,Checkout declined my card and no order was created. Should I submit the payment again?
+q086,failed_payment,exact_hit,exact,1,true_hit,q085,q085,5741,5741,0.21,Checkout declined my card and no order was created. Should I submit the payment again?
+q087,failed_payment,exact_hit,exact,1,true_hit,q085,q085,5741,5741,0.21,Checkout declined my card and no order was created. Should I submit the payment again?
+q088,failed_payment,semantic_hit,semantic,0,true_miss,,,5741,0,0.17,My card was declined and there is no order. Should I try the payment again?
+q089,failed_payment,semantic_hit,semantic,0,true_miss,,,5741,0,0.12,Checkout failed with a decline and did not create an order. Should I submit payment again?
+q090,failed_payment,miss,tricky_state,0,true_miss,,,5749,0,0.17,Checkout left a pending authorization and no order was created. Should I submit the payment again?
+q091,failed_payment,miss,tricky_negation,0,true_miss,,,5749,0,0.17,"Checkout declined my card and a pending authorization is showing. I should not submit the payment again, right?"
+q092,failed_payment,miss,tricky_intent,0,true_miss,,,5741,0,0.17,"Checkout declined my card and no order was created. Should I submit the payment again, or refund that charge?"
+q093,failed_payment,cold,cold,0,true_miss,,,116,0,0.17,Is a pending authorization the same as a completed charge?
+q094,failed_payment,exact_hit,exact,1,true_hit,q093,q093,116,116,0.17,Is a pending authorization the same as a completed charge?
+q095,failed_payment,semantic_hit,semantic,0,true_miss,,,116,0,0.17,Is a pending authorization the same thing as a completed charge?
+q096,failed_payment,miss,tricky_case,0,true_miss,,,5756,0,0.17,Checkout declined my card and no order was created. Should I submit the payment again and refund both the pending authorization and the captured charge?
+q097,address_change,cold,cold,0,true_miss,,,5642,0,0.25,I need to change the delivery address. The order still lets me edit it. Can I change it on the page?
+q098,address_change,exact_hit,exact,1,true_hit,q097,q097,5642,5642,0.17,I need to change the delivery address. The order still lets me edit it. Can I change it on the page?
+q099,address_change,exact_hit,exact,1,true_hit,q097,q097,5642,5642,0.21,I need to change the delivery address. The order still lets me edit it. Can I change it on the page?
+q100,address_change,semantic_hit,semantic,0,true_miss,,,5642,0,0.17,The order still shows an address edit. Can I update the delivery address on the page?
+q101,address_change,semantic_hit,semantic,0,true_miss,,,5642,0,0.17,Edit address is still available. Can I change the delivery address there?
+q102,address_change,miss,tricky_state,0,true_miss,,,5646,0,0.12,I need to change the delivery address. The order does not let me edit it. Can I change it on the page?
+q103,address_change,miss,tricky_negation,0,true_miss,,,5642,0,0.17,"I need to change the delivery address. The order still lets me edit it. You already changed it, right?"
+q104,address_change,miss,tricky_intent,0,true_miss,,,5642,0,0.13,I need to change the delivery address. The order still lets me edit it. Should I cancel the whole order instead?
+q105,address_change,cold,cold,0,true_miss,,,112,0,0.21,Can the shipping address be updated after the carrier has the package?
+q106,address_change,exact_hit,exact,1,true_hit,q105,q105,112,112,0.17,Can the shipping address be updated after the carrier has the package?
+q107,address_change,semantic_hit,semantic,0,true_miss,,,112,0,0.17,Can the shipping address be changed after the carrier has the package?
+q108,address_change,miss,tricky_case,0,true_miss,,,5654,0,0.13,I need to change the delivery address. The order does not let me edit it. Can you read the recipient's full address back and cancel the order?
+q109,subscription_cancel,cold,cold,0,true_miss,,,6140,0,0.21,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+q110,subscription_cancel,exact_hit,exact,1,true_hit,q109,q109,6140,6140,0.21,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+q111,subscription_cancel,exact_hit,exact,1,true_hit,q109,q109,6140,6140,0.17,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+q112,subscription_cancel,semantic_hit,semantic,0,true_miss,,,6140,0,0.21,"Plus charged me 2 hours ago, no benefit was used, and I can see the refund control. Does the narrow fee exception apply?"
+q113,subscription_cancel,semantic_hit,semantic,0,true_miss,,,6140,0,0.17,The membership fee posted 2 hours ago with no benefits used and the refund button visible. Is the narrow full-fee case met?
+q114,subscription_cancel,miss,tricky_number,0,true_miss,,,6136,0,0.17,"The Plus fee posted 10 days ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+q115,subscription_cancel,miss,tricky_negation,0,true_miss,,,6140,0,0.21,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. The narrow full-fee exception does not apply, right?"
+q116,subscription_cancel,miss,tricky_intent,0,true_miss,,,6140,0,0.17,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does Plus end the moment I ask you to cancel it?"
+q117,subscription_cancel,cold,cold,0,true_miss,,,181,0,0.17,Where do I manage or cancel a Northstar Plus membership?
+q118,subscription_cancel,exact_hit,exact,1,true_hit,q117,q117,181,181,0.17,Where do I manage or cancel a Northstar Plus membership?
+q119,subscription_cancel,semantic_hit,semantic,0,true_miss,,,181,0,0.13,Where do I manage or cancel my Northstar Plus membership?
+q120,subscription_cancel,miss,tricky_case,0,true_miss,,,6137,0,0.13,"The Plus fee posted yesterday, I have used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+q121,marketplace_seller,cold,cold,0,true_miss,,,6079,0,0.21,Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Do I escalate now?
+q122,marketplace_seller,exact_hit,exact,1,true_hit,q121,q121,6079,6079,0.21,Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Do I escalate now?
+q123,marketplace_seller,exact_hit,exact,1,true_hit,q121,q121,6079,6079,0.17,Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Do I escalate now?
+q124,marketplace_seller,semantic_hit,semantic,0,true_miss,,,6079,0,0.17,"It has been 2 days with no reply from Harbor Home, and the order lists no different window. Do I escalate now?"
+q125,marketplace_seller,semantic_hit,semantic,0,true_miss,,,6079,0,0.13,Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Should I escalate now?
+q126,marketplace_seller,miss,tricky_number,0,true_miss,,,6079,0,0.17,Harbor Home hasn't replied for 6 days on my return. The order shows no other response window. Do I escalate now?
+q127,marketplace_seller,miss,tricky_negation,0,true_miss,,,6079,0,0.13,"Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. I should not escalate yet, right?"
+q128,marketplace_seller,miss,tricky_intent,0,true_miss,,,6079,0,0.21,"Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Seller items always use Northstar's 30-day window, right?"
+q129,marketplace_seller,cold,cold,0,true_miss,,,95,0,0.17,Where do I see who sold an item?
+q130,marketplace_seller,exact_hit,exact,1,true_hit,q129,q129,95,95,0.17,Where do I see who sold an item?
+q131,marketplace_seller,semantic_hit,semantic,0,true_miss,,,95,0,0.17,Where do I see who sold a particular item?
+q132,marketplace_seller,miss,tricky_case,0,true_miss,,,6087,0,0.21,Harbor Home hasn't replied for 6 days on my return. The order shows no other response window. Will you confirm the refund now?
+q133,gift_cards,cold,cold,0,true_miss,,,5483,0,0.13,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+q134,gift_cards,exact_hit,exact,1,true_hit,q133,q133,5483,5483,0.17,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+q135,gift_cards,exact_hit,exact,1,true_hit,q133,q133,5483,5483,0.17,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+q136,gift_cards,semantic_hit,semantic,0,true_miss,,,5483,0,0.17,Is it okay to paste gift card code ABCD-1234 into a public chat and let a friend check the balance?
+q137,gift_cards,semantic_hit,semantic,0,true_miss,,,5483,0,0.17,Can my friend look up gift card code ABCD-1234 if I post it in a public chat?
+q138,gift_cards,miss,tricky_number,0,true_miss,,,5483,0,0.17,Can I post gift card code ABCD-1234 in a public chat so a friend can check the $50 balance?
+q139,gift_cards,miss,tricky_negation,0,true_miss,,,5483,0,0.17,"I should not post gift card code ABCD-1234 in a public chat, right?"
+q140,gift_cards,miss,tricky_intent,0,true_miss,,,5483,0,0.21,Can I post gift card code ABCD-1234 in a public chat so a friend can check the store-credit balance?
+q141,gift_cards,cold,cold,0,true_miss,,,142,0,0.17,Should I post a gift card code in a public chat?
+q142,gift_cards,exact_hit,exact,1,true_hit,q141,q141,142,142,0.17,Should I post a gift card code in a public chat?
+q143,gift_cards,semantic_hit,semantic,0,true_miss,,,142,0,0.17,Is a public chat a safe place to share a gift card code?
+q144,gift_cards,miss,tricky_case,0,true_miss,,,5489,0,0.21,"Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance, then restore $50 and read the code back?"
+q145,edge_account,cold,edge,0,true_miss,,,191,0,0.21,Someone placed an order on my account. Email me a password reset and list the other orders.
+q146,edge_specs,cold,edge,0,true_miss,,,143,0,0.13,"Does the Nova headphone set include a travel case, and what is the driver size?"
+q147,edge_price,cold,edge,0,true_miss,,,155,0,0.17,Yesterday's chat said the Arc Lamp was $29. Is that still the price?
+q148,edge_international,miss,edge,0,true_miss,,,5365,0,0.13,Can I return my Nova Wireless Headphones? They were delivered 10 days ago to another country. Will the return label be free?
+q149,edge_warranty,cold,edge,0,true_miss,,,5608,0,0.17,My Harbor blender stopped working after 8 months. The 30-day return window is closed. Is this still a standard return?
+q150,edge_preorder,cold,edge,0,true_miss,,,5859,0,0.13,"My preorder ship date moved by two weeks and the cancel button is still showing. That already cancelled the order and refunded me, right?"

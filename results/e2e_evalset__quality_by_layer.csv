@@ -1,0 +1,14 @@
+pipeline,layer,model,queries,correct_pct,wrong_pct,cost_usd
+baseline,llm,claude-sonnet-5-5,40,0.975,0.0,0.5579
+optimized_w800,exact_cache,,5,1.0,0.0,0.0
+optimized_w800,llm,claude-sonnet-5-5,29,0.8966,0.0,0.1351
+optimized_w800,semantic_cache,,6,0.6667,0.0,0.0
+optimized_w1200,exact_cache,,5,1.0,0.0,0.0
+optimized_w1200,llm,claude-sonnet-5-5,29,0.8966,0.0,0.1674
+optimized_w1200,semantic_cache,,6,0.8333,0.0,0.0
+optimized_w800_lingua0.7,exact_cache,,5,1.0,0.0,0.0
+optimized_w800_lingua0.7,llm,claude-sonnet-5-5,29,0.9655,0.0,0.1311
+optimized_w800_lingua0.7,semantic_cache,,6,0.8333,0.0,0.0
+optimized_w1200_lingua0.7,exact_cache,,5,1.0,0.0,0.0
+optimized_w1200_lingua0.7,llm,claude-sonnet-5-5,29,0.9655,0.0,0.1648
+optimized_w1200_lingua0.7,semantic_cache,,6,0.8333,0.1667,0.0

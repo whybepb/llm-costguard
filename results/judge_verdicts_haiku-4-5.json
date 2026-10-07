@@ -1,0 +1,356 @@
+{
+ "[\"Can I return my Nova Wireless Headphones? They were delivered 10 days ago.\", \"Could I return my Nova Wireless Headphones? They were delivered 10 days ago.\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 174,
+  "output_tokens": 5
+ },
+ "[\"Can I return my Nova Wireless Headphones? They were delivered 10 days ago.\", \"Can I return my Nova Wireless Headphones if they were delivered 10 days ago?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 174,
+  "output_tokens": 5
+ },
+ "[\"Can I return my Nova Wireless Headphones? They were delivered 10 days ago.\", \"Can I get my money back for my Nova Wireless Headphones? They were delivered 10 days ago.\"]": {
+  "verdict": "DIFFERENT",
+  "raw": "DIFFERENT\n\nMESSAGE A",
+  "input_tokens": 178,
+  "output_tokens": 5
+ },
+ "[\"How many days do I have to return most items?\", \"How many days do I have to return most normal items?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 157,
+  "output_tokens": 5
+ },
+ "[\"My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?\", \"My refund shows issued 3 business days ago and the status has not changed. Has the money already posted to my card?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 187,
+  "output_tokens": 5
+ },
+ "[\"My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?\", \"My refund shows issued 3 business days ago and the status has not changed. Is the credit already on my card?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 186,
+  "output_tokens": 5
+ },
+ "[\"My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?\", \"My refund shows issued 3 business days ago and the status has not changed. Can I start a new return?\"]": {
+  "verdict": "DIFFERENT",
+  "raw": "DIFFERENT\n\nMESSAGE A",
+  "input_tokens": 185,
+  "output_tokens": 5
+ },
+ "[\"How long do card refunds take after Northstar issues them?\", \"How long do card refunds take once Northstar issues them?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME",
+  "input_tokens": 162,
+  "output_tokens": 5
+ },
+ "[\"Order NS-22011 is still processing and the cancel button is there. Is cancellation available?\", \"NS-22011 still shows processing and I can see Cancel order. Can this order still be cancelled?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 177,
+  "output_tokens": 5
+ },
+ "[\"Order NS-22011 is still processing and the cancel button is there. Is cancellation available?\", \"Order NS-22011 is still processing and the cancel button is there. You already cancelled it, right?\"]": {
+  "verdict": "DIFFERENT",
+  "raw": "DIFFERENT\n\nMESSAGE A",
+  "input_tokens": 178,
+  "output_tokens": 5
+ },
+ "[\"Order NS-22011 is still processing and the cancel button is there. You already cancelled it, right?\", \"Order NS-22011 is still processing and the cancel button is there. Should I return it instead?\"]": {
+  "verdict": "DIFFERENT",
+  "raw": "DIFFERENT\n\nMESSAGE A",
+  "input_tokens": 179,
+  "output_tokens": 5
+ },
+ "[\"Order NS-22011 is still processing and the cancel button is there. Is cancellation available?\", \"Order NS-22011 is still processing and the cancel button is there. Should I return it instead?\"]": {
+  "verdict": "DIFFERENT",
+  "raw": "DIFFERENT\n\nMESSAGE A",
+  "input_tokens": 177,
+  "output_tokens": 5
+ },
+ "[\"When can an order be cancelled?\", \"When can an order still be cancelled?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 149,
+  "output_tokens": 5
+ },
+ "[\"My order was handed to the carrier 6 hours ago and there are no scans. Should I keep waiting?\", \"My order was handed to the carrier 6 hours ago and there are still no scans. Should I keep waiting?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 183,
+  "output_tokens": 5
+ },
+ "[\"How long can a new tracking scan take to appear after the carrier gets the parcel?\", \"How long can a new tracking scan take to appear after the carrier receives the parcel?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 170,
+  "output_tokens": 5
+ },
+ "[\"The delivery estimate was yesterday and the package is not here. Should I contact support now?\", \"The estimated delivery date was yesterday and nothing has arrived. Should I contact support now?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 169,
+  "output_tokens": 5
+ },
+ "[\"What should I check first if tracking says delivered but the box is not here?\", \"Tracking says delivered and I cannot find the parcel. What do I check first?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 168,
+  "output_tokens": 5
+ },
+ "[\"My mug arrived cracked 10 days ago. Will you replace it today?\", \"The mug showed up cracked 10 days ago. Are you sending a replacement today?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 172,
+  "output_tokens": 5
+ },
+ "[\"My mug arrived cracked 10 days ago. Will you replace it today?\", \"I received a cracked mug 10 days ago. Will a replacement go out today?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 172,
+  "output_tokens": 5
+ },
+ "[\"Should I throw away a damaged item before support replies?\", \"Should I throw away a damaged item before support has replied?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 157,
+  "output_tokens": 5
+ },
+ "[\"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?\", \"I have not placed the order. The cart is a $62 towel. Does SAVE10 qualify?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 192,
+  "output_tokens": 5
+ },
+ "[\"Where do I enter a promo code?\", \"Where do I enter a promo code before checkout?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 154,
+  "output_tokens": 5
+ },
+ "[\"Checkout declined my card and no order was created. Should I submit the payment again?\", \"My card was declined and there is no order. Should I try the payment again?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 169,
+  "output_tokens": 5
+ },
+ "[\"Checkout declined my card and no order was created. Should I submit the payment again?\", \"Checkout failed with a decline and did not create an order. Should I submit payment again?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 171,
+  "output_tokens": 5
+ },
+ "[\"Checkout left a pending authorization and no order was created. Should I submit the payment again?\", \"Checkout declined my card and a pending authorization is showing. I should not submit the payment again, right?\"]": {
+  "verdict": "DIFFERENT",
+  "raw": "DIFFERENT\n\nMESSAGE A",
+  "input_tokens": 175,
+  "output_tokens": 5
+ },
+ "[\"Checkout declined my card and no order was created. Should I submit the payment again?\", \"Checkout declined my card and no order was created. Should I submit the payment again, or refund that charge?\"]": {
+  "verdict": "DIFFERENT",
+  "raw": "DIFFERENT\n\nMESSAGE A",
+  "input_tokens": 176,
+  "output_tokens": 5
+ },
+ "[\"Is a pending authorization the same as a completed charge?\", \"Is a pending authorization the same thing as a completed charge?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 157,
+  "output_tokens": 5
+ },
+ "[\"I need to change the delivery address. The order still lets me edit it. Can I change it on the page?\", \"The order still shows an address edit. Can I update the delivery address on the page?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 176,
+  "output_tokens": 5
+ },
+ "[\"I need to change the delivery address. The order still lets me edit it. Can I change it on the page?\", \"Edit address is still available. Can I change the delivery address there?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 172,
+  "output_tokens": 5
+ },
+ "[\"I need to change the delivery address. The order still lets me edit it. Can I change it on the page?\", \"I need to change the delivery address. The order still lets me edit it. You already changed it, right?\"]": {
+  "verdict": "DIFFERENT",
+  "raw": "DIFFERENT\n\nMESSAGE A",
+  "input_tokens": 181,
+  "output_tokens": 5
+ },
+ "[\"I need to change the delivery address. The order still lets me edit it. Can I change it on the page?\", \"I need to change the delivery address. The order still lets me edit it. Should I cancel the whole order instead?\"]": {
+  "verdict": "DIFFERENT",
+  "raw": "DIFFERENT\n\nMESSAGE A",
+  "input_tokens": 182,
+  "output_tokens": 5
+ },
+ "[\"I need to change the delivery address. The order still lets me edit it. You already changed it, right?\", \"I need to change the delivery address. The order still lets me edit it. Should I cancel the whole order instead?\"]": {
+  "verdict": "DIFFERENT",
+  "raw": "DIFFERENT\n\nMESSAGE A",
+  "input_tokens": 181,
+  "output_tokens": 5
+ },
+ "[\"Can the shipping address be updated after the carrier has the package?\", \"Can the shipping address be changed after the carrier has the package?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 160,
+  "output_tokens": 5
+ },
+ "[\"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?\", \"Plus charged me 2 hours ago, no benefit was used, and I can see the refund control. Does the narrow fee exception apply?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 198,
+  "output_tokens": 5
+ },
+ "[\"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?\", \"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does Plus end the moment I ask you to cancel it?\"]": {
+  "verdict": "DIFFERENT",
+  "raw": "DIFFERENT\n\nMESSAGE A",
+  "input_tokens": 205,
+  "output_tokens": 5
+ },
+ "[\"Where do I manage or cancel a Northstar Plus membership?\", \"Where do I manage or cancel my Northstar Plus membership?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME",
+  "input_tokens": 160,
+  "output_tokens": 5
+ },
+ "[\"Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Do I escalate now?\", \"It has been 2 days with no reply from Harbor Home, and the order lists no different window. Do I escalate now?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 190,
+  "output_tokens": 5
+ },
+ "[\"Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Do I escalate now?\", \"Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Should I escalate now?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 190,
+  "output_tokens": 5
+ },
+ "[\"Where do I see who sold an item?\", \"Where do I see who sold a particular item?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 153,
+  "output_tokens": 5
+ },
+ "[\"Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?\", \"Is it okay to paste gift card code ABCD-1234 into a public chat and let a friend check the balance?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 186,
+  "output_tokens": 5
+ },
+ "[\"Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?\", \"Can my friend look up gift card code ABCD-1234 if I post it in a public chat?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 183,
+  "output_tokens": 5
+ },
+ "[\"Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?\", \"Can I post gift card code ABCD-1234 in a public chat so a friend can check the store-credit balance?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 187,
+  "output_tokens": 5
+ },
+ "[\"Should I post a gift card code in a public chat?\", \"Is a public chat a safe place to share a gift card code?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 160,
+  "output_tokens": 5
+ },
+ "[\"My Steelbrew kettle stopped heating 5 months after delivery. What are my options?\", \"My Steelbrew kettle quit heating about 5 months after it arrived. What can I do?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 178,
+  "output_tokens": 5
+ },
+ "[\"My refund was issued 10 business days ago and the status still hasn't changed. What should I do?\", \"It's been 10 business days since my refund was issued and nothing has changed. What now?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 180,
+  "output_tokens": 5
+ },
+ "[\"My Arc Lamp was delivered 4 days ago and I just saw the same lamp listed cheaper on Northstar. Can I get a price match?\", \"My Arc Lamp was delivered 4 days ago and I just saw the same lamp listed cheaper at another store. Can I get a price match?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 197,
+  "output_tokens": 5
+ },
+ "[\"I'm tax exempt. Can you remove the sales tax from the order I placed last week?\", \"I have tax-exempt status. Could you take the sales tax off my order from last week?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME",
+  "input_tokens": 173,
+  "output_tokens": 5
+ },
+ "[\"I escalated my refund case yesterday. Does that mean my refund is approved?\", \"I escalated my refund yesterday. Does that mean it got approved?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 167,
+  "output_tokens": 5
+ },
+ "[\"My Arc Lamp was delivered 4 days ago and I just saw the same lamp listed cheaper on Northstar. Can I get a price match?\", \"The same Arc Lamp I got 4 days ago is now cheaper on Northstar. Can I ask for a price match?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 194,
+  "output_tokens": 5
+ },
+ "[\"Order NS-22011 is still processing and the cancel button is there. Is cancellation available?\", \"The cancel button is visible on NS-22011 and it has not shipped. Is cancellation available?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 177,
+  "output_tokens": 5
+ },
+ "[\"The delivery estimate was yesterday and the package is not here. Should I contact support now?\", \"It is one day past the delivery estimate and the parcel is missing. Should I contact support now?\"]": {
+  "verdict": "SAME",
+  "raw": "SAME\n\nBOTH MESSAGES",
+  "input_tokens": 173,
+  "output_tokens": 5
+ },
+ "[\"Can I return my Nova Wireless Headphones? They were delivered 10 days ago.\", \"I can't return my Nova Wireless Headphones that were delivered 10 days ago, right?\"]": {
+  "verdict": "DIFFERENT",
+  "raw": "DIFFERENT\n\nMESSAGE A",
+  "input_tokens": 176,
+  "output_tokens": 5
+ },
+ "[\"My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?\", \"My refund shows issued 3 business days ago and the status has not changed. The money is not already on my card, right?\"]": {
+  "verdict": "DIFFERENT",
+  "raw": "DIFFERENT\n\nMESSAGE A",
+  "input_tokens": 189,
+  "output_tokens": 5
+ },
+ "[\"My order was handed to the carrier 6 hours ago and there are no scans. Should I keep waiting?\", \"My order was handed to the carrier 6 hours ago and there are no scans. I should not keep waiting, right?\"]": {
+  "verdict": "DIFFERENT",
+  "raw": "DIFFERENT\n\nMESSAGE A",
+  "input_tokens": 185,
+  "output_tokens": 5
+ },
+ "[\"The delivery estimate was yesterday and the package is not here. Should I contact support now?\", \"The delivery estimate was yesterday and the package is not here. I should not contact support yet, right?\"]": {
+  "verdict": "DIFFERENT",
+  "raw": "DIFFERENT\n\nMESSAGE A",
+  "input_tokens": 173,
+  "output_tokens": 5
+ },
+ "[\"My mug arrived cracked 10 days ago. Will you replace it today?\", \"My mug arrived cracked 10 days ago. You won't necessarily replace it today, right?\"]": {
+  "verdict": "DIFFERENT",
+  "raw": "DIFFERENT\n\nMESSAGE A",
+  "input_tokens": 174,
+  "output_tokens": 5
+ },
+ "[\"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?\", \"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. The code does not qualify, right?\"]": {
+  "verdict": "DIFFERENT",
+  "raw": "DIFFERENT\n\nMESSAGE A",
+  "input_tokens": 205,
+  "output_tokens": 5
+ },
+ "[\"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?\", \"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. The narrow full-fee exception does not apply, right?\"]": {
+  "verdict": "DIFFERENT",
+  "raw": "DIFFERENT\n\nMESSAGE A",
+  "input_tokens": 205,
+  "output_tokens": 5
+ },
+ "[\"Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Do I escalate now?\", \"Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. I should not escalate yet, right?\"]": {
+  "verdict": "DIFFERENT",
+  "raw": "DIFFERENT\n\nMESSAGE A",
+  "input_tokens": 193,
+  "output_tokens": 5
+ }
+}

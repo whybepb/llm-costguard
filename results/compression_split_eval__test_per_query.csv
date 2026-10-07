@@ -1,0 +1,673 @@
+seed,config,id,cluster_id,all_facts_kept,tokens_original,tokens_after_window,tokens_after_compression,missing_facts,query
+0,"window=800,keep=0.8,neighbors=1",q001,returns_eligibility,1,5371,833,814,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+0,"window=800,keep=0.8,neighbors=1",q002,returns_eligibility,1,5371,833,814,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+0,"window=800,keep=0.8,neighbors=1",q003,returns_eligibility,1,5371,833,814,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+0,"window=800,keep=0.8,neighbors=1",q004,returns_eligibility,1,5371,833,814,,Could I return my Nova Wireless Headphones? They were delivered 10 days ago.
+0,"window=800,keep=0.8,neighbors=1",q005,returns_eligibility,1,5371,844,783,,Can I return my Nova Wireless Headphones if they were delivered 10 days ago?
+0,"window=800,keep=0.8,neighbors=1",q006,returns_eligibility,1,5371,842,823,,Can I return my Nova Wireless Headphones? They were delivered 40 days ago.
+0,"window=800,keep=0.8,neighbors=1",q007,returns_eligibility,1,5371,841,822,,"I can't return my Nova Wireless Headphones that were delivered 10 days ago, right?"
+0,"window=800,keep=0.8,neighbors=1",q008,returns_eligibility,1,5371,841,822,,Can I get my money back for my Nova Wireless Headphones? They were delivered 10 days ago.
+0,"window=800,keep=0.8,neighbors=1",q012,returns_eligibility,1,5371,842,821,,"Can I return my Nova Wireless Headphones? They were delivered 5 days ago, but the product page said final sale."
+0,"window=800,keep=0.8,neighbors=1",q013,refund_timeline,1,5887,836,820,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+0,"window=800,keep=0.8,neighbors=1",q014,refund_timeline,1,5887,836,820,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+0,"window=800,keep=0.8,neighbors=1",q015,refund_timeline,1,5887,836,820,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+0,"window=800,keep=0.8,neighbors=1",q016,refund_timeline,1,5887,812,812,,My refund shows issued 3 business days ago and the status has not changed. Has the money already posted to my card?
+0,"window=800,keep=0.8,neighbors=1",q017,refund_timeline,1,5887,836,820,,My refund shows issued 3 business days ago and the status has not changed. Is the credit already on my card?
+0,"window=800,keep=0.8,neighbors=1",q018,refund_timeline,1,5887,836,820,,My refund shows issued 12 business days ago and the status has not changed. Is the money already on my card?
+0,"window=800,keep=0.8,neighbors=1",q019,refund_timeline,1,5887,812,812,,"My refund shows issued 3 business days ago and the status has not changed. The money is not already on my card, right?"
+0,"window=800,keep=0.8,neighbors=1",q020,refund_timeline,1,5887,836,836,,My refund shows issued 3 business days ago and the status has not changed. Can I start a new return?
+0,"window=800,keep=0.8,neighbors=1",q024,refund_timeline,1,5880,827,800,,My refund shows issued 3 business days ago and the status has not changed. I never sent the item back. Is the money already on my card?
+0,"window=800,keep=0.8,neighbors=1",q025,order_cancellation,1,6035,818,818,,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+0,"window=800,keep=0.8,neighbors=1",q026,order_cancellation,1,6035,818,818,,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+0,"window=800,keep=0.8,neighbors=1",q027,order_cancellation,1,6035,818,818,,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+0,"window=800,keep=0.8,neighbors=1",q028,order_cancellation,1,6035,818,811,,NS-22011 still shows processing and I can see Cancel order. Can this order still be cancelled?
+0,"window=800,keep=0.8,neighbors=1",q029,order_cancellation,1,6035,818,818,,The cancel button is visible on NS-22011 and it has not shipped. Is cancellation available?
+0,"window=800,keep=0.8,neighbors=1",q030,order_cancellation,1,6039,824,824,,Order NS-22018 is already shipped and the cancel button is not there. Is cancellation available?
+0,"window=800,keep=0.8,neighbors=1",q031,order_cancellation,1,6035,818,818,,"Order NS-22011 is still processing and the cancel button is there. You already cancelled it, right?"
+0,"window=800,keep=0.8,neighbors=1",q032,order_cancellation,1,6035,818,818,,Order NS-22011 is still processing and the cancel button is there. Should I return it instead?
+0,"window=800,keep=0.8,neighbors=1",q036,order_cancellation,1,6044,824,824,,Order NS-22019 is still processing on one item and the cancel button is there. Is cancellation available for the whole order?
+0,"window=800,keep=0.8,neighbors=1",q049,missing_package,1,5638,819,788,,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+0,"window=800,keep=0.8,neighbors=1",q050,missing_package,1,5638,819,788,,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+0,"window=800,keep=0.8,neighbors=1",q051,missing_package,1,5638,819,788,,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+0,"window=800,keep=0.8,neighbors=1",q052,missing_package,1,5638,819,788,,The estimated delivery date was yesterday and nothing has arrived. Should I contact support now?
+0,"window=800,keep=0.8,neighbors=1",q053,missing_package,1,5638,810,801,,It is one day past the delivery estimate and the parcel is missing. Should I contact support now?
+0,"window=800,keep=0.8,neighbors=1",q054,missing_package,1,5641,822,782,,The delivery estimate was 4 days ago and the package is not here. Should I contact support now?
+0,"window=800,keep=0.8,neighbors=1",q055,missing_package,1,5638,823,793,,"The delivery estimate was yesterday and the package is not here. I should not contact support yet, right?"
+0,"window=800,keep=0.8,neighbors=1",q056,missing_package,1,5637,818,797,,The delivery estimate was yesterday and tracking says delivered. Should I contact support now?
+0,"window=800,keep=0.8,neighbors=1",q060,missing_package,1,5653,835,794,,The delivery estimate was yesterday and the package is not here. Harbor Home hasn't replied for 6 days. Should I contact support now?
+0,"window=800,keep=0.8,neighbors=1",q061,damaged_item,1,5675,829,792,,My mug arrived cracked 10 days ago. Will you replace it today?
+0,"window=800,keep=0.8,neighbors=1",q062,damaged_item,1,5675,829,792,,My mug arrived cracked 10 days ago. Will you replace it today?
+0,"window=800,keep=0.8,neighbors=1",q063,damaged_item,1,5675,829,792,,My mug arrived cracked 10 days ago. Will you replace it today?
+0,"window=800,keep=0.8,neighbors=1",q064,damaged_item,1,5675,813,776,,The mug showed up cracked 10 days ago. Are you sending a replacement today?
+0,"window=800,keep=0.8,neighbors=1",q065,damaged_item,1,5675,829,792,,I received a cracked mug 10 days ago. Will a replacement go out today?
+0,"window=800,keep=0.8,neighbors=1",q066,damaged_item,0,5673,827,790,30 calendar days,My mug arrived intact 10 days ago. I changed my mind. Will you replace it today?
+0,"window=800,keep=0.8,neighbors=1",q067,damaged_item,1,5675,804,786,,"My mug arrived cracked 10 days ago. You won't necessarily replace it today, right?"
+0,"window=800,keep=0.8,neighbors=1",q068,damaged_item,1,5675,829,811,,"My mug arrived cracked 10 days ago. Will you replace it today, or refund the SAVE10 difference instead?"
+0,"window=800,keep=0.8,neighbors=1",q072,damaged_item,0,5677,834,815,do not promise immediate approval,My mug arrived cracked 10 days ago. Will you refund me today if it is final sale and Harbor Home sold it?
+0,"window=800,keep=0.8,neighbors=1",q085,failed_payment,1,5543,816,808,,Checkout declined my card and no order was created. Should I submit the payment again?
+0,"window=800,keep=0.8,neighbors=1",q086,failed_payment,1,5543,816,808,,Checkout declined my card and no order was created. Should I submit the payment again?
+0,"window=800,keep=0.8,neighbors=1",q087,failed_payment,1,5543,816,808,,Checkout declined my card and no order was created. Should I submit the payment again?
+0,"window=800,keep=0.8,neighbors=1",q088,failed_payment,1,5543,798,774,,My card was declined and there is no order. Should I try the payment again?
+0,"window=800,keep=0.8,neighbors=1",q089,failed_payment,1,5543,818,814,,Checkout failed with a decline and did not create an order. Should I submit payment again?
+0,"window=800,keep=0.8,neighbors=1",q090,failed_payment,1,5551,797,777,,Checkout left a pending authorization and no order was created. Should I submit the payment again?
+0,"window=800,keep=0.8,neighbors=1",q091,failed_payment,1,5551,817,796,,"Checkout declined my card and a pending authorization is showing. I should not submit the payment again, right?"
+0,"window=800,keep=0.8,neighbors=1",q092,failed_payment,0,5543,816,792,5 to 10 business days,"Checkout declined my card and no order was created. Should I submit the payment again, or refund that charge?"
+0,"window=800,keep=0.8,neighbors=1",q096,failed_payment,1,5559,806,768,,Checkout declined my card and no order was created. Should I submit the payment again and refund both the pending authorization and the captured charge?
+0,"window=800,keep=0.8,neighbors=1",q109,subscription_cancel,1,5936,827,827,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+0,"window=800,keep=0.8,neighbors=1",q110,subscription_cancel,1,5936,827,827,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+0,"window=800,keep=0.8,neighbors=1",q111,subscription_cancel,1,5936,827,827,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+0,"window=800,keep=0.8,neighbors=1",q112,subscription_cancel,1,5936,831,831,,"Plus charged me 2 hours ago, no benefit was used, and I can see the refund control. Does the narrow fee exception apply?"
+0,"window=800,keep=0.8,neighbors=1",q113,subscription_cancel,1,5936,831,831,,The membership fee posted 2 hours ago with no benefits used and the refund button visible. Is the narrow full-fee case met?
+0,"window=800,keep=0.8,neighbors=1",q114,subscription_cancel,1,5932,823,823,,"The Plus fee posted 10 days ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+0,"window=800,keep=0.8,neighbors=1",q115,subscription_cancel,1,5936,827,827,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. The narrow full-fee exception does not apply, right?"
+0,"window=800,keep=0.8,neighbors=1",q116,subscription_cancel,1,5936,813,813,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does Plus end the moment I ask you to cancel it?"
+0,"window=800,keep=0.8,neighbors=1",q120,subscription_cancel,1,5933,824,809,,"The Plus fee posted yesterday, I have used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+0,"window=800,keep=0.8,neighbors=1",q150,edge_preorder,1,5669,833,822,,"My preorder ship date moved by two weeks and the cancel button is still showing. That already cancelled the order and refunded me, right?"
+0,"window=1200,keep=0.7,neighbors=1",q001,returns_eligibility,1,5371,1236,1175,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+0,"window=1200,keep=0.7,neighbors=1",q002,returns_eligibility,1,5371,1236,1175,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+0,"window=1200,keep=0.7,neighbors=1",q003,returns_eligibility,1,5371,1236,1175,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+0,"window=1200,keep=0.7,neighbors=1",q004,returns_eligibility,1,5371,1236,1175,,Could I return my Nova Wireless Headphones? They were delivered 10 days ago.
+0,"window=1200,keep=0.7,neighbors=1",q005,returns_eligibility,1,5371,1230,1169,,Can I return my Nova Wireless Headphones if they were delivered 10 days ago?
+0,"window=1200,keep=0.7,neighbors=1",q006,returns_eligibility,1,5371,1233,1141,,Can I return my Nova Wireless Headphones? They were delivered 40 days ago.
+0,"window=1200,keep=0.7,neighbors=1",q007,returns_eligibility,1,5371,1236,1175,,"I can't return my Nova Wireless Headphones that were delivered 10 days ago, right?"
+0,"window=1200,keep=0.7,neighbors=1",q008,returns_eligibility,1,5371,1236,1159,,Can I get my money back for my Nova Wireless Headphones? They were delivered 10 days ago.
+0,"window=1200,keep=0.7,neighbors=1",q012,returns_eligibility,1,5371,1243,1216,,"Can I return my Nova Wireless Headphones? They were delivered 5 days ago, but the product page said final sale."
+0,"window=1200,keep=0.7,neighbors=1",q013,refund_timeline,1,5887,1236,1161,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+0,"window=1200,keep=0.7,neighbors=1",q014,refund_timeline,1,5887,1236,1161,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+0,"window=1200,keep=0.7,neighbors=1",q015,refund_timeline,1,5887,1236,1161,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+0,"window=1200,keep=0.7,neighbors=1",q016,refund_timeline,1,5887,1236,1174,,My refund shows issued 3 business days ago and the status has not changed. Has the money already posted to my card?
+0,"window=1200,keep=0.7,neighbors=1",q017,refund_timeline,1,5887,1236,1161,,My refund shows issued 3 business days ago and the status has not changed. Is the credit already on my card?
+0,"window=1200,keep=0.7,neighbors=1",q018,refund_timeline,1,5887,1236,1161,,My refund shows issued 12 business days ago and the status has not changed. Is the money already on my card?
+0,"window=1200,keep=0.7,neighbors=1",q019,refund_timeline,1,5887,1231,1164,,"My refund shows issued 3 business days ago and the status has not changed. The money is not already on my card, right?"
+0,"window=1200,keep=0.7,neighbors=1",q020,refund_timeline,1,5887,1221,1208,,My refund shows issued 3 business days ago and the status has not changed. Can I start a new return?
+0,"window=1200,keep=0.7,neighbors=1",q024,refund_timeline,1,5880,1229,1154,,My refund shows issued 3 business days ago and the status has not changed. I never sent the item back. Is the money already on my card?
+0,"window=1200,keep=0.7,neighbors=1",q025,order_cancellation,1,6035,1210,1164,,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+0,"window=1200,keep=0.7,neighbors=1",q026,order_cancellation,1,6035,1210,1164,,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+0,"window=1200,keep=0.7,neighbors=1",q027,order_cancellation,1,6035,1210,1164,,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+0,"window=1200,keep=0.7,neighbors=1",q028,order_cancellation,1,6035,1223,1154,,NS-22011 still shows processing and I can see Cancel order. Can this order still be cancelled?
+0,"window=1200,keep=0.7,neighbors=1",q029,order_cancellation,1,6035,1219,1212,,The cancel button is visible on NS-22011 and it has not shipped. Is cancellation available?
+0,"window=1200,keep=0.7,neighbors=1",q030,order_cancellation,1,6039,1220,1213,,Order NS-22018 is already shipped and the cancel button is not there. Is cancellation available?
+0,"window=1200,keep=0.7,neighbors=1",q031,order_cancellation,1,6035,1201,1194,,"Order NS-22011 is still processing and the cancel button is there. You already cancelled it, right?"
+0,"window=1200,keep=0.7,neighbors=1",q032,order_cancellation,1,6035,1212,1205,,Order NS-22011 is still processing and the cancel button is there. Should I return it instead?
+0,"window=1200,keep=0.7,neighbors=1",q036,order_cancellation,1,6044,1228,1209,,Order NS-22019 is still processing on one item and the cancel button is there. Is cancellation available for the whole order?
+0,"window=1200,keep=0.7,neighbors=1",q049,missing_package,1,5638,1221,1144,,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+0,"window=1200,keep=0.7,neighbors=1",q050,missing_package,1,5638,1221,1144,,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+0,"window=1200,keep=0.7,neighbors=1",q051,missing_package,1,5638,1221,1144,,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+0,"window=1200,keep=0.7,neighbors=1",q052,missing_package,1,5638,1221,1106,,The estimated delivery date was yesterday and nothing has arrived. Should I contact support now?
+0,"window=1200,keep=0.7,neighbors=1",q053,missing_package,1,5638,1210,1170,,It is one day past the delivery estimate and the parcel is missing. Should I contact support now?
+0,"window=1200,keep=0.7,neighbors=1",q054,missing_package,1,5641,1212,1097,,The delivery estimate was 4 days ago and the package is not here. Should I contact support now?
+0,"window=1200,keep=0.7,neighbors=1",q055,missing_package,1,5638,1221,1163,,"The delivery estimate was yesterday and the package is not here. I should not contact support yet, right?"
+0,"window=1200,keep=0.7,neighbors=1",q056,missing_package,1,5637,1215,1156,,The delivery estimate was yesterday and tracking says delivered. Should I contact support now?
+0,"window=1200,keep=0.7,neighbors=1",q060,missing_package,1,5653,1232,1146,,The delivery estimate was yesterday and the package is not here. Harbor Home hasn't replied for 6 days. Should I contact support now?
+0,"window=1200,keep=0.7,neighbors=1",q061,damaged_item,1,5675,1207,1121,,My mug arrived cracked 10 days ago. Will you replace it today?
+0,"window=1200,keep=0.7,neighbors=1",q062,damaged_item,1,5675,1207,1121,,My mug arrived cracked 10 days ago. Will you replace it today?
+0,"window=1200,keep=0.7,neighbors=1",q063,damaged_item,1,5675,1207,1121,,My mug arrived cracked 10 days ago. Will you replace it today?
+0,"window=1200,keep=0.7,neighbors=1",q064,damaged_item,1,5675,1221,1151,,The mug showed up cracked 10 days ago. Are you sending a replacement today?
+0,"window=1200,keep=0.7,neighbors=1",q065,damaged_item,1,5675,1221,1173,,I received a cracked mug 10 days ago. Will a replacement go out today?
+0,"window=1200,keep=0.7,neighbors=1",q066,damaged_item,1,5673,1219,1140,,My mug arrived intact 10 days ago. I changed my mind. Will you replace it today?
+0,"window=1200,keep=0.7,neighbors=1",q067,damaged_item,1,5675,1214,1196,,"My mug arrived cracked 10 days ago. You won't necessarily replace it today, right?"
+0,"window=1200,keep=0.7,neighbors=1",q068,damaged_item,0,5675,1208,1141,not a damage remedy,"My mug arrived cracked 10 days ago. Will you replace it today, or refund the SAVE10 difference instead?"
+0,"window=1200,keep=0.7,neighbors=1",q072,damaged_item,0,5677,1207,1170,do not promise immediate approval,My mug arrived cracked 10 days ago. Will you refund me today if it is final sale and Harbor Home sold it?
+0,"window=1200,keep=0.7,neighbors=1",q085,failed_payment,1,5543,1188,1086,,Checkout declined my card and no order was created. Should I submit the payment again?
+0,"window=1200,keep=0.7,neighbors=1",q086,failed_payment,1,5543,1188,1086,,Checkout declined my card and no order was created. Should I submit the payment again?
+0,"window=1200,keep=0.7,neighbors=1",q087,failed_payment,1,5543,1188,1086,,Checkout declined my card and no order was created. Should I submit the payment again?
+0,"window=1200,keep=0.7,neighbors=1",q088,failed_payment,1,5543,1219,1157,,My card was declined and there is no order. Should I try the payment again?
+0,"window=1200,keep=0.7,neighbors=1",q089,failed_payment,1,5543,1190,1162,,Checkout failed with a decline and did not create an order. Should I submit payment again?
+0,"window=1200,keep=0.7,neighbors=1",q090,failed_payment,1,5551,1226,1156,,Checkout left a pending authorization and no order was created. Should I submit the payment again?
+0,"window=1200,keep=0.7,neighbors=1",q091,failed_payment,1,5551,1213,1098,,"Checkout declined my card and a pending authorization is showing. I should not submit the payment again, right?"
+0,"window=1200,keep=0.7,neighbors=1",q092,failed_payment,1,5543,1188,1124,,"Checkout declined my card and no order was created. Should I submit the payment again, or refund that charge?"
+0,"window=1200,keep=0.7,neighbors=1",q096,failed_payment,1,5559,1204,1110,,Checkout declined my card and no order was created. Should I submit the payment again and refund both the pending authorization and the captured charge?
+0,"window=1200,keep=0.7,neighbors=1",q109,subscription_cancel,1,5936,1226,1180,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+0,"window=1200,keep=0.7,neighbors=1",q110,subscription_cancel,1,5936,1226,1180,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+0,"window=1200,keep=0.7,neighbors=1",q111,subscription_cancel,1,5936,1226,1180,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+0,"window=1200,keep=0.7,neighbors=1",q112,subscription_cancel,1,5936,1226,1184,,"Plus charged me 2 hours ago, no benefit was used, and I can see the refund control. Does the narrow fee exception apply?"
+0,"window=1200,keep=0.7,neighbors=1",q113,subscription_cancel,1,5936,1235,1215,,The membership fee posted 2 hours ago with no benefits used and the refund button visible. Is the narrow full-fee case met?
+0,"window=1200,keep=0.7,neighbors=1",q114,subscription_cancel,1,5932,1222,1139,,"The Plus fee posted 10 days ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+0,"window=1200,keep=0.7,neighbors=1",q115,subscription_cancel,1,5936,1224,1165,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. The narrow full-fee exception does not apply, right?"
+0,"window=1200,keep=0.7,neighbors=1",q116,subscription_cancel,1,5936,1233,1233,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does Plus end the moment I ask you to cancel it?"
+0,"window=1200,keep=0.7,neighbors=1",q120,subscription_cancel,1,5933,1219,1188,,"The Plus fee posted yesterday, I have used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+0,"window=1200,keep=0.7,neighbors=1",q150,edge_preorder,1,5669,1233,1179,,"My preorder ship date moved by two weeks and the cancel button is still showing. That already cancelled the order and refunded me, right?"
+1,"window=800,keep=0.8,neighbors=1",q001,returns_eligibility,1,5371,833,814,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+1,"window=800,keep=0.8,neighbors=1",q002,returns_eligibility,1,5371,833,814,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+1,"window=800,keep=0.8,neighbors=1",q003,returns_eligibility,1,5371,833,814,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+1,"window=800,keep=0.8,neighbors=1",q004,returns_eligibility,1,5371,833,814,,Could I return my Nova Wireless Headphones? They were delivered 10 days ago.
+1,"window=800,keep=0.8,neighbors=1",q005,returns_eligibility,1,5371,844,783,,Can I return my Nova Wireless Headphones if they were delivered 10 days ago?
+1,"window=800,keep=0.8,neighbors=1",q006,returns_eligibility,1,5371,842,823,,Can I return my Nova Wireless Headphones? They were delivered 40 days ago.
+1,"window=800,keep=0.8,neighbors=1",q007,returns_eligibility,1,5371,841,822,,"I can't return my Nova Wireless Headphones that were delivered 10 days ago, right?"
+1,"window=800,keep=0.8,neighbors=1",q008,returns_eligibility,1,5371,841,822,,Can I get my money back for my Nova Wireless Headphones? They were delivered 10 days ago.
+1,"window=800,keep=0.8,neighbors=1",q012,returns_eligibility,1,5371,842,821,,"Can I return my Nova Wireless Headphones? They were delivered 5 days ago, but the product page said final sale."
+1,"window=800,keep=0.8,neighbors=1",q013,refund_timeline,1,5887,836,820,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+1,"window=800,keep=0.8,neighbors=1",q014,refund_timeline,1,5887,836,820,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+1,"window=800,keep=0.8,neighbors=1",q015,refund_timeline,1,5887,836,820,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+1,"window=800,keep=0.8,neighbors=1",q016,refund_timeline,1,5887,812,812,,My refund shows issued 3 business days ago and the status has not changed. Has the money already posted to my card?
+1,"window=800,keep=0.8,neighbors=1",q017,refund_timeline,1,5887,836,820,,My refund shows issued 3 business days ago and the status has not changed. Is the credit already on my card?
+1,"window=800,keep=0.8,neighbors=1",q018,refund_timeline,1,5887,836,820,,My refund shows issued 12 business days ago and the status has not changed. Is the money already on my card?
+1,"window=800,keep=0.8,neighbors=1",q019,refund_timeline,1,5887,812,812,,"My refund shows issued 3 business days ago and the status has not changed. The money is not already on my card, right?"
+1,"window=800,keep=0.8,neighbors=1",q020,refund_timeline,1,5887,836,836,,My refund shows issued 3 business days ago and the status has not changed. Can I start a new return?
+1,"window=800,keep=0.8,neighbors=1",q024,refund_timeline,1,5880,827,800,,My refund shows issued 3 business days ago and the status has not changed. I never sent the item back. Is the money already on my card?
+1,"window=800,keep=0.8,neighbors=1",q049,missing_package,1,5638,819,788,,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+1,"window=800,keep=0.8,neighbors=1",q050,missing_package,1,5638,819,788,,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+1,"window=800,keep=0.8,neighbors=1",q051,missing_package,1,5638,819,788,,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+1,"window=800,keep=0.8,neighbors=1",q052,missing_package,1,5638,819,788,,The estimated delivery date was yesterday and nothing has arrived. Should I contact support now?
+1,"window=800,keep=0.8,neighbors=1",q053,missing_package,1,5638,810,801,,It is one day past the delivery estimate and the parcel is missing. Should I contact support now?
+1,"window=800,keep=0.8,neighbors=1",q054,missing_package,1,5641,822,782,,The delivery estimate was 4 days ago and the package is not here. Should I contact support now?
+1,"window=800,keep=0.8,neighbors=1",q055,missing_package,1,5638,823,793,,"The delivery estimate was yesterday and the package is not here. I should not contact support yet, right?"
+1,"window=800,keep=0.8,neighbors=1",q056,missing_package,1,5637,818,797,,The delivery estimate was yesterday and tracking says delivered. Should I contact support now?
+1,"window=800,keep=0.8,neighbors=1",q060,missing_package,1,5653,835,794,,The delivery estimate was yesterday and the package is not here. Harbor Home hasn't replied for 6 days. Should I contact support now?
+1,"window=800,keep=0.8,neighbors=1",q061,damaged_item,1,5675,829,792,,My mug arrived cracked 10 days ago. Will you replace it today?
+1,"window=800,keep=0.8,neighbors=1",q062,damaged_item,1,5675,829,792,,My mug arrived cracked 10 days ago. Will you replace it today?
+1,"window=800,keep=0.8,neighbors=1",q063,damaged_item,1,5675,829,792,,My mug arrived cracked 10 days ago. Will you replace it today?
+1,"window=800,keep=0.8,neighbors=1",q064,damaged_item,1,5675,813,776,,The mug showed up cracked 10 days ago. Are you sending a replacement today?
+1,"window=800,keep=0.8,neighbors=1",q065,damaged_item,1,5675,829,792,,I received a cracked mug 10 days ago. Will a replacement go out today?
+1,"window=800,keep=0.8,neighbors=1",q066,damaged_item,0,5673,827,790,30 calendar days,My mug arrived intact 10 days ago. I changed my mind. Will you replace it today?
+1,"window=800,keep=0.8,neighbors=1",q067,damaged_item,1,5675,804,786,,"My mug arrived cracked 10 days ago. You won't necessarily replace it today, right?"
+1,"window=800,keep=0.8,neighbors=1",q068,damaged_item,1,5675,829,811,,"My mug arrived cracked 10 days ago. Will you replace it today, or refund the SAVE10 difference instead?"
+1,"window=800,keep=0.8,neighbors=1",q072,damaged_item,0,5677,834,815,do not promise immediate approval,My mug arrived cracked 10 days ago. Will you refund me today if it is final sale and Harbor Home sold it?
+1,"window=800,keep=0.8,neighbors=1",q073,promo_codes,1,5698,841,824,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+1,"window=800,keep=0.8,neighbors=1",q074,promo_codes,1,5698,841,824,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+1,"window=800,keep=0.8,neighbors=1",q075,promo_codes,1,5698,841,824,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+1,"window=800,keep=0.8,neighbors=1",q076,promo_codes,1,5698,830,830,,Does SAVE10 qualify on a $62 cotton towel if I have not checked out yet?
+1,"window=800,keep=0.8,neighbors=1",q077,promo_codes,1,5698,822,796,,I have not placed the order. The cart is a $62 towel. Does SAVE10 qualify?
+1,"window=800,keep=0.8,neighbors=1",q078,promo_codes,1,5690,833,816,,"SAVE10 should work. My cart is $42, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+1,"window=800,keep=0.8,neighbors=1",q079,promo_codes,1,5698,841,824,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. The code does not qualify, right?"
+1,"window=800,keep=0.8,neighbors=1",q080,promo_codes,1,5694,837,820,,"SAVE10 should work. My cart was a $62 cotton towel, and I placed the order yesterday. Can you add the code now?"
+1,"window=800,keep=0.8,neighbors=1",q084,promo_codes,1,5691,833,807,,"SAVE10 should work. My cart is $62, the item is Nova headphones, and I have not placed the order. Does the code qualify?"
+1,"window=800,keep=0.8,neighbors=1",q085,failed_payment,1,5543,816,808,,Checkout declined my card and no order was created. Should I submit the payment again?
+1,"window=800,keep=0.8,neighbors=1",q086,failed_payment,1,5543,816,808,,Checkout declined my card and no order was created. Should I submit the payment again?
+1,"window=800,keep=0.8,neighbors=1",q087,failed_payment,1,5543,816,808,,Checkout declined my card and no order was created. Should I submit the payment again?
+1,"window=800,keep=0.8,neighbors=1",q088,failed_payment,1,5543,798,774,,My card was declined and there is no order. Should I try the payment again?
+1,"window=800,keep=0.8,neighbors=1",q089,failed_payment,1,5543,818,814,,Checkout failed with a decline and did not create an order. Should I submit payment again?
+1,"window=800,keep=0.8,neighbors=1",q090,failed_payment,1,5551,797,777,,Checkout left a pending authorization and no order was created. Should I submit the payment again?
+1,"window=800,keep=0.8,neighbors=1",q091,failed_payment,1,5551,817,796,,"Checkout declined my card and a pending authorization is showing. I should not submit the payment again, right?"
+1,"window=800,keep=0.8,neighbors=1",q092,failed_payment,0,5543,816,792,5 to 10 business days,"Checkout declined my card and no order was created. Should I submit the payment again, or refund that charge?"
+1,"window=800,keep=0.8,neighbors=1",q096,failed_payment,1,5559,806,768,,Checkout declined my card and no order was created. Should I submit the payment again and refund both the pending authorization and the captured charge?
+1,"window=800,keep=0.8,neighbors=1",q133,gift_cards,1,5286,815,798,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+1,"window=800,keep=0.8,neighbors=1",q134,gift_cards,1,5286,815,798,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+1,"window=800,keep=0.8,neighbors=1",q135,gift_cards,1,5286,815,798,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+1,"window=800,keep=0.8,neighbors=1",q136,gift_cards,1,5286,804,787,,Is it okay to paste gift card code ABCD-1234 into a public chat and let a friend check the balance?
+1,"window=800,keep=0.8,neighbors=1",q137,gift_cards,1,5286,796,768,,Can my friend look up gift card code ABCD-1234 if I post it in a public chat?
+1,"window=800,keep=0.8,neighbors=1",q138,gift_cards,1,5286,815,798,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the $50 balance?
+1,"window=800,keep=0.8,neighbors=1",q139,gift_cards,1,5286,813,796,,"I should not post gift card code ABCD-1234 in a public chat, right?"
+1,"window=800,keep=0.8,neighbors=1",q140,gift_cards,1,5286,815,798,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the store-credit balance?
+1,"window=800,keep=0.8,neighbors=1",q144,gift_cards,1,5291,813,796,,"Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance, then restore $50 and read the code back?"
+1,"window=800,keep=0.8,neighbors=1",q150,edge_preorder,1,5669,833,822,,"My preorder ship date moved by two weeks and the cancel button is still showing. That already cancelled the order and refunded me, right?"
+1,"window=1200,keep=0.7,neighbors=1",q001,returns_eligibility,1,5371,1236,1175,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+1,"window=1200,keep=0.7,neighbors=1",q002,returns_eligibility,1,5371,1236,1175,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+1,"window=1200,keep=0.7,neighbors=1",q003,returns_eligibility,1,5371,1236,1175,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+1,"window=1200,keep=0.7,neighbors=1",q004,returns_eligibility,1,5371,1236,1175,,Could I return my Nova Wireless Headphones? They were delivered 10 days ago.
+1,"window=1200,keep=0.7,neighbors=1",q005,returns_eligibility,1,5371,1230,1169,,Can I return my Nova Wireless Headphones if they were delivered 10 days ago?
+1,"window=1200,keep=0.7,neighbors=1",q006,returns_eligibility,1,5371,1233,1141,,Can I return my Nova Wireless Headphones? They were delivered 40 days ago.
+1,"window=1200,keep=0.7,neighbors=1",q007,returns_eligibility,1,5371,1236,1175,,"I can't return my Nova Wireless Headphones that were delivered 10 days ago, right?"
+1,"window=1200,keep=0.7,neighbors=1",q008,returns_eligibility,1,5371,1236,1159,,Can I get my money back for my Nova Wireless Headphones? They were delivered 10 days ago.
+1,"window=1200,keep=0.7,neighbors=1",q012,returns_eligibility,1,5371,1243,1216,,"Can I return my Nova Wireless Headphones? They were delivered 5 days ago, but the product page said final sale."
+1,"window=1200,keep=0.7,neighbors=1",q013,refund_timeline,1,5887,1236,1161,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+1,"window=1200,keep=0.7,neighbors=1",q014,refund_timeline,1,5887,1236,1161,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+1,"window=1200,keep=0.7,neighbors=1",q015,refund_timeline,1,5887,1236,1161,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+1,"window=1200,keep=0.7,neighbors=1",q016,refund_timeline,1,5887,1236,1174,,My refund shows issued 3 business days ago and the status has not changed. Has the money already posted to my card?
+1,"window=1200,keep=0.7,neighbors=1",q017,refund_timeline,1,5887,1236,1161,,My refund shows issued 3 business days ago and the status has not changed. Is the credit already on my card?
+1,"window=1200,keep=0.7,neighbors=1",q018,refund_timeline,1,5887,1236,1161,,My refund shows issued 12 business days ago and the status has not changed. Is the money already on my card?
+1,"window=1200,keep=0.7,neighbors=1",q019,refund_timeline,1,5887,1231,1164,,"My refund shows issued 3 business days ago and the status has not changed. The money is not already on my card, right?"
+1,"window=1200,keep=0.7,neighbors=1",q020,refund_timeline,1,5887,1221,1208,,My refund shows issued 3 business days ago and the status has not changed. Can I start a new return?
+1,"window=1200,keep=0.7,neighbors=1",q024,refund_timeline,1,5880,1229,1154,,My refund shows issued 3 business days ago and the status has not changed. I never sent the item back. Is the money already on my card?
+1,"window=1200,keep=0.7,neighbors=1",q049,missing_package,1,5638,1221,1144,,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+1,"window=1200,keep=0.7,neighbors=1",q050,missing_package,1,5638,1221,1144,,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+1,"window=1200,keep=0.7,neighbors=1",q051,missing_package,1,5638,1221,1144,,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+1,"window=1200,keep=0.7,neighbors=1",q052,missing_package,1,5638,1221,1106,,The estimated delivery date was yesterday and nothing has arrived. Should I contact support now?
+1,"window=1200,keep=0.7,neighbors=1",q053,missing_package,1,5638,1210,1170,,It is one day past the delivery estimate and the parcel is missing. Should I contact support now?
+1,"window=1200,keep=0.7,neighbors=1",q054,missing_package,1,5641,1212,1097,,The delivery estimate was 4 days ago and the package is not here. Should I contact support now?
+1,"window=1200,keep=0.7,neighbors=1",q055,missing_package,1,5638,1221,1163,,"The delivery estimate was yesterday and the package is not here. I should not contact support yet, right?"
+1,"window=1200,keep=0.7,neighbors=1",q056,missing_package,1,5637,1215,1156,,The delivery estimate was yesterday and tracking says delivered. Should I contact support now?
+1,"window=1200,keep=0.7,neighbors=1",q060,missing_package,1,5653,1232,1146,,The delivery estimate was yesterday and the package is not here. Harbor Home hasn't replied for 6 days. Should I contact support now?
+1,"window=1200,keep=0.7,neighbors=1",q061,damaged_item,1,5675,1207,1121,,My mug arrived cracked 10 days ago. Will you replace it today?
+1,"window=1200,keep=0.7,neighbors=1",q062,damaged_item,1,5675,1207,1121,,My mug arrived cracked 10 days ago. Will you replace it today?
+1,"window=1200,keep=0.7,neighbors=1",q063,damaged_item,1,5675,1207,1121,,My mug arrived cracked 10 days ago. Will you replace it today?
+1,"window=1200,keep=0.7,neighbors=1",q064,damaged_item,1,5675,1221,1151,,The mug showed up cracked 10 days ago. Are you sending a replacement today?
+1,"window=1200,keep=0.7,neighbors=1",q065,damaged_item,1,5675,1221,1173,,I received a cracked mug 10 days ago. Will a replacement go out today?
+1,"window=1200,keep=0.7,neighbors=1",q066,damaged_item,1,5673,1219,1140,,My mug arrived intact 10 days ago. I changed my mind. Will you replace it today?
+1,"window=1200,keep=0.7,neighbors=1",q067,damaged_item,1,5675,1214,1196,,"My mug arrived cracked 10 days ago. You won't necessarily replace it today, right?"
+1,"window=1200,keep=0.7,neighbors=1",q068,damaged_item,0,5675,1208,1141,not a damage remedy,"My mug arrived cracked 10 days ago. Will you replace it today, or refund the SAVE10 difference instead?"
+1,"window=1200,keep=0.7,neighbors=1",q072,damaged_item,0,5677,1207,1170,do not promise immediate approval,My mug arrived cracked 10 days ago. Will you refund me today if it is final sale and Harbor Home sold it?
+1,"window=1200,keep=0.7,neighbors=1",q073,promo_codes,1,5698,1237,1151,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+1,"window=1200,keep=0.7,neighbors=1",q074,promo_codes,1,5698,1237,1151,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+1,"window=1200,keep=0.7,neighbors=1",q075,promo_codes,1,5698,1237,1151,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+1,"window=1200,keep=0.7,neighbors=1",q076,promo_codes,1,5698,1236,1177,,Does SAVE10 qualify on a $62 cotton towel if I have not checked out yet?
+1,"window=1200,keep=0.7,neighbors=1",q077,promo_codes,1,5698,1241,1145,,I have not placed the order. The cart is a $62 towel. Does SAVE10 qualify?
+1,"window=1200,keep=0.7,neighbors=1",q078,promo_codes,1,5690,1229,1143,,"SAVE10 should work. My cart is $42, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+1,"window=1200,keep=0.7,neighbors=1",q079,promo_codes,1,5698,1228,1131,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. The code does not qualify, right?"
+1,"window=1200,keep=0.7,neighbors=1",q080,promo_codes,1,5694,1222,1158,,"SAVE10 should work. My cart was a $62 cotton towel, and I placed the order yesterday. Can you add the code now?"
+1,"window=1200,keep=0.7,neighbors=1",q084,promo_codes,1,5691,1234,1183,,"SAVE10 should work. My cart is $62, the item is Nova headphones, and I have not placed the order. Does the code qualify?"
+1,"window=1200,keep=0.7,neighbors=1",q085,failed_payment,1,5543,1188,1086,,Checkout declined my card and no order was created. Should I submit the payment again?
+1,"window=1200,keep=0.7,neighbors=1",q086,failed_payment,1,5543,1188,1086,,Checkout declined my card and no order was created. Should I submit the payment again?
+1,"window=1200,keep=0.7,neighbors=1",q087,failed_payment,1,5543,1188,1086,,Checkout declined my card and no order was created. Should I submit the payment again?
+1,"window=1200,keep=0.7,neighbors=1",q088,failed_payment,1,5543,1219,1157,,My card was declined and there is no order. Should I try the payment again?
+1,"window=1200,keep=0.7,neighbors=1",q089,failed_payment,1,5543,1190,1162,,Checkout failed with a decline and did not create an order. Should I submit payment again?
+1,"window=1200,keep=0.7,neighbors=1",q090,failed_payment,1,5551,1226,1156,,Checkout left a pending authorization and no order was created. Should I submit the payment again?
+1,"window=1200,keep=0.7,neighbors=1",q091,failed_payment,1,5551,1213,1098,,"Checkout declined my card and a pending authorization is showing. I should not submit the payment again, right?"
+1,"window=1200,keep=0.7,neighbors=1",q092,failed_payment,1,5543,1188,1124,,"Checkout declined my card and no order was created. Should I submit the payment again, or refund that charge?"
+1,"window=1200,keep=0.7,neighbors=1",q096,failed_payment,1,5559,1204,1110,,Checkout declined my card and no order was created. Should I submit the payment again and refund both the pending authorization and the captured charge?
+1,"window=1200,keep=0.7,neighbors=1",q133,gift_cards,1,5286,1210,1107,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+1,"window=1200,keep=0.7,neighbors=1",q134,gift_cards,1,5286,1210,1107,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+1,"window=1200,keep=0.7,neighbors=1",q135,gift_cards,1,5286,1210,1107,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+1,"window=1200,keep=0.7,neighbors=1",q136,gift_cards,1,5286,1218,1138,,Is it okay to paste gift card code ABCD-1234 into a public chat and let a friend check the balance?
+1,"window=1200,keep=0.7,neighbors=1",q137,gift_cards,1,5286,1217,1151,,Can my friend look up gift card code ABCD-1234 if I post it in a public chat?
+1,"window=1200,keep=0.7,neighbors=1",q138,gift_cards,1,5286,1218,1112,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the $50 balance?
+1,"window=1200,keep=0.7,neighbors=1",q139,gift_cards,1,5286,1198,1151,,"I should not post gift card code ABCD-1234 in a public chat, right?"
+1,"window=1200,keep=0.7,neighbors=1",q140,gift_cards,1,5286,1209,1133,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the store-credit balance?
+1,"window=1200,keep=0.7,neighbors=1",q144,gift_cards,1,5291,1197,1115,,"Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance, then restore $50 and read the code back?"
+1,"window=1200,keep=0.7,neighbors=1",q150,edge_preorder,1,5669,1233,1179,,"My preorder ship date moved by two weeks and the cancel button is still showing. That already cancelled the order and refunded me, right?"
+2,"window=800,keep=0.7,neighbors=1",q001,returns_eligibility,1,5371,833,772,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+2,"window=800,keep=0.7,neighbors=1",q002,returns_eligibility,1,5371,833,772,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+2,"window=800,keep=0.7,neighbors=1",q003,returns_eligibility,1,5371,833,772,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+2,"window=800,keep=0.7,neighbors=1",q004,returns_eligibility,1,5371,833,772,,Could I return my Nova Wireless Headphones? They were delivered 10 days ago.
+2,"window=800,keep=0.7,neighbors=1",q005,returns_eligibility,1,5371,844,783,,Can I return my Nova Wireless Headphones if they were delivered 10 days ago?
+2,"window=800,keep=0.7,neighbors=1",q006,returns_eligibility,1,5371,842,781,,Can I return my Nova Wireless Headphones? They were delivered 40 days ago.
+2,"window=800,keep=0.7,neighbors=1",q007,returns_eligibility,1,5371,841,780,,"I can't return my Nova Wireless Headphones that were delivered 10 days ago, right?"
+2,"window=800,keep=0.7,neighbors=1",q008,returns_eligibility,1,5371,841,822,,Can I get my money back for my Nova Wireless Headphones? They were delivered 10 days ago.
+2,"window=800,keep=0.7,neighbors=1",q012,returns_eligibility,1,5371,842,821,,"Can I return my Nova Wireless Headphones? They were delivered 5 days ago, but the product page said final sale."
+2,"window=800,keep=0.7,neighbors=1",q013,refund_timeline,1,5887,836,820,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+2,"window=800,keep=0.7,neighbors=1",q014,refund_timeline,1,5887,836,820,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+2,"window=800,keep=0.7,neighbors=1",q015,refund_timeline,1,5887,836,820,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+2,"window=800,keep=0.7,neighbors=1",q016,refund_timeline,1,5887,812,795,,My refund shows issued 3 business days ago and the status has not changed. Has the money already posted to my card?
+2,"window=800,keep=0.7,neighbors=1",q017,refund_timeline,1,5887,836,820,,My refund shows issued 3 business days ago and the status has not changed. Is the credit already on my card?
+2,"window=800,keep=0.7,neighbors=1",q018,refund_timeline,1,5887,836,820,,My refund shows issued 12 business days ago and the status has not changed. Is the money already on my card?
+2,"window=800,keep=0.7,neighbors=1",q019,refund_timeline,1,5887,812,795,,"My refund shows issued 3 business days ago and the status has not changed. The money is not already on my card, right?"
+2,"window=800,keep=0.7,neighbors=1",q020,refund_timeline,1,5887,836,819,,My refund shows issued 3 business days ago and the status has not changed. Can I start a new return?
+2,"window=800,keep=0.7,neighbors=1",q024,refund_timeline,1,5880,827,778,,My refund shows issued 3 business days ago and the status has not changed. I never sent the item back. Is the money already on my card?
+2,"window=800,keep=0.7,neighbors=1",q025,order_cancellation,1,6035,818,811,,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+2,"window=800,keep=0.7,neighbors=1",q026,order_cancellation,1,6035,818,811,,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+2,"window=800,keep=0.7,neighbors=1",q027,order_cancellation,1,6035,818,811,,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+2,"window=800,keep=0.7,neighbors=1",q028,order_cancellation,1,6035,818,811,,NS-22011 still shows processing and I can see Cancel order. Can this order still be cancelled?
+2,"window=800,keep=0.7,neighbors=1",q029,order_cancellation,1,6035,818,811,,The cancel button is visible on NS-22011 and it has not shipped. Is cancellation available?
+2,"window=800,keep=0.7,neighbors=1",q030,order_cancellation,1,6039,824,796,,Order NS-22018 is already shipped and the cancel button is not there. Is cancellation available?
+2,"window=800,keep=0.7,neighbors=1",q031,order_cancellation,1,6035,818,811,,"Order NS-22011 is still processing and the cancel button is there. You already cancelled it, right?"
+2,"window=800,keep=0.7,neighbors=1",q032,order_cancellation,1,6035,818,811,,Order NS-22011 is still processing and the cancel button is there. Should I return it instead?
+2,"window=800,keep=0.7,neighbors=1",q036,order_cancellation,1,6044,824,774,,Order NS-22019 is still processing on one item and the cancel button is there. Is cancellation available for the whole order?
+2,"window=800,keep=0.7,neighbors=1",q037,tracking_scans,1,5486,835,782,,My order was handed to the carrier 6 hours ago and there are no scans. Should I keep waiting?
+2,"window=800,keep=0.7,neighbors=1",q038,tracking_scans,1,5486,835,782,,My order was handed to the carrier 6 hours ago and there are no scans. Should I keep waiting?
+2,"window=800,keep=0.7,neighbors=1",q039,tracking_scans,1,5486,835,782,,My order was handed to the carrier 6 hours ago and there are no scans. Should I keep waiting?
+2,"window=800,keep=0.7,neighbors=1",q040,tracking_scans,1,5486,808,760,,The carrier got my parcel 6 hours ago and tracking is still blank. Should I keep waiting?
+2,"window=800,keep=0.7,neighbors=1",q041,tracking_scans,1,5486,835,782,,My order was handed to the carrier 6 hours ago and there are still no scans. Should I keep waiting?
+2,"window=800,keep=0.7,neighbors=1",q042,tracking_scans,1,5484,833,790,,My order was handed to the carrier 30 hours ago and there are no scans. Should I keep waiting?
+2,"window=800,keep=0.7,neighbors=1",q043,tracking_scans,1,5486,835,782,,"My order was handed to the carrier 6 hours ago and there are no scans. I should not keep waiting, right?"
+2,"window=800,keep=0.7,neighbors=1",q044,tracking_scans,1,5480,802,792,,My order was handed to the carrier 6 hours ago and tracking now says delivered. Should I keep waiting?
+2,"window=800,keep=0.7,neighbors=1",q048,tracking_scans,0,5487,836,783,do not create them,"My order was handed to the carrier 6 hours ago and there are no scans. It is moving through Austin today, right?"
+2,"window=800,keep=0.7,neighbors=1",q061,damaged_item,1,5675,829,787,,My mug arrived cracked 10 days ago. Will you replace it today?
+2,"window=800,keep=0.7,neighbors=1",q062,damaged_item,1,5675,829,787,,My mug arrived cracked 10 days ago. Will you replace it today?
+2,"window=800,keep=0.7,neighbors=1",q063,damaged_item,1,5675,829,787,,My mug arrived cracked 10 days ago. Will you replace it today?
+2,"window=800,keep=0.7,neighbors=1",q064,damaged_item,1,5675,813,776,,The mug showed up cracked 10 days ago. Are you sending a replacement today?
+2,"window=800,keep=0.7,neighbors=1",q065,damaged_item,1,5675,829,781,,I received a cracked mug 10 days ago. Will a replacement go out today?
+2,"window=800,keep=0.7,neighbors=1",q066,damaged_item,0,5673,827,785,30 calendar days,My mug arrived intact 10 days ago. I changed my mind. Will you replace it today?
+2,"window=800,keep=0.7,neighbors=1",q067,damaged_item,1,5675,804,786,,"My mug arrived cracked 10 days ago. You won't necessarily replace it today, right?"
+2,"window=800,keep=0.7,neighbors=1",q068,damaged_item,0,5675,829,792,not a damage remedy,"My mug arrived cracked 10 days ago. Will you replace it today, or refund the SAVE10 difference instead?"
+2,"window=800,keep=0.7,neighbors=1",q072,damaged_item,0,5677,834,815,do not promise immediate approval,My mug arrived cracked 10 days ago. Will you refund me today if it is final sale and Harbor Home sold it?
+2,"window=800,keep=0.7,neighbors=1",q073,promo_codes,1,5698,841,772,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+2,"window=800,keep=0.7,neighbors=1",q074,promo_codes,1,5698,841,772,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+2,"window=800,keep=0.7,neighbors=1",q075,promo_codes,1,5698,841,772,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+2,"window=800,keep=0.7,neighbors=1",q076,promo_codes,1,5698,830,800,,Does SAVE10 qualify on a $62 cotton towel if I have not checked out yet?
+2,"window=800,keep=0.7,neighbors=1",q077,promo_codes,1,5698,822,779,,I have not placed the order. The cart is a $62 towel. Does SAVE10 qualify?
+2,"window=800,keep=0.7,neighbors=1",q078,promo_codes,1,5690,833,764,,"SAVE10 should work. My cart is $42, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+2,"window=800,keep=0.7,neighbors=1",q079,promo_codes,1,5698,841,772,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. The code does not qualify, right?"
+2,"window=800,keep=0.7,neighbors=1",q080,promo_codes,1,5694,837,794,,"SAVE10 should work. My cart was a $62 cotton towel, and I placed the order yesterday. Can you add the code now?"
+2,"window=800,keep=0.7,neighbors=1",q084,promo_codes,1,5691,833,807,,"SAVE10 should work. My cart is $62, the item is Nova headphones, and I have not placed the order. Does the code qualify?"
+2,"window=800,keep=0.7,neighbors=1",q085,failed_payment,1,5543,816,768,,Checkout declined my card and no order was created. Should I submit the payment again?
+2,"window=800,keep=0.7,neighbors=1",q086,failed_payment,1,5543,816,768,,Checkout declined my card and no order was created. Should I submit the payment again?
+2,"window=800,keep=0.7,neighbors=1",q087,failed_payment,1,5543,816,768,,Checkout declined my card and no order was created. Should I submit the payment again?
+2,"window=800,keep=0.7,neighbors=1",q088,failed_payment,1,5543,798,770,,My card was declined and there is no order. Should I try the payment again?
+2,"window=800,keep=0.7,neighbors=1",q089,failed_payment,1,5543,818,814,,Checkout failed with a decline and did not create an order. Should I submit payment again?
+2,"window=800,keep=0.7,neighbors=1",q090,failed_payment,1,5551,797,757,,Checkout left a pending authorization and no order was created. Should I submit the payment again?
+2,"window=800,keep=0.7,neighbors=1",q091,failed_payment,1,5551,817,776,,"Checkout declined my card and a pending authorization is showing. I should not submit the payment again, right?"
+2,"window=800,keep=0.7,neighbors=1",q092,failed_payment,0,5543,816,768,5 to 10 business days,"Checkout declined my card and no order was created. Should I submit the payment again, or refund that charge?"
+2,"window=800,keep=0.7,neighbors=1",q096,failed_payment,1,5559,806,748,,Checkout declined my card and no order was created. Should I submit the payment again and refund both the pending authorization and the captured charge?
+2,"window=800,keep=0.7,neighbors=1",q109,subscription_cancel,1,5936,827,805,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+2,"window=800,keep=0.7,neighbors=1",q110,subscription_cancel,1,5936,827,805,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+2,"window=800,keep=0.7,neighbors=1",q111,subscription_cancel,1,5936,827,805,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+2,"window=800,keep=0.7,neighbors=1",q112,subscription_cancel,1,5936,831,809,,"Plus charged me 2 hours ago, no benefit was used, and I can see the refund control. Does the narrow fee exception apply?"
+2,"window=800,keep=0.7,neighbors=1",q113,subscription_cancel,1,5936,831,831,,The membership fee posted 2 hours ago with no benefits used and the refund button visible. Is the narrow full-fee case met?
+2,"window=800,keep=0.7,neighbors=1",q114,subscription_cancel,1,5932,823,786,,"The Plus fee posted 10 days ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+2,"window=800,keep=0.7,neighbors=1",q115,subscription_cancel,1,5936,827,805,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. The narrow full-fee exception does not apply, right?"
+2,"window=800,keep=0.7,neighbors=1",q116,subscription_cancel,1,5936,813,813,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does Plus end the moment I ask you to cancel it?"
+2,"window=800,keep=0.7,neighbors=1",q120,subscription_cancel,1,5933,824,800,,"The Plus fee posted yesterday, I have used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+2,"window=1200,keep=0.6,neighbors=1",q001,returns_eligibility,1,5371,1236,1143,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+2,"window=1200,keep=0.6,neighbors=1",q002,returns_eligibility,1,5371,1236,1143,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+2,"window=1200,keep=0.6,neighbors=1",q003,returns_eligibility,1,5371,1236,1143,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+2,"window=1200,keep=0.6,neighbors=1",q004,returns_eligibility,1,5371,1236,1159,,Could I return my Nova Wireless Headphones? They were delivered 10 days ago.
+2,"window=1200,keep=0.6,neighbors=1",q005,returns_eligibility,1,5371,1230,1156,,Can I return my Nova Wireless Headphones if they were delivered 10 days ago?
+2,"window=1200,keep=0.6,neighbors=1",q006,returns_eligibility,1,5371,1233,1141,,Can I return my Nova Wireless Headphones? They were delivered 40 days ago.
+2,"window=1200,keep=0.6,neighbors=1",q007,returns_eligibility,1,5371,1236,1128,,"I can't return my Nova Wireless Headphones that were delivered 10 days ago, right?"
+2,"window=1200,keep=0.6,neighbors=1",q008,returns_eligibility,1,5371,1236,1110,,Can I get my money back for my Nova Wireless Headphones? They were delivered 10 days ago.
+2,"window=1200,keep=0.6,neighbors=1",q012,returns_eligibility,1,5371,1243,1216,,"Can I return my Nova Wireless Headphones? They were delivered 5 days ago, but the product page said final sale."
+2,"window=1200,keep=0.6,neighbors=1",q013,refund_timeline,1,5887,1236,1144,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+2,"window=1200,keep=0.6,neighbors=1",q014,refund_timeline,1,5887,1236,1144,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+2,"window=1200,keep=0.6,neighbors=1",q015,refund_timeline,1,5887,1236,1144,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+2,"window=1200,keep=0.6,neighbors=1",q016,refund_timeline,1,5887,1236,1153,,My refund shows issued 3 business days ago and the status has not changed. Has the money already posted to my card?
+2,"window=1200,keep=0.6,neighbors=1",q017,refund_timeline,1,5887,1236,1144,,My refund shows issued 3 business days ago and the status has not changed. Is the credit already on my card?
+2,"window=1200,keep=0.6,neighbors=1",q018,refund_timeline,1,5887,1236,1161,,My refund shows issued 12 business days ago and the status has not changed. Is the money already on my card?
+2,"window=1200,keep=0.6,neighbors=1",q019,refund_timeline,1,5887,1231,1143,,"My refund shows issued 3 business days ago and the status has not changed. The money is not already on my card, right?"
+2,"window=1200,keep=0.6,neighbors=1",q020,refund_timeline,1,5887,1221,1129,,My refund shows issued 3 business days ago and the status has not changed. Can I start a new return?
+2,"window=1200,keep=0.6,neighbors=1",q024,refund_timeline,1,5880,1229,1150,,My refund shows issued 3 business days ago and the status has not changed. I never sent the item back. Is the money already on my card?
+2,"window=1200,keep=0.6,neighbors=1",q025,order_cancellation,1,6035,1210,1062,,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+2,"window=1200,keep=0.6,neighbors=1",q026,order_cancellation,1,6035,1210,1062,,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+2,"window=1200,keep=0.6,neighbors=1",q027,order_cancellation,1,6035,1210,1062,,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+2,"window=1200,keep=0.6,neighbors=1",q028,order_cancellation,1,6035,1223,1108,,NS-22011 still shows processing and I can see Cancel order. Can this order still be cancelled?
+2,"window=1200,keep=0.6,neighbors=1",q029,order_cancellation,1,6035,1219,1071,,The cancel button is visible on NS-22011 and it has not shipped. Is cancellation available?
+2,"window=1200,keep=0.6,neighbors=1",q030,order_cancellation,1,6039,1220,1098,,Order NS-22018 is already shipped and the cancel button is not there. Is cancellation available?
+2,"window=1200,keep=0.6,neighbors=1",q031,order_cancellation,1,6035,1201,1144,,"Order NS-22011 is still processing and the cancel button is there. You already cancelled it, right?"
+2,"window=1200,keep=0.6,neighbors=1",q032,order_cancellation,1,6035,1212,1124,,Order NS-22011 is still processing and the cancel button is there. Should I return it instead?
+2,"window=1200,keep=0.6,neighbors=1",q036,order_cancellation,1,6044,1228,1154,,Order NS-22019 is still processing on one item and the cancel button is there. Is cancellation available for the whole order?
+2,"window=1200,keep=0.6,neighbors=1",q037,tracking_scans,1,5486,1227,1051,,My order was handed to the carrier 6 hours ago and there are no scans. Should I keep waiting?
+2,"window=1200,keep=0.6,neighbors=1",q038,tracking_scans,1,5486,1227,1051,,My order was handed to the carrier 6 hours ago and there are no scans. Should I keep waiting?
+2,"window=1200,keep=0.6,neighbors=1",q039,tracking_scans,1,5486,1227,1051,,My order was handed to the carrier 6 hours ago and there are no scans. Should I keep waiting?
+2,"window=1200,keep=0.6,neighbors=1",q040,tracking_scans,1,5486,1224,1127,,The carrier got my parcel 6 hours ago and tracking is still blank. Should I keep waiting?
+2,"window=1200,keep=0.6,neighbors=1",q041,tracking_scans,1,5486,1227,1051,,My order was handed to the carrier 6 hours ago and there are still no scans. Should I keep waiting?
+2,"window=1200,keep=0.6,neighbors=1",q042,tracking_scans,1,5484,1225,1049,,My order was handed to the carrier 30 hours ago and there are no scans. Should I keep waiting?
+2,"window=1200,keep=0.6,neighbors=1",q043,tracking_scans,1,5486,1227,1031,,"My order was handed to the carrier 6 hours ago and there are no scans. I should not keep waiting, right?"
+2,"window=1200,keep=0.6,neighbors=1",q044,tracking_scans,1,5480,1218,1108,,My order was handed to the carrier 6 hours ago and tracking now says delivered. Should I keep waiting?
+2,"window=1200,keep=0.6,neighbors=1",q048,tracking_scans,0,5487,1228,1088,do not create them,"My order was handed to the carrier 6 hours ago and there are no scans. It is moving through Austin today, right?"
+2,"window=1200,keep=0.6,neighbors=1",q061,damaged_item,1,5675,1207,1068,,My mug arrived cracked 10 days ago. Will you replace it today?
+2,"window=1200,keep=0.6,neighbors=1",q062,damaged_item,1,5675,1207,1068,,My mug arrived cracked 10 days ago. Will you replace it today?
+2,"window=1200,keep=0.6,neighbors=1",q063,damaged_item,1,5675,1207,1068,,My mug arrived cracked 10 days ago. Will you replace it today?
+2,"window=1200,keep=0.6,neighbors=1",q064,damaged_item,1,5675,1221,1131,,The mug showed up cracked 10 days ago. Are you sending a replacement today?
+2,"window=1200,keep=0.6,neighbors=1",q065,damaged_item,1,5675,1221,1161,,I received a cracked mug 10 days ago. Will a replacement go out today?
+2,"window=1200,keep=0.6,neighbors=1",q066,damaged_item,1,5673,1219,1140,,My mug arrived intact 10 days ago. I changed my mind. Will you replace it today?
+2,"window=1200,keep=0.6,neighbors=1",q067,damaged_item,1,5675,1214,1086,,"My mug arrived cracked 10 days ago. You won't necessarily replace it today, right?"
+2,"window=1200,keep=0.6,neighbors=1",q068,damaged_item,0,5675,1208,1110,not a damage remedy,"My mug arrived cracked 10 days ago. Will you replace it today, or refund the SAVE10 difference instead?"
+2,"window=1200,keep=0.6,neighbors=1",q072,damaged_item,0,5677,1207,1165,do not promise immediate approval,My mug arrived cracked 10 days ago. Will you refund me today if it is final sale and Harbor Home sold it?
+2,"window=1200,keep=0.6,neighbors=1",q073,promo_codes,1,5698,1237,1129,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+2,"window=1200,keep=0.6,neighbors=1",q074,promo_codes,1,5698,1237,1129,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+2,"window=1200,keep=0.6,neighbors=1",q075,promo_codes,1,5698,1237,1129,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+2,"window=1200,keep=0.6,neighbors=1",q076,promo_codes,1,5698,1236,1137,,Does SAVE10 qualify on a $62 cotton towel if I have not checked out yet?
+2,"window=1200,keep=0.6,neighbors=1",q077,promo_codes,1,5698,1241,1079,,I have not placed the order. The cart is a $62 towel. Does SAVE10 qualify?
+2,"window=1200,keep=0.6,neighbors=1",q078,promo_codes,1,5690,1229,1110,,"SAVE10 should work. My cart is $42, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+2,"window=1200,keep=0.6,neighbors=1",q079,promo_codes,1,5698,1228,1127,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. The code does not qualify, right?"
+2,"window=1200,keep=0.6,neighbors=1",q080,promo_codes,1,5694,1222,1056,,"SAVE10 should work. My cart was a $62 cotton towel, and I placed the order yesterday. Can you add the code now?"
+2,"window=1200,keep=0.6,neighbors=1",q084,promo_codes,1,5691,1234,1109,,"SAVE10 should work. My cart is $62, the item is Nova headphones, and I have not placed the order. Does the code qualify?"
+2,"window=1200,keep=0.6,neighbors=1",q085,failed_payment,1,5543,1188,1026,,Checkout declined my card and no order was created. Should I submit the payment again?
+2,"window=1200,keep=0.6,neighbors=1",q086,failed_payment,1,5543,1188,1026,,Checkout declined my card and no order was created. Should I submit the payment again?
+2,"window=1200,keep=0.6,neighbors=1",q087,failed_payment,1,5543,1188,1026,,Checkout declined my card and no order was created. Should I submit the payment again?
+2,"window=1200,keep=0.6,neighbors=1",q088,failed_payment,1,5543,1219,1098,,My card was declined and there is no order. Should I try the payment again?
+2,"window=1200,keep=0.6,neighbors=1",q089,failed_payment,1,5543,1190,1076,,Checkout failed with a decline and did not create an order. Should I submit payment again?
+2,"window=1200,keep=0.6,neighbors=1",q090,failed_payment,1,5551,1226,1110,,Checkout left a pending authorization and no order was created. Should I submit the payment again?
+2,"window=1200,keep=0.6,neighbors=1",q091,failed_payment,1,5551,1213,1067,,"Checkout declined my card and a pending authorization is showing. I should not submit the payment again, right?"
+2,"window=1200,keep=0.6,neighbors=1",q092,failed_payment,1,5543,1188,1071,,"Checkout declined my card and no order was created. Should I submit the payment again, or refund that charge?"
+2,"window=1200,keep=0.6,neighbors=1",q096,failed_payment,1,5559,1204,1058,,Checkout declined my card and no order was created. Should I submit the payment again and refund both the pending authorization and the captured charge?
+2,"window=1200,keep=0.6,neighbors=1",q109,subscription_cancel,1,5936,1226,1139,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+2,"window=1200,keep=0.6,neighbors=1",q110,subscription_cancel,1,5936,1226,1139,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+2,"window=1200,keep=0.6,neighbors=1",q111,subscription_cancel,1,5936,1226,1139,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+2,"window=1200,keep=0.6,neighbors=1",q112,subscription_cancel,1,5936,1226,1152,,"Plus charged me 2 hours ago, no benefit was used, and I can see the refund control. Does the narrow fee exception apply?"
+2,"window=1200,keep=0.6,neighbors=1",q113,subscription_cancel,1,5936,1235,1145,,The membership fee posted 2 hours ago with no benefits used and the refund button visible. Is the narrow full-fee case met?
+2,"window=1200,keep=0.6,neighbors=1",q114,subscription_cancel,1,5932,1222,1108,,"The Plus fee posted 10 days ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+2,"window=1200,keep=0.6,neighbors=1",q115,subscription_cancel,1,5936,1224,1137,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. The narrow full-fee exception does not apply, right?"
+2,"window=1200,keep=0.6,neighbors=1",q116,subscription_cancel,1,5936,1233,1155,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does Plus end the moment I ask you to cancel it?"
+2,"window=1200,keep=0.6,neighbors=1",q120,subscription_cancel,1,5933,1219,1116,,"The Plus fee posted yesterday, I have used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+3,"window=800,keep=0.8,neighbors=1",q001,returns_eligibility,1,5371,833,814,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+3,"window=800,keep=0.8,neighbors=1",q002,returns_eligibility,1,5371,833,814,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+3,"window=800,keep=0.8,neighbors=1",q003,returns_eligibility,1,5371,833,814,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+3,"window=800,keep=0.8,neighbors=1",q004,returns_eligibility,1,5371,833,814,,Could I return my Nova Wireless Headphones? They were delivered 10 days ago.
+3,"window=800,keep=0.8,neighbors=1",q005,returns_eligibility,1,5371,844,783,,Can I return my Nova Wireless Headphones if they were delivered 10 days ago?
+3,"window=800,keep=0.8,neighbors=1",q006,returns_eligibility,1,5371,842,823,,Can I return my Nova Wireless Headphones? They were delivered 40 days ago.
+3,"window=800,keep=0.8,neighbors=1",q007,returns_eligibility,1,5371,841,822,,"I can't return my Nova Wireless Headphones that were delivered 10 days ago, right?"
+3,"window=800,keep=0.8,neighbors=1",q008,returns_eligibility,1,5371,841,822,,Can I get my money back for my Nova Wireless Headphones? They were delivered 10 days ago.
+3,"window=800,keep=0.8,neighbors=1",q012,returns_eligibility,1,5371,842,821,,"Can I return my Nova Wireless Headphones? They were delivered 5 days ago, but the product page said final sale."
+3,"window=800,keep=0.8,neighbors=1",q013,refund_timeline,1,5887,836,820,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+3,"window=800,keep=0.8,neighbors=1",q014,refund_timeline,1,5887,836,820,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+3,"window=800,keep=0.8,neighbors=1",q015,refund_timeline,1,5887,836,820,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+3,"window=800,keep=0.8,neighbors=1",q016,refund_timeline,1,5887,812,812,,My refund shows issued 3 business days ago and the status has not changed. Has the money already posted to my card?
+3,"window=800,keep=0.8,neighbors=1",q017,refund_timeline,1,5887,836,820,,My refund shows issued 3 business days ago and the status has not changed. Is the credit already on my card?
+3,"window=800,keep=0.8,neighbors=1",q018,refund_timeline,1,5887,836,820,,My refund shows issued 12 business days ago and the status has not changed. Is the money already on my card?
+3,"window=800,keep=0.8,neighbors=1",q019,refund_timeline,1,5887,812,812,,"My refund shows issued 3 business days ago and the status has not changed. The money is not already on my card, right?"
+3,"window=800,keep=0.8,neighbors=1",q020,refund_timeline,1,5887,836,836,,My refund shows issued 3 business days ago and the status has not changed. Can I start a new return?
+3,"window=800,keep=0.8,neighbors=1",q024,refund_timeline,1,5880,827,800,,My refund shows issued 3 business days ago and the status has not changed. I never sent the item back. Is the money already on my card?
+3,"window=800,keep=0.8,neighbors=1",q025,order_cancellation,1,6035,818,818,,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+3,"window=800,keep=0.8,neighbors=1",q026,order_cancellation,1,6035,818,818,,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+3,"window=800,keep=0.8,neighbors=1",q027,order_cancellation,1,6035,818,818,,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+3,"window=800,keep=0.8,neighbors=1",q028,order_cancellation,1,6035,818,811,,NS-22011 still shows processing and I can see Cancel order. Can this order still be cancelled?
+3,"window=800,keep=0.8,neighbors=1",q029,order_cancellation,1,6035,818,818,,The cancel button is visible on NS-22011 and it has not shipped. Is cancellation available?
+3,"window=800,keep=0.8,neighbors=1",q030,order_cancellation,1,6039,824,824,,Order NS-22018 is already shipped and the cancel button is not there. Is cancellation available?
+3,"window=800,keep=0.8,neighbors=1",q031,order_cancellation,1,6035,818,818,,"Order NS-22011 is still processing and the cancel button is there. You already cancelled it, right?"
+3,"window=800,keep=0.8,neighbors=1",q032,order_cancellation,1,6035,818,818,,Order NS-22011 is still processing and the cancel button is there. Should I return it instead?
+3,"window=800,keep=0.8,neighbors=1",q036,order_cancellation,1,6044,824,824,,Order NS-22019 is still processing on one item and the cancel button is there. Is cancellation available for the whole order?
+3,"window=800,keep=0.8,neighbors=1",q061,damaged_item,1,5675,829,792,,My mug arrived cracked 10 days ago. Will you replace it today?
+3,"window=800,keep=0.8,neighbors=1",q062,damaged_item,1,5675,829,792,,My mug arrived cracked 10 days ago. Will you replace it today?
+3,"window=800,keep=0.8,neighbors=1",q063,damaged_item,1,5675,829,792,,My mug arrived cracked 10 days ago. Will you replace it today?
+3,"window=800,keep=0.8,neighbors=1",q064,damaged_item,1,5675,813,776,,The mug showed up cracked 10 days ago. Are you sending a replacement today?
+3,"window=800,keep=0.8,neighbors=1",q065,damaged_item,1,5675,829,792,,I received a cracked mug 10 days ago. Will a replacement go out today?
+3,"window=800,keep=0.8,neighbors=1",q066,damaged_item,0,5673,827,790,30 calendar days,My mug arrived intact 10 days ago. I changed my mind. Will you replace it today?
+3,"window=800,keep=0.8,neighbors=1",q067,damaged_item,1,5675,804,786,,"My mug arrived cracked 10 days ago. You won't necessarily replace it today, right?"
+3,"window=800,keep=0.8,neighbors=1",q068,damaged_item,1,5675,829,811,,"My mug arrived cracked 10 days ago. Will you replace it today, or refund the SAVE10 difference instead?"
+3,"window=800,keep=0.8,neighbors=1",q072,damaged_item,0,5677,834,815,do not promise immediate approval,My mug arrived cracked 10 days ago. Will you refund me today if it is final sale and Harbor Home sold it?
+3,"window=800,keep=0.8,neighbors=1",q073,promo_codes,1,5698,841,824,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+3,"window=800,keep=0.8,neighbors=1",q074,promo_codes,1,5698,841,824,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+3,"window=800,keep=0.8,neighbors=1",q075,promo_codes,1,5698,841,824,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+3,"window=800,keep=0.8,neighbors=1",q076,promo_codes,1,5698,830,830,,Does SAVE10 qualify on a $62 cotton towel if I have not checked out yet?
+3,"window=800,keep=0.8,neighbors=1",q077,promo_codes,1,5698,822,796,,I have not placed the order. The cart is a $62 towel. Does SAVE10 qualify?
+3,"window=800,keep=0.8,neighbors=1",q078,promo_codes,1,5690,833,816,,"SAVE10 should work. My cart is $42, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+3,"window=800,keep=0.8,neighbors=1",q079,promo_codes,1,5698,841,824,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. The code does not qualify, right?"
+3,"window=800,keep=0.8,neighbors=1",q080,promo_codes,1,5694,837,820,,"SAVE10 should work. My cart was a $62 cotton towel, and I placed the order yesterday. Can you add the code now?"
+3,"window=800,keep=0.8,neighbors=1",q084,promo_codes,1,5691,833,807,,"SAVE10 should work. My cart is $62, the item is Nova headphones, and I have not placed the order. Does the code qualify?"
+3,"window=800,keep=0.8,neighbors=1",q085,failed_payment,1,5543,816,808,,Checkout declined my card and no order was created. Should I submit the payment again?
+3,"window=800,keep=0.8,neighbors=1",q086,failed_payment,1,5543,816,808,,Checkout declined my card and no order was created. Should I submit the payment again?
+3,"window=800,keep=0.8,neighbors=1",q087,failed_payment,1,5543,816,808,,Checkout declined my card and no order was created. Should I submit the payment again?
+3,"window=800,keep=0.8,neighbors=1",q088,failed_payment,1,5543,798,774,,My card was declined and there is no order. Should I try the payment again?
+3,"window=800,keep=0.8,neighbors=1",q089,failed_payment,1,5543,818,814,,Checkout failed with a decline and did not create an order. Should I submit payment again?
+3,"window=800,keep=0.8,neighbors=1",q090,failed_payment,1,5551,797,777,,Checkout left a pending authorization and no order was created. Should I submit the payment again?
+3,"window=800,keep=0.8,neighbors=1",q091,failed_payment,1,5551,817,796,,"Checkout declined my card and a pending authorization is showing. I should not submit the payment again, right?"
+3,"window=800,keep=0.8,neighbors=1",q092,failed_payment,0,5543,816,792,5 to 10 business days,"Checkout declined my card and no order was created. Should I submit the payment again, or refund that charge?"
+3,"window=800,keep=0.8,neighbors=1",q096,failed_payment,1,5559,806,768,,Checkout declined my card and no order was created. Should I submit the payment again and refund both the pending authorization and the captured charge?
+3,"window=800,keep=0.8,neighbors=1",q121,marketplace_seller,1,5886,799,786,,Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Do I escalate now?
+3,"window=800,keep=0.8,neighbors=1",q122,marketplace_seller,1,5886,799,786,,Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Do I escalate now?
+3,"window=800,keep=0.8,neighbors=1",q123,marketplace_seller,1,5886,799,786,,Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Do I escalate now?
+3,"window=800,keep=0.8,neighbors=1",q124,marketplace_seller,1,5886,812,812,,"It has been 2 days with no reply from Harbor Home, and the order lists no different window. Do I escalate now?"
+3,"window=800,keep=0.8,neighbors=1",q125,marketplace_seller,1,5886,799,786,,Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Should I escalate now?
+3,"window=800,keep=0.8,neighbors=1",q126,marketplace_seller,1,5886,799,799,,Harbor Home hasn't replied for 6 days on my return. The order shows no other response window. Do I escalate now?
+3,"window=800,keep=0.8,neighbors=1",q127,marketplace_seller,1,5886,799,786,,"Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. I should not escalate yet, right?"
+3,"window=800,keep=0.8,neighbors=1",q128,marketplace_seller,1,5886,803,772,,"Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Seller items always use Northstar's 30-day window, right?"
+3,"window=800,keep=0.8,neighbors=1",q132,marketplace_seller,1,5894,824,800,,Harbor Home hasn't replied for 6 days on my return. The order shows no other response window. Will you confirm the refund now?
+3,"window=800,keep=0.8,neighbors=1",q133,gift_cards,1,5286,815,798,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+3,"window=800,keep=0.8,neighbors=1",q134,gift_cards,1,5286,815,798,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+3,"window=800,keep=0.8,neighbors=1",q135,gift_cards,1,5286,815,798,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+3,"window=800,keep=0.8,neighbors=1",q136,gift_cards,1,5286,804,787,,Is it okay to paste gift card code ABCD-1234 into a public chat and let a friend check the balance?
+3,"window=800,keep=0.8,neighbors=1",q137,gift_cards,1,5286,796,768,,Can my friend look up gift card code ABCD-1234 if I post it in a public chat?
+3,"window=800,keep=0.8,neighbors=1",q138,gift_cards,1,5286,815,798,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the $50 balance?
+3,"window=800,keep=0.8,neighbors=1",q139,gift_cards,1,5286,813,796,,"I should not post gift card code ABCD-1234 in a public chat, right?"
+3,"window=800,keep=0.8,neighbors=1",q140,gift_cards,1,5286,815,798,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the store-credit balance?
+3,"window=800,keep=0.8,neighbors=1",q144,gift_cards,1,5291,813,796,,"Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance, then restore $50 and read the code back?"
+3,"window=1200,keep=0.7,neighbors=1",q001,returns_eligibility,1,5371,1236,1175,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+3,"window=1200,keep=0.7,neighbors=1",q002,returns_eligibility,1,5371,1236,1175,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+3,"window=1200,keep=0.7,neighbors=1",q003,returns_eligibility,1,5371,1236,1175,,Can I return my Nova Wireless Headphones? They were delivered 10 days ago.
+3,"window=1200,keep=0.7,neighbors=1",q004,returns_eligibility,1,5371,1236,1175,,Could I return my Nova Wireless Headphones? They were delivered 10 days ago.
+3,"window=1200,keep=0.7,neighbors=1",q005,returns_eligibility,1,5371,1230,1169,,Can I return my Nova Wireless Headphones if they were delivered 10 days ago?
+3,"window=1200,keep=0.7,neighbors=1",q006,returns_eligibility,1,5371,1233,1141,,Can I return my Nova Wireless Headphones? They were delivered 40 days ago.
+3,"window=1200,keep=0.7,neighbors=1",q007,returns_eligibility,1,5371,1236,1175,,"I can't return my Nova Wireless Headphones that were delivered 10 days ago, right?"
+3,"window=1200,keep=0.7,neighbors=1",q008,returns_eligibility,1,5371,1236,1159,,Can I get my money back for my Nova Wireless Headphones? They were delivered 10 days ago.
+3,"window=1200,keep=0.7,neighbors=1",q012,returns_eligibility,1,5371,1243,1216,,"Can I return my Nova Wireless Headphones? They were delivered 5 days ago, but the product page said final sale."
+3,"window=1200,keep=0.7,neighbors=1",q013,refund_timeline,1,5887,1236,1161,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+3,"window=1200,keep=0.7,neighbors=1",q014,refund_timeline,1,5887,1236,1161,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+3,"window=1200,keep=0.7,neighbors=1",q015,refund_timeline,1,5887,1236,1161,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+3,"window=1200,keep=0.7,neighbors=1",q016,refund_timeline,1,5887,1236,1174,,My refund shows issued 3 business days ago and the status has not changed. Has the money already posted to my card?
+3,"window=1200,keep=0.7,neighbors=1",q017,refund_timeline,1,5887,1236,1161,,My refund shows issued 3 business days ago and the status has not changed. Is the credit already on my card?
+3,"window=1200,keep=0.7,neighbors=1",q018,refund_timeline,1,5887,1236,1161,,My refund shows issued 12 business days ago and the status has not changed. Is the money already on my card?
+3,"window=1200,keep=0.7,neighbors=1",q019,refund_timeline,1,5887,1231,1164,,"My refund shows issued 3 business days ago and the status has not changed. The money is not already on my card, right?"
+3,"window=1200,keep=0.7,neighbors=1",q020,refund_timeline,1,5887,1221,1208,,My refund shows issued 3 business days ago and the status has not changed. Can I start a new return?
+3,"window=1200,keep=0.7,neighbors=1",q024,refund_timeline,1,5880,1229,1154,,My refund shows issued 3 business days ago and the status has not changed. I never sent the item back. Is the money already on my card?
+3,"window=1200,keep=0.7,neighbors=1",q025,order_cancellation,1,6035,1210,1164,,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+3,"window=1200,keep=0.7,neighbors=1",q026,order_cancellation,1,6035,1210,1164,,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+3,"window=1200,keep=0.7,neighbors=1",q027,order_cancellation,1,6035,1210,1164,,Order NS-22011 is still processing and the cancel button is there. Is cancellation available?
+3,"window=1200,keep=0.7,neighbors=1",q028,order_cancellation,1,6035,1223,1154,,NS-22011 still shows processing and I can see Cancel order. Can this order still be cancelled?
+3,"window=1200,keep=0.7,neighbors=1",q029,order_cancellation,1,6035,1219,1212,,The cancel button is visible on NS-22011 and it has not shipped. Is cancellation available?
+3,"window=1200,keep=0.7,neighbors=1",q030,order_cancellation,1,6039,1220,1213,,Order NS-22018 is already shipped and the cancel button is not there. Is cancellation available?
+3,"window=1200,keep=0.7,neighbors=1",q031,order_cancellation,1,6035,1201,1194,,"Order NS-22011 is still processing and the cancel button is there. You already cancelled it, right?"
+3,"window=1200,keep=0.7,neighbors=1",q032,order_cancellation,1,6035,1212,1205,,Order NS-22011 is still processing and the cancel button is there. Should I return it instead?
+3,"window=1200,keep=0.7,neighbors=1",q036,order_cancellation,1,6044,1228,1209,,Order NS-22019 is still processing on one item and the cancel button is there. Is cancellation available for the whole order?
+3,"window=1200,keep=0.7,neighbors=1",q061,damaged_item,1,5675,1207,1121,,My mug arrived cracked 10 days ago. Will you replace it today?
+3,"window=1200,keep=0.7,neighbors=1",q062,damaged_item,1,5675,1207,1121,,My mug arrived cracked 10 days ago. Will you replace it today?
+3,"window=1200,keep=0.7,neighbors=1",q063,damaged_item,1,5675,1207,1121,,My mug arrived cracked 10 days ago. Will you replace it today?
+3,"window=1200,keep=0.7,neighbors=1",q064,damaged_item,1,5675,1221,1151,,The mug showed up cracked 10 days ago. Are you sending a replacement today?
+3,"window=1200,keep=0.7,neighbors=1",q065,damaged_item,1,5675,1221,1173,,I received a cracked mug 10 days ago. Will a replacement go out today?
+3,"window=1200,keep=0.7,neighbors=1",q066,damaged_item,1,5673,1219,1140,,My mug arrived intact 10 days ago. I changed my mind. Will you replace it today?
+3,"window=1200,keep=0.7,neighbors=1",q067,damaged_item,1,5675,1214,1196,,"My mug arrived cracked 10 days ago. You won't necessarily replace it today, right?"
+3,"window=1200,keep=0.7,neighbors=1",q068,damaged_item,0,5675,1208,1141,not a damage remedy,"My mug arrived cracked 10 days ago. Will you replace it today, or refund the SAVE10 difference instead?"
+3,"window=1200,keep=0.7,neighbors=1",q072,damaged_item,0,5677,1207,1170,do not promise immediate approval,My mug arrived cracked 10 days ago. Will you refund me today if it is final sale and Harbor Home sold it?
+3,"window=1200,keep=0.7,neighbors=1",q073,promo_codes,1,5698,1237,1151,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+3,"window=1200,keep=0.7,neighbors=1",q074,promo_codes,1,5698,1237,1151,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+3,"window=1200,keep=0.7,neighbors=1",q075,promo_codes,1,5698,1237,1151,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+3,"window=1200,keep=0.7,neighbors=1",q076,promo_codes,1,5698,1236,1177,,Does SAVE10 qualify on a $62 cotton towel if I have not checked out yet?
+3,"window=1200,keep=0.7,neighbors=1",q077,promo_codes,1,5698,1241,1145,,I have not placed the order. The cart is a $62 towel. Does SAVE10 qualify?
+3,"window=1200,keep=0.7,neighbors=1",q078,promo_codes,1,5690,1229,1143,,"SAVE10 should work. My cart is $42, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+3,"window=1200,keep=0.7,neighbors=1",q079,promo_codes,1,5698,1228,1131,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. The code does not qualify, right?"
+3,"window=1200,keep=0.7,neighbors=1",q080,promo_codes,1,5694,1222,1158,,"SAVE10 should work. My cart was a $62 cotton towel, and I placed the order yesterday. Can you add the code now?"
+3,"window=1200,keep=0.7,neighbors=1",q084,promo_codes,1,5691,1234,1183,,"SAVE10 should work. My cart is $62, the item is Nova headphones, and I have not placed the order. Does the code qualify?"
+3,"window=1200,keep=0.7,neighbors=1",q085,failed_payment,1,5543,1188,1086,,Checkout declined my card and no order was created. Should I submit the payment again?
+3,"window=1200,keep=0.7,neighbors=1",q086,failed_payment,1,5543,1188,1086,,Checkout declined my card and no order was created. Should I submit the payment again?
+3,"window=1200,keep=0.7,neighbors=1",q087,failed_payment,1,5543,1188,1086,,Checkout declined my card and no order was created. Should I submit the payment again?
+3,"window=1200,keep=0.7,neighbors=1",q088,failed_payment,1,5543,1219,1157,,My card was declined and there is no order. Should I try the payment again?
+3,"window=1200,keep=0.7,neighbors=1",q089,failed_payment,1,5543,1190,1162,,Checkout failed with a decline and did not create an order. Should I submit payment again?
+3,"window=1200,keep=0.7,neighbors=1",q090,failed_payment,1,5551,1226,1156,,Checkout left a pending authorization and no order was created. Should I submit the payment again?
+3,"window=1200,keep=0.7,neighbors=1",q091,failed_payment,1,5551,1213,1098,,"Checkout declined my card and a pending authorization is showing. I should not submit the payment again, right?"
+3,"window=1200,keep=0.7,neighbors=1",q092,failed_payment,1,5543,1188,1124,,"Checkout declined my card and no order was created. Should I submit the payment again, or refund that charge?"
+3,"window=1200,keep=0.7,neighbors=1",q096,failed_payment,1,5559,1204,1110,,Checkout declined my card and no order was created. Should I submit the payment again and refund both the pending authorization and the captured charge?
+3,"window=1200,keep=0.7,neighbors=1",q121,marketplace_seller,1,5886,1202,1173,,Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Do I escalate now?
+3,"window=1200,keep=0.7,neighbors=1",q122,marketplace_seller,1,5886,1202,1173,,Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Do I escalate now?
+3,"window=1200,keep=0.7,neighbors=1",q123,marketplace_seller,1,5886,1202,1173,,Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Do I escalate now?
+3,"window=1200,keep=0.7,neighbors=1",q124,marketplace_seller,1,5886,1214,1168,,"It has been 2 days with no reply from Harbor Home, and the order lists no different window. Do I escalate now?"
+3,"window=1200,keep=0.7,neighbors=1",q125,marketplace_seller,1,5886,1202,1173,,Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Should I escalate now?
+3,"window=1200,keep=0.7,neighbors=1",q126,marketplace_seller,1,5886,1232,1192,,Harbor Home hasn't replied for 6 days on my return. The order shows no other response window. Do I escalate now?
+3,"window=1200,keep=0.7,neighbors=1",q127,marketplace_seller,1,5886,1202,1173,,"Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. I should not escalate yet, right?"
+3,"window=1200,keep=0.7,neighbors=1",q128,marketplace_seller,1,5886,1200,1110,,"Harbor Home hasn't replied for 2 days on my return. The order shows no other response window. Seller items always use Northstar's 30-day window, right?"
+3,"window=1200,keep=0.7,neighbors=1",q132,marketplace_seller,1,5894,1219,1184,,Harbor Home hasn't replied for 6 days on my return. The order shows no other response window. Will you confirm the refund now?
+3,"window=1200,keep=0.7,neighbors=1",q133,gift_cards,1,5286,1210,1107,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+3,"window=1200,keep=0.7,neighbors=1",q134,gift_cards,1,5286,1210,1107,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+3,"window=1200,keep=0.7,neighbors=1",q135,gift_cards,1,5286,1210,1107,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+3,"window=1200,keep=0.7,neighbors=1",q136,gift_cards,1,5286,1218,1138,,Is it okay to paste gift card code ABCD-1234 into a public chat and let a friend check the balance?
+3,"window=1200,keep=0.7,neighbors=1",q137,gift_cards,1,5286,1217,1151,,Can my friend look up gift card code ABCD-1234 if I post it in a public chat?
+3,"window=1200,keep=0.7,neighbors=1",q138,gift_cards,1,5286,1218,1112,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the $50 balance?
+3,"window=1200,keep=0.7,neighbors=1",q139,gift_cards,1,5286,1198,1151,,"I should not post gift card code ABCD-1234 in a public chat, right?"
+3,"window=1200,keep=0.7,neighbors=1",q140,gift_cards,1,5286,1209,1133,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the store-credit balance?
+3,"window=1200,keep=0.7,neighbors=1",q144,gift_cards,1,5291,1197,1115,,"Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance, then restore $50 and read the code back?"
+4,"window=800,keep=0.8,neighbors=1",q013,refund_timeline,1,5887,836,820,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+4,"window=800,keep=0.8,neighbors=1",q014,refund_timeline,1,5887,836,820,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+4,"window=800,keep=0.8,neighbors=1",q015,refund_timeline,1,5887,836,820,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+4,"window=800,keep=0.8,neighbors=1",q016,refund_timeline,1,5887,812,812,,My refund shows issued 3 business days ago and the status has not changed. Has the money already posted to my card?
+4,"window=800,keep=0.8,neighbors=1",q017,refund_timeline,1,5887,836,820,,My refund shows issued 3 business days ago and the status has not changed. Is the credit already on my card?
+4,"window=800,keep=0.8,neighbors=1",q018,refund_timeline,1,5887,836,820,,My refund shows issued 12 business days ago and the status has not changed. Is the money already on my card?
+4,"window=800,keep=0.8,neighbors=1",q019,refund_timeline,1,5887,812,812,,"My refund shows issued 3 business days ago and the status has not changed. The money is not already on my card, right?"
+4,"window=800,keep=0.8,neighbors=1",q020,refund_timeline,1,5887,836,836,,My refund shows issued 3 business days ago and the status has not changed. Can I start a new return?
+4,"window=800,keep=0.8,neighbors=1",q024,refund_timeline,1,5880,827,800,,My refund shows issued 3 business days ago and the status has not changed. I never sent the item back. Is the money already on my card?
+4,"window=800,keep=0.8,neighbors=1",q049,missing_package,1,5638,819,788,,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+4,"window=800,keep=0.8,neighbors=1",q050,missing_package,1,5638,819,788,,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+4,"window=800,keep=0.8,neighbors=1",q051,missing_package,1,5638,819,788,,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+4,"window=800,keep=0.8,neighbors=1",q052,missing_package,1,5638,819,788,,The estimated delivery date was yesterday and nothing has arrived. Should I contact support now?
+4,"window=800,keep=0.8,neighbors=1",q053,missing_package,1,5638,810,801,,It is one day past the delivery estimate and the parcel is missing. Should I contact support now?
+4,"window=800,keep=0.8,neighbors=1",q054,missing_package,1,5641,822,782,,The delivery estimate was 4 days ago and the package is not here. Should I contact support now?
+4,"window=800,keep=0.8,neighbors=1",q055,missing_package,1,5638,823,793,,"The delivery estimate was yesterday and the package is not here. I should not contact support yet, right?"
+4,"window=800,keep=0.8,neighbors=1",q056,missing_package,1,5637,818,797,,The delivery estimate was yesterday and tracking says delivered. Should I contact support now?
+4,"window=800,keep=0.8,neighbors=1",q060,missing_package,1,5653,835,794,,The delivery estimate was yesterday and the package is not here. Harbor Home hasn't replied for 6 days. Should I contact support now?
+4,"window=800,keep=0.8,neighbors=1",q073,promo_codes,1,5698,841,824,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+4,"window=800,keep=0.8,neighbors=1",q074,promo_codes,1,5698,841,824,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+4,"window=800,keep=0.8,neighbors=1",q075,promo_codes,1,5698,841,824,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+4,"window=800,keep=0.8,neighbors=1",q076,promo_codes,1,5698,830,830,,Does SAVE10 qualify on a $62 cotton towel if I have not checked out yet?
+4,"window=800,keep=0.8,neighbors=1",q077,promo_codes,1,5698,822,796,,I have not placed the order. The cart is a $62 towel. Does SAVE10 qualify?
+4,"window=800,keep=0.8,neighbors=1",q078,promo_codes,1,5690,833,816,,"SAVE10 should work. My cart is $42, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+4,"window=800,keep=0.8,neighbors=1",q079,promo_codes,1,5698,841,824,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. The code does not qualify, right?"
+4,"window=800,keep=0.8,neighbors=1",q080,promo_codes,1,5694,837,820,,"SAVE10 should work. My cart was a $62 cotton towel, and I placed the order yesterday. Can you add the code now?"
+4,"window=800,keep=0.8,neighbors=1",q084,promo_codes,1,5691,833,807,,"SAVE10 should work. My cart is $62, the item is Nova headphones, and I have not placed the order. Does the code qualify?"
+4,"window=800,keep=0.8,neighbors=1",q085,failed_payment,1,5543,816,808,,Checkout declined my card and no order was created. Should I submit the payment again?
+4,"window=800,keep=0.8,neighbors=1",q086,failed_payment,1,5543,816,808,,Checkout declined my card and no order was created. Should I submit the payment again?
+4,"window=800,keep=0.8,neighbors=1",q087,failed_payment,1,5543,816,808,,Checkout declined my card and no order was created. Should I submit the payment again?
+4,"window=800,keep=0.8,neighbors=1",q088,failed_payment,1,5543,798,774,,My card was declined and there is no order. Should I try the payment again?
+4,"window=800,keep=0.8,neighbors=1",q089,failed_payment,1,5543,818,814,,Checkout failed with a decline and did not create an order. Should I submit payment again?
+4,"window=800,keep=0.8,neighbors=1",q090,failed_payment,1,5551,797,777,,Checkout left a pending authorization and no order was created. Should I submit the payment again?
+4,"window=800,keep=0.8,neighbors=1",q091,failed_payment,1,5551,817,796,,"Checkout declined my card and a pending authorization is showing. I should not submit the payment again, right?"
+4,"window=800,keep=0.8,neighbors=1",q092,failed_payment,0,5543,816,792,5 to 10 business days,"Checkout declined my card and no order was created. Should I submit the payment again, or refund that charge?"
+4,"window=800,keep=0.8,neighbors=1",q096,failed_payment,1,5559,806,768,,Checkout declined my card and no order was created. Should I submit the payment again and refund both the pending authorization and the captured charge?
+4,"window=800,keep=0.8,neighbors=1",q097,address_change,1,5453,810,810,,I need to change the delivery address. The order still lets me edit it. Can I change it on the page?
+4,"window=800,keep=0.8,neighbors=1",q098,address_change,1,5453,810,810,,I need to change the delivery address. The order still lets me edit it. Can I change it on the page?
+4,"window=800,keep=0.8,neighbors=1",q099,address_change,1,5453,810,810,,I need to change the delivery address. The order still lets me edit it. Can I change it on the page?
+4,"window=800,keep=0.8,neighbors=1",q100,address_change,1,5453,800,800,,The order still shows an address edit. Can I update the delivery address on the page?
+4,"window=800,keep=0.8,neighbors=1",q101,address_change,1,5453,821,799,,Edit address is still available. Can I change the delivery address there?
+4,"window=800,keep=0.8,neighbors=1",q102,address_change,1,5457,814,799,,I need to change the delivery address. The order does not let me edit it. Can I change it on the page?
+4,"window=800,keep=0.8,neighbors=1",q103,address_change,1,5453,816,816,,"I need to change the delivery address. The order still lets me edit it. You already changed it, right?"
+4,"window=800,keep=0.8,neighbors=1",q104,address_change,1,5453,801,801,,I need to change the delivery address. The order still lets me edit it. Should I cancel the whole order instead?
+4,"window=800,keep=0.8,neighbors=1",q108,address_change,1,5465,813,813,,I need to change the delivery address. The order does not let me edit it. Can you read the recipient's full address back and cancel the order?
+4,"window=800,keep=0.8,neighbors=1",q109,subscription_cancel,1,5936,827,827,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+4,"window=800,keep=0.8,neighbors=1",q110,subscription_cancel,1,5936,827,827,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+4,"window=800,keep=0.8,neighbors=1",q111,subscription_cancel,1,5936,827,827,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+4,"window=800,keep=0.8,neighbors=1",q112,subscription_cancel,1,5936,831,831,,"Plus charged me 2 hours ago, no benefit was used, and I can see the refund control. Does the narrow fee exception apply?"
+4,"window=800,keep=0.8,neighbors=1",q113,subscription_cancel,1,5936,831,831,,The membership fee posted 2 hours ago with no benefits used and the refund button visible. Is the narrow full-fee case met?
+4,"window=800,keep=0.8,neighbors=1",q114,subscription_cancel,1,5932,823,823,,"The Plus fee posted 10 days ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+4,"window=800,keep=0.8,neighbors=1",q115,subscription_cancel,1,5936,827,827,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. The narrow full-fee exception does not apply, right?"
+4,"window=800,keep=0.8,neighbors=1",q116,subscription_cancel,1,5936,813,813,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does Plus end the moment I ask you to cancel it?"
+4,"window=800,keep=0.8,neighbors=1",q120,subscription_cancel,1,5933,824,809,,"The Plus fee posted yesterday, I have used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+4,"window=800,keep=0.8,neighbors=1",q133,gift_cards,1,5286,815,798,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+4,"window=800,keep=0.8,neighbors=1",q134,gift_cards,1,5286,815,798,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+4,"window=800,keep=0.8,neighbors=1",q135,gift_cards,1,5286,815,798,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+4,"window=800,keep=0.8,neighbors=1",q136,gift_cards,1,5286,804,787,,Is it okay to paste gift card code ABCD-1234 into a public chat and let a friend check the balance?
+4,"window=800,keep=0.8,neighbors=1",q137,gift_cards,1,5286,796,768,,Can my friend look up gift card code ABCD-1234 if I post it in a public chat?
+4,"window=800,keep=0.8,neighbors=1",q138,gift_cards,1,5286,815,798,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the $50 balance?
+4,"window=800,keep=0.8,neighbors=1",q139,gift_cards,1,5286,813,796,,"I should not post gift card code ABCD-1234 in a public chat, right?"
+4,"window=800,keep=0.8,neighbors=1",q140,gift_cards,1,5286,815,798,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the store-credit balance?
+4,"window=800,keep=0.8,neighbors=1",q144,gift_cards,1,5291,813,796,,"Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance, then restore $50 and read the code back?"
+4,"window=800,keep=0.8,neighbors=1",q150,edge_preorder,1,5669,833,822,,"My preorder ship date moved by two weeks and the cancel button is still showing. That already cancelled the order and refunded me, right?"
+4,"window=1200,keep=0.8,neighbors=1",q013,refund_timeline,1,5887,1236,1183,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+4,"window=1200,keep=0.8,neighbors=1",q014,refund_timeline,1,5887,1236,1183,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+4,"window=1200,keep=0.8,neighbors=1",q015,refund_timeline,1,5887,1236,1183,,My refund shows issued 3 business days ago and the status has not changed. Is the money already on my card?
+4,"window=1200,keep=0.8,neighbors=1",q016,refund_timeline,1,5887,1236,1196,,My refund shows issued 3 business days ago and the status has not changed. Has the money already posted to my card?
+4,"window=1200,keep=0.8,neighbors=1",q017,refund_timeline,1,5887,1236,1183,,My refund shows issued 3 business days ago and the status has not changed. Is the credit already on my card?
+4,"window=1200,keep=0.8,neighbors=1",q018,refund_timeline,1,5887,1236,1194,,My refund shows issued 12 business days ago and the status has not changed. Is the money already on my card?
+4,"window=1200,keep=0.8,neighbors=1",q019,refund_timeline,1,5887,1231,1197,,"My refund shows issued 3 business days ago and the status has not changed. The money is not already on my card, right?"
+4,"window=1200,keep=0.8,neighbors=1",q020,refund_timeline,1,5887,1221,1221,,My refund shows issued 3 business days ago and the status has not changed. Can I start a new return?
+4,"window=1200,keep=0.8,neighbors=1",q024,refund_timeline,1,5880,1229,1196,,My refund shows issued 3 business days ago and the status has not changed. I never sent the item back. Is the money already on my card?
+4,"window=1200,keep=0.8,neighbors=1",q049,missing_package,1,5638,1221,1181,,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+4,"window=1200,keep=0.8,neighbors=1",q050,missing_package,1,5638,1221,1181,,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+4,"window=1200,keep=0.8,neighbors=1",q051,missing_package,1,5638,1221,1181,,The delivery estimate was yesterday and the package is not here. Should I contact support now?
+4,"window=1200,keep=0.8,neighbors=1",q052,missing_package,1,5638,1221,1170,,The estimated delivery date was yesterday and nothing has arrived. Should I contact support now?
+4,"window=1200,keep=0.8,neighbors=1",q053,missing_package,1,5638,1210,1191,,It is one day past the delivery estimate and the parcel is missing. Should I contact support now?
+4,"window=1200,keep=0.8,neighbors=1",q054,missing_package,1,5641,1212,1172,,The delivery estimate was 4 days ago and the package is not here. Should I contact support now?
+4,"window=1200,keep=0.8,neighbors=1",q055,missing_package,1,5638,1221,1181,,"The delivery estimate was yesterday and the package is not here. I should not contact support yet, right?"
+4,"window=1200,keep=0.8,neighbors=1",q056,missing_package,1,5637,1215,1194,,The delivery estimate was yesterday and tracking says delivered. Should I contact support now?
+4,"window=1200,keep=0.8,neighbors=1",q060,missing_package,1,5653,1232,1191,,The delivery estimate was yesterday and the package is not here. Harbor Home hasn't replied for 6 days. Should I contact support now?
+4,"window=1200,keep=0.8,neighbors=1",q073,promo_codes,1,5698,1237,1220,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+4,"window=1200,keep=0.8,neighbors=1",q074,promo_codes,1,5698,1237,1220,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+4,"window=1200,keep=0.8,neighbors=1",q075,promo_codes,1,5698,1237,1220,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+4,"window=1200,keep=0.8,neighbors=1",q076,promo_codes,1,5698,1236,1219,,Does SAVE10 qualify on a $62 cotton towel if I have not checked out yet?
+4,"window=1200,keep=0.8,neighbors=1",q077,promo_codes,1,5698,1241,1199,,I have not placed the order. The cart is a $62 towel. Does SAVE10 qualify?
+4,"window=1200,keep=0.8,neighbors=1",q078,promo_codes,1,5690,1229,1212,,"SAVE10 should work. My cart is $42, the item is a cotton towel, and I have not placed the order. Does the code qualify?"
+4,"window=1200,keep=0.8,neighbors=1",q079,promo_codes,1,5698,1228,1211,,"SAVE10 should work. My cart is $62, the item is a cotton towel, and I have not placed the order. The code does not qualify, right?"
+4,"window=1200,keep=0.8,neighbors=1",q080,promo_codes,1,5694,1222,1205,,"SAVE10 should work. My cart was a $62 cotton towel, and I placed the order yesterday. Can you add the code now?"
+4,"window=1200,keep=0.8,neighbors=1",q084,promo_codes,1,5691,1234,1217,,"SAVE10 should work. My cart is $62, the item is Nova headphones, and I have not placed the order. Does the code qualify?"
+4,"window=1200,keep=0.8,neighbors=1",q085,failed_payment,1,5543,1188,1162,,Checkout declined my card and no order was created. Should I submit the payment again?
+4,"window=1200,keep=0.8,neighbors=1",q086,failed_payment,1,5543,1188,1162,,Checkout declined my card and no order was created. Should I submit the payment again?
+4,"window=1200,keep=0.8,neighbors=1",q087,failed_payment,1,5543,1188,1162,,Checkout declined my card and no order was created. Should I submit the payment again?
+4,"window=1200,keep=0.8,neighbors=1",q088,failed_payment,1,5543,1219,1191,,My card was declined and there is no order. Should I try the payment again?
+4,"window=1200,keep=0.8,neighbors=1",q089,failed_payment,1,5543,1190,1186,,Checkout failed with a decline and did not create an order. Should I submit payment again?
+4,"window=1200,keep=0.8,neighbors=1",q090,failed_payment,1,5551,1226,1206,,Checkout left a pending authorization and no order was created. Should I submit the payment again?
+4,"window=1200,keep=0.8,neighbors=1",q091,failed_payment,1,5551,1213,1154,,"Checkout declined my card and a pending authorization is showing. I should not submit the payment again, right?"
+4,"window=1200,keep=0.8,neighbors=1",q092,failed_payment,1,5543,1188,1164,,"Checkout declined my card and no order was created. Should I submit the payment again, or refund that charge?"
+4,"window=1200,keep=0.8,neighbors=1",q096,failed_payment,1,5559,1204,1166,,Checkout declined my card and no order was created. Should I submit the payment again and refund both the pending authorization and the captured charge?
+4,"window=1200,keep=0.8,neighbors=1",q097,address_change,1,5453,1217,1185,,I need to change the delivery address. The order still lets me edit it. Can I change it on the page?
+4,"window=1200,keep=0.8,neighbors=1",q098,address_change,1,5453,1217,1185,,I need to change the delivery address. The order still lets me edit it. Can I change it on the page?
+4,"window=1200,keep=0.8,neighbors=1",q099,address_change,1,5453,1217,1185,,I need to change the delivery address. The order still lets me edit it. Can I change it on the page?
+4,"window=1200,keep=0.8,neighbors=1",q100,address_change,1,5453,1209,1190,,The order still shows an address edit. Can I update the delivery address on the page?
+4,"window=1200,keep=0.8,neighbors=1",q101,address_change,1,5453,1209,1186,,Edit address is still available. Can I change the delivery address there?
+4,"window=1200,keep=0.8,neighbors=1",q102,address_change,1,5457,1221,1202,,I need to change the delivery address. The order does not let me edit it. Can I change it on the page?
+4,"window=1200,keep=0.8,neighbors=1",q103,address_change,1,5453,1195,1185,,"I need to change the delivery address. The order still lets me edit it. You already changed it, right?"
+4,"window=1200,keep=0.8,neighbors=1",q104,address_change,1,5453,1212,1212,,I need to change the delivery address. The order still lets me edit it. Should I cancel the whole order instead?
+4,"window=1200,keep=0.8,neighbors=1",q108,address_change,1,5465,1231,1231,,I need to change the delivery address. The order does not let me edit it. Can you read the recipient's full address back and cancel the order?
+4,"window=1200,keep=0.8,neighbors=1",q109,subscription_cancel,1,5936,1226,1226,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+4,"window=1200,keep=0.8,neighbors=1",q110,subscription_cancel,1,5936,1226,1226,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+4,"window=1200,keep=0.8,neighbors=1",q111,subscription_cancel,1,5936,1226,1226,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+4,"window=1200,keep=0.8,neighbors=1",q112,subscription_cancel,1,5936,1226,1226,,"Plus charged me 2 hours ago, no benefit was used, and I can see the refund control. Does the narrow fee exception apply?"
+4,"window=1200,keep=0.8,neighbors=1",q113,subscription_cancel,1,5936,1235,1215,,The membership fee posted 2 hours ago with no benefits used and the refund button visible. Is the narrow full-fee case met?
+4,"window=1200,keep=0.8,neighbors=1",q114,subscription_cancel,1,5932,1222,1206,,"The Plus fee posted 10 days ago, I have not used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+4,"window=1200,keep=0.8,neighbors=1",q115,subscription_cancel,1,5936,1224,1224,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. The narrow full-fee exception does not apply, right?"
+4,"window=1200,keep=0.8,neighbors=1",q116,subscription_cancel,1,5936,1233,1233,,"The Plus fee posted 2 hours ago, I have not used a benefit, and the refund control is showing. Does Plus end the moment I ask you to cancel it?"
+4,"window=1200,keep=0.8,neighbors=1",q120,subscription_cancel,1,5933,1219,1203,,"The Plus fee posted yesterday, I have used a benefit, and the refund control is showing. Does the narrow full-fee exception apply?"
+4,"window=1200,keep=0.8,neighbors=1",q133,gift_cards,1,5286,1210,1193,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+4,"window=1200,keep=0.8,neighbors=1",q134,gift_cards,1,5286,1210,1193,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+4,"window=1200,keep=0.8,neighbors=1",q135,gift_cards,1,5286,1210,1193,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance?
+4,"window=1200,keep=0.8,neighbors=1",q136,gift_cards,1,5286,1218,1202,,Is it okay to paste gift card code ABCD-1234 into a public chat and let a friend check the balance?
+4,"window=1200,keep=0.8,neighbors=1",q137,gift_cards,1,5286,1217,1189,,Can my friend look up gift card code ABCD-1234 if I post it in a public chat?
+4,"window=1200,keep=0.8,neighbors=1",q138,gift_cards,1,5286,1218,1201,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the $50 balance?
+4,"window=1200,keep=0.8,neighbors=1",q139,gift_cards,1,5286,1198,1164,,"I should not post gift card code ABCD-1234 in a public chat, right?"
+4,"window=1200,keep=0.8,neighbors=1",q140,gift_cards,1,5286,1209,1192,,Can I post gift card code ABCD-1234 in a public chat so a friend can check the store-credit balance?
+4,"window=1200,keep=0.8,neighbors=1",q144,gift_cards,1,5291,1197,1169,,"Can I post gift card code ABCD-1234 in a public chat so a friend can check the balance, then restore $50 and read the code back?"
+4,"window=1200,keep=0.8,neighbors=1",q150,edge_preorder,1,5669,1233,1233,,"My preorder ship date moved by two weeks and the cancel button is still showing. That already cancelled the order and refunded me, right?"
