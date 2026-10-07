@@ -1,0 +1,47 @@
+# CostGuard configuration. Every tunable lives here or in config/prompts/, so changes are
+# diffable and reviewed in PRs. config_version (a hash of this file's relevant parts and
+# the prompts) is part of the live cache key: changing the answer prompt starts a fresh cache.
+
+[models]
+small = "claude-haiku-5-5"          # router target for easy queries
+large = "claude-sonnet-5-5"         # router target for everything else
+baseline = "claude-sonnet-5-5"      # the naive pipeline we measure savings against
+cache_judge = "claude-haiku-4-5"    # semantic-cache equivalence judge
+eval_judge = "claude-sonnet-5-5"    # offline grader vs reference answers
+quality_judge = "claude-sonnet-5-5" # live shadow-mode judge: optimized vs baseline answer
+embedding = "BAAI/bge-small-en-v1.5"
+
+# $ per 1M tokens (input, output), prompts under 100K tokens
+[prices]
+"claude-haiku-5-5" = [0.10, 0.50]
+"claude-sonnet-5-5" = [2.00, 10.00]
+"claude-haiku-4-5" = [1.00, 5.00]
+
+[llm]
+max_tokens = 4000
+
+[cache]
+semantic_threshold = 0.90  # bge cosine; see results/semantic_*__threshold_sweep_all_models.csv
+semantic_knn = 5
+ttl_seconds = 604800       # 7 days
+
+[window]
+budget = 800               # hybrid selection; see results/window_split_eval__*.csv
+min_context_tokens = 1500  # below this, windowing is skipped
+
+[router]
+max_complex_to_small = 0.0  # threshold = highest one with no complex query routed small (out-of-fold)
+
+# Quality gates. CI fails when a measured value crosses a bound.
+[gates.deterministic]          # local, no API calls (tests/test_gates.py)
+exact_false_hits_max = 0
+exact_hits_min = 36            # of 36 expected on demo_data
+semantic_wrong_hits_max = 1    # demo_data, full chain incl. memoized judge verdicts
+semantic_paraphrase_hits_min = 31
+window_all_facts_kept_min = 0.95  # hybrid@budget, all 111 large-context demo queries
+
+[gates.llm]                    # e2e on eval_data (memoized; live calls only when prompts change)
+pipeline = "optimized_w800"
+max_wrong_pct = 0.025
+max_correct_drop_vs_baseline = 0.125  # baseline correct% minus pipeline correct%
+max_cost_vs_baseline = 0.35

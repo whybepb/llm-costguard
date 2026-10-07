@@ -1,0 +1,19 @@
+# Python 3.14. CPU torch is enough (install with --extra-index-url https://download.pytorch.org/whl/cpu).
+anthropic==1.15.0
+sentence-transformers==6.1.0
+transformers==5.20.0
+torch==2.14.1
+numpy==2.5.4
+scikit-learn==1.9.1
+joblib==1.6.0
+# service
+fastapi==0.143.3
+uvicorn[standard]==0.54.0
+pydantic==2.14.1
+redis==8.1.0
+prometheus_client==0.26.0
+httpx==0.28.1
+# compression experiments (optional)
+llmlingua==0.2.2
+# tests
+pytest==9.1.1
