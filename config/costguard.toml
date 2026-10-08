@@ -40,7 +40,7 @@ semantic_wrong_hits_max = 1    # demo_data, full chain incl. memoized judge verd
 semantic_paraphrase_hits_min = 31
 window_all_facts_kept_min = 0.95  # hybrid@budget, all 111 large-context demo queries
 
-[gates.llm]                    # e2e on eval_data (memoized; live calls only when prompts change)
+[gates.llm]                    # e2e on eval/data/evalset (memoized; live calls only when prompts change)
 pipeline = "optimized_w800"
 max_wrong_pct = 0.025
 max_correct_drop_vs_baseline = 0.125  # baseline correct% minus pipeline correct%

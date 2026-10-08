@@ -1,10 +1,10 @@
 """End-to-end cost vs quality: baseline Sonnet 5.5 on full context vs the CostGuard pipeline.
 
-Usage: set -a; . ./.env; set +a; .venv/bin/python -m e2e.run [--data eval_data]
+Usage: set -a; . ./.env; set +a; .venv/bin/python -m e2e.run [--data eval/data/evalset]
 
 --data demo_data (default): the 150 tuning queries. Router cross-fitted by cluster;
   semantic-cache depends_on from the gold docs. Writes results/e2e__*.csv.
---data eval_data: the held-out set. Router trained on the 150 demo queries only;
+--data eval/data/evalset: the held-out set. Router trained on the 150 demo queries only;
   depends_on from the docs the 800 window keeps (as the live service does), so no
   label of the eval set is used. Writes results/e2e_evalset__*.csv.
 

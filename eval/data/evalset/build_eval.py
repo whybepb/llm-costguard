@@ -1,8 +1,8 @@
 """Build the held-out evaluation set: 40 Northstar support queries, never used for tuning.
 
-Usage: .venv/bin/python -m eval_data.build_eval
+Usage: .venv/bin/python -m eval.data.evalset.build_eval
 
-Writes eval_data/queries.jsonl, eval_data/cases.json and eval_data/manifest.json in the
+Writes eval/data/evalset/queries.jsonl, cases.json and manifest.json in the
 same schema as demo_data, so the e2e evaluation can run on it unchanged.
 
 Mix (replay order matters: exact repeats, paraphrases and traps come after their source):
@@ -25,7 +25,7 @@ from pathlib import Path
 from demo_data.build_dataset import approx_tokens, assemble, load_corpus
 
 ROOT = Path(__file__).resolve().parent
-DEMO_QUERIES = ROOT.parent / "demo_data" / "queries.jsonl"
+DEMO_QUERIES = ROOT.parents[2] / "demo_data" / "queries.jsonl"
 SEED = 2026
 LARGE_BUNDLE = 8
 MIN_WINDOW_TOKENS = 1500

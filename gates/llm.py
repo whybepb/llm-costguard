@@ -2,7 +2,7 @@
 
 Usage: .venv/bin/python -m gates.llm results/<prefix>__cost_vs_quality_summary.csv
 
-Reads the summary written by `python -m e2e.run --data eval_data` and checks the configured
+Reads the summary written by `python -m e2e.run --data eval/data/evalset` and checks the configured
 pipeline against [gates.llm] in config/costguard.toml: wrong answers, the drop in correct
 answers vs the baseline, and cost vs the baseline. Exit code 1 on any failure.
 """

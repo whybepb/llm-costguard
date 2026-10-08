@@ -34,7 +34,7 @@ Outcomes: `correct_hit` (served answer has the right `answer_id`), `wrong_hit` (
 Tokens saved count correct hits only.
 
 
-## End-to-end cost vs quality (`.venv/bin/python -m e2e.run [--data eval_data]`)
+## End-to-end cost vs quality (`.venv/bin/python -m e2e.run [--data eval/data/evalset]`)
 
 Baseline (Sonnet 5.5, full context) vs the pipeline variants; every answer graded by Sonnet 5.5 against the reference. `e2e__*` is the 150-query tuning set, `e2e_evalset__*` the 40-query held-out set.
 
@@ -50,7 +50,7 @@ Baseline (Sonnet 5.5, full context) vs the pipeline variants; every answer grade
 
 | File | Contents |
 |---|---|
-| `trace_replay_eval_data__per_query.csv` | The held-out set sent through the running service in replay mode: layer (checked against the offline run), cost vs baseline, quality verdict, latency |
+| `trace_replay_evalset__per_query.csv` | The held-out set sent through the running service in replay mode: layer (checked against the offline run), cost vs baseline, quality verdict, latency |
 
 ## Load test (`.venv/bin/python -m loadtest.run`)
 

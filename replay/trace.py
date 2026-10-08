@@ -1,13 +1,13 @@
 """Replay a fixed request trace through the running service, so Grafana shows baseline vs
 optimized for exactly that trace.
 
-Usage: .venv/bin/python -m replay.trace [--data eval_data] [--mode replay] [--url http://localhost:8000]
+Usage: .venv/bin/python -m replay.trace [--data eval/data/evalset] [--mode replay] [--url http://localhost:8000]
 
 Clears the trace tenant's cache, then sends every query in order with its case and exact
 attachments, shadow mode on. In replay mode (default) answers, the baseline and quality all
 come from the memoized e2e run, so it costs nothing; the service still does the real cache,
 window and routing work and records every metric. Cross-checks each request's layer
-against the offline e2e run and writes results/trace_replay_<data>__per_query.csv.
+against the offline e2e run and writes results/trace_replay_<data folder>__per_query.csv.
 """
 
 import argparse
@@ -22,13 +22,14 @@ ROOT = Path(__file__).resolve().parent.parent
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--data", default="eval_data")
+    ap.add_argument("--data", default="eval/data/evalset")
     ap.add_argument("--url", default="http://localhost:8000")
     ap.add_argument("--mode", default="replay", choices=["replay", "live", "mock"])
     ap.add_argument("--budget", type=int, default=800)
     ap.add_argument("--tenant", default=None)
     args = ap.parse_args()
-    tenant = args.tenant or f"trace_{args.data}"
+    name = Path(args.data).name  # tenant and file name use the folder name, not the path
+    tenant = args.tenant or f"trace_{name}"
     rows = [json.loads(line) for line in (ROOT / args.data / "queries.jsonl").open()]
     cases = json.loads((ROOT / args.data / "cases.json").read_text())
     prefix = "e2e_evalset" if args.data != "demo_data" else "e2e"
@@ -59,7 +60,7 @@ def main():
         print(f"{r['id']} {x['layer']:15s} {x['model'] or '-':18s} ${x['cost_usd']:.5f} vs ${x['baseline_cost_usd']:.5f}"
               f"  {out[-1]['quality'] or '-'}")
 
-    path = ROOT / "results" / f"trace_replay_{args.data}__per_query.csv"
+    path = ROOT / "results" / f"trace_replay_{name}__per_query.csv"
     with path.open("w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(out[0]))
         w.writeheader()

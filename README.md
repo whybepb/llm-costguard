@@ -93,9 +93,9 @@ request (tenant, query, case, policy docs)
 | Set | Size | Purpose |
 |---|---|---|
 | `demo_data/` | 150 queries, 44 cases | Tuning: thresholds, budgets, router. Labels: expected cache outcome, gold docs, gold facts, must-not-claim, difficulty |
-| `eval_data/` | 40 queries, 25 cases | **Held out**, used only for final measurement. 20 cold (13 on topics the tuning set barely covers), 5 exact repeats, 6 paraphrases, 9 traps (number, negation, intent, state, case, date boundary, source swap, duties vs tax) |
+| `eval/data/evalset/` | 40 queries, 25 cases | **Held out**, used only for final measurement. 20 cold (13 on topics the tuning set barely covers), 5 exact repeats, 6 paraphrases, 9 traps (number, negation, intent, state, case, date boundary, source swap, duties vs tax) |
 
-`eval_data/build_eval.py` builds the set and checks it: every gold fact appears verbatim in its gold policy, every gold doc is attached, gold docs are not always first in the bundle, and no query copies the tuning set.
+`eval/data/evalset/build_eval.py` builds the set and checks it: every gold fact appears verbatim in its gold policy, every gold doc is attached, gold docs are not always first in the bundle, and no query copies the tuning set.
 
 **Scoring:**
 1. **LLM-as-judge.** Sonnet 5.5 grades each answer blind against the reference answer, gold facts and must-not-claim list: correct / partial / wrong + a 1–5 score (`config/prompts/eval_grader_system.txt`).
@@ -125,7 +125,7 @@ Grafana at http://localhost:3000 (dashboard *LLM CostGuard*), filterable by tena
 - **Breakdown:** layers, models, quality verdicts, semantic-cache rejection reasons, overhead costs
 - **Offline evaluation** results
 
-**Before/after on a fixed trace.** `python -m replay.trace` sends the held-out set through the running service in replay mode: answers, baseline and grades come from the memoized evaluation, so it costs nothing while the service does the real cache, window and routing work. Result: 40/40 requests take the same path as the offline run, **$0.135 vs $0.558 baseline (75.8% saved)**, quality equivalent on 36, worse on 4. Shown under tenant `trace_eval_data`.
+**Before/after on a fixed trace.** `python -m replay.trace` sends the held-out set through the running service in replay mode: answers, baseline and grades come from the memoized evaluation, so it costs nothing while the service does the real cache, window and routing work. Result: 40/40 requests take the same path as the offline run, **$0.135 vs $0.558 baseline (75.8% saved)**, quality equivalent on 36, worse on 4. Shown under tenant `trace_evalset`.
 
 ## Setup
 
@@ -147,7 +147,7 @@ The demo page has three LLM modes: **live** (real calls; shadow mode adds a base
 |---|---|---|
 | Unit tests + deterministic gates | `HF_HUB_OFFLINE=1 .venv/bin/python -m pytest -q tests` | free |
 | Gate report | `.venv/bin/python -m gates.deterministic` | free |
-| End-to-end eval (memoized) | `.venv/bin/python -m e2e.run --data eval_data` | free if memoized, else ~$1.50 |
+| End-to-end eval (memoized) | `.venv/bin/python -m e2e.run --data eval/data/evalset` | free if memoized, else ~$1.50 |
 | LLM gate | `.venv/bin/python -m gates.llm results/e2e_evalset__cost_vs_quality_summary.csv` | free |
 | Replay the trace into Grafana | `.venv/bin/python -m replay.trace` | free |
 | Load test | see `loadtest/run.py` | free (mock) |

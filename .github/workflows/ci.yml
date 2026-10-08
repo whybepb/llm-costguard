@@ -25,7 +25,7 @@ jobs:
       - run: pip install --extra-index-url https://download.pytorch.org/whl/cpu -r requirements.txt
       - run: python -m pytest -q tests
 
-  # Held-out LLM quality gate on eval_data. Answers and grades are memoized in
+  # Held-out LLM quality gate on eval/data/evalset. Answers and grades are memoized in
   # results/e2e__api_memo.json, so an unchanged pipeline replays for free. A PR that
   # changes prompts, windowing or routing produces new prompts: with the
   # ANTHROPIC_API_KEY secret set those calls run under a spend cap, without it the
@@ -47,10 +47,10 @@ jobs:
           path: ~/.cache/huggingface
           key: hf-${{ hashFiles('config/costguard.toml') }}
       - run: pip install --extra-index-url https://download.pytorch.org/whl/cpu -r requirements.txt
-      - name: Run e2e on eval_data (memo first)
+      - name: Run e2e on eval/data/evalset (memo first)
         run: |
           if [ -z "$ANTHROPIC_API_KEY" ]; then export COSTGUARD_OFFLINE=1; fi
-          python -m e2e.run --data eval_data --variants optimized_w800 --prefix ci_evalset
+          python -m e2e.run --data eval/data/evalset --variants optimized_w800 --prefix ci_evalset
       - name: Gate
         run: python -m gates.llm results/ci_evalset__cost_vs_quality_summary.csv
       - uses: actions/upload-artifact@v4

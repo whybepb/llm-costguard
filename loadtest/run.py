@@ -92,7 +92,7 @@ def append_csv(path, rows):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--url", default="http://localhost:8100")
-    ap.add_argument("--data", default="eval_data")
+    ap.add_argument("--data", default="eval/data/evalset")
     ap.add_argument("--requests", type=int, default=600)
     ap.add_argument("--concurrency", type=int, default=16)
     ap.add_argument("--budget", type=int, default=800)
