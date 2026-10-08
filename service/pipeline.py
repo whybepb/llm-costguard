@@ -40,6 +40,7 @@ from e2e.run import ANSWER_SYSTEM, optimized_context, prompt
 from routing.router import LARGE, SMALL, text_features
 from window.manager import MIN_CONTEXT_TOKENS, approx_tokens, chunk_docs, repeated_sentences, select_hybrid
 from service.store import tenant_slug
+from service.tracing import Tracer, llm_fields
 
 BASELINE_MODEL = CFG["models"]["baseline"]
 QUALITY_MODEL = CFG["models"]["quality_judge"]
@@ -93,6 +94,7 @@ class Pipeline:
                     self.grades[(row["query"], row["pipeline"])] = row["verdict"]
         self.judge_lock = threading.Lock()
         self.pool = ThreadPoolExecutor(8)
+        self.tracer = Tracer()
         self.corpus_boilerplate = repeated_sentences(corpus)
         self._vec_cache = {}
         self.embed([c["text"] for d in corpus for c in chunk_docs(corpus, [{"doc_id": d}])])
@@ -162,6 +164,17 @@ class Pipeline:
             self.judge.path.write_text(json.dumps(self.judge.verdicts, indent=1))
         return v["verdict"] == "SAME", cost(CACHE_JUDGE_MODEL, v["input_tokens"], v["output_tokens"])
 
+    def _shadow(self, root, baseline_prompt, mode):
+        """Shadow baseline (Sonnet 5.5, full context), run on the pool; traced as a child of root."""
+        obs = root.start_observation(name="shadow_baseline", as_type="generation",
+                                     input={"system": ANSWER_SYSTEM, "user": baseline_prompt})
+        try:
+            res = self._llm(BASELINE_MODEL, ANSWER_SYSTEM, baseline_prompt, None, mode)
+            obs.update(output=res["text"], **llm_fields(BASELINE_MODEL, res["input_tokens"], res["output_tokens"]))
+            return res
+        finally:
+            obs.end()
+
     def _quality(self, query, full_context, baseline_text, optimized_text):
         user = (f"<context>\n{full_context}\n</context>\n\nCustomer message:\n{query}\n\n"
                 f"Answer A (reference):\n{baseline_text or '(empty)'}\n\nAnswer B (optimized):\n{optimized_text or '(empty)'}")
@@ -172,7 +185,8 @@ class Pipeline:
         except json.JSONDecodeError:
             parsed = {}
         verdict = parsed.get("verdict") if parsed.get("verdict") in ("equivalent", "better", "worse") else "unparsed"
-        return {"verdict": verdict, "reason": parsed.get("reason", g["text"][:300]), "cost_usd": g["cost_usd"]}
+        return {"verdict": verdict, "reason": parsed.get("reason", g["text"][:300]), "cost_usd": g["cost_usd"],
+                "input_tokens": g["input_tokens"], "output_tokens": g["output_tokens"]}
 
     def _offline_quality(self, query, window_budget):
         """Replay: compare the offline grades (vs the reference answer) of this pipeline and the baseline."""
@@ -186,8 +200,29 @@ class Pipeline:
                 "cost_usd": 0.0}
 
     # --- the request -------------------------------------------------------------
-    def answer(self, query, tenant="default", doc_ids=(), custom_docs=(), case=None,
-               window_budget=800, shadow=False, use_cache=True, attachments=None, llm_mode="live"):
+    def answer(self, query, tenant="default", llm_mode="live", window_budget=800, shadow=False, use_cache=True,
+               **request):
+        """One request, traced in Langfuse (when configured) as one trace with a span per stage."""
+        meta = {"config_version": CONFIG_VERSION, "window_budget": window_budget, "shadow": shadow,
+                "use_cache": use_cache}
+        with self.tracer.request(llm_mode, tenant_slug(tenant), query.strip(), meta) as root:
+            r = self._answer(root, query, tenant=tenant, llm_mode=llm_mode, window_budget=window_budget,
+                             shadow=shadow, use_cache=use_cache, **request)
+            summary = {k: r[k] for k in ("answer", "layer", "model", "cost_usd", "baseline_cost_usd",
+                                         "savings_pct", "latency_s")}
+            root.update(output=summary, metadata={"layer": r["layer"], "model": r["model"] or "none"})
+            root.set_trace_io(input={"query": r["query"], "tenant": r["tenant"], "docs": r["docs"],
+                                     "case": r["case_text"]}, output=summary)
+            root.score_trace(name="savings_pct", value=float(r["savings_pct"]))
+            if r["quality"]:
+                root.score_trace(name="quality", value=r["quality"]["verdict"], data_type="CATEGORICAL",
+                                 comment=r["quality"]["reason"])
+            r["trace_url"] = self.tracer.url(root)
+        return r
+
+    def _answer(self, root, query, tenant="default", doc_ids=(), custom_docs=(), case=None,
+                window_budget=800, shadow=False, use_cache=True, attachments=None, llm_mode="live"):
+        stage = self.tracer.stage
         t_start = time.perf_counter()
         timings, overhead, rejections = {}, {}, []
         tenant = tenant_slug(tenant)
@@ -216,8 +251,7 @@ class Pipeline:
         key = CONFIG_VERSION + ":" + cache_key(query, case_text or None, list(doc_texts.values()))
         baseline_prompt = prompt(query, full_context)
 
-        shadow_future = (self.pool.submit(self._llm, BASELINE_MODEL, ANSWER_SYSTEM, baseline_prompt, None, llm_mode)
-                         if shadow else None)
+        shadow_future = self.pool.submit(self._shadow, root, baseline_prompt, llm_mode) if shadow else None
         count_future = self.pool.submit(self._count_tokens, BASELINE_MODEL, baseline_prompt, llm_mode)
 
         layer, model, served_from, entry, sem_score = None, None, None, None, None
@@ -225,88 +259,117 @@ class Pipeline:
         answer_cost, answer_text, router_info, window_info = 0.0, "", None, None
 
         # 1. Exact cache.
-        t = time.perf_counter()
-        if use_cache:
-            entry = self.store.exact_get(tenant, key)
-        timings["exact_cache"] = time.perf_counter() - t
-        if entry:
-            layer = "exact_cache"
+        with stage(root, "exact_cache", "retriever", input={"key": key, "use_cache": use_cache}) as sp:
+            t = time.perf_counter()
+            if use_cache:
+                entry = self.store.exact_get(tenant, key)
+            timings["exact_cache"] = time.perf_counter() - t
+            if entry:
+                layer = "exact_cache"
+            sp.update(output={"hit": bool(entry), "cached_query": entry["query"] if entry else None})
 
         # 2. Semantic cache.
         qvec = None
         if not layer:
-            t = time.perf_counter()
-            qvec = self.embed([query])[0]
-            if use_cache:
-                for score, cand in self.store.semantic_candidates(tenant, qvec):
-                    if score < SEMANTIC_THRESHOLD:
+            with stage(root, "semantic_cache", "retriever", input={"query": query}) as sp:
+                t = time.perf_counter()
+                qvec = self.embed([query])[0]
+                candidates = []  # every KNN candidate and what happened to it, for the trace
+                if use_cache:
+                    for score, cand in self.store.semantic_candidates(tenant, qvec):
+                        seen = {"cosine": round(score, 4), "cached_query": cand["query"]}
+                        candidates.append(seen)
+                        if score < SEMANTIC_THRESHOLD:
+                            seen["verdict"] = f"below_threshold_{SEMANTIC_THRESHOLD}"
+                            break
+                        reason = None
+                        if cand.get("config_version") != CONFIG_VERSION:
+                            reason = "config_version_mismatch"
+                        elif not set(cand["depends_on"]) <= context_hashes:
+                            reason = "context_mismatch"
+                        else:
+                            for name, ok in GUARDS:
+                                if not ok(query, cand["query"]):
+                                    reason = f"{name}_mismatch"
+                                    break
+                        if reason is None:
+                            with stage(sp, "cache_judge", "generation", model=CACHE_JUDGE_MODEL,
+                                       input={"cached": cand["query"], "new": query}) as jsp:
+                                same, jc = self._judge_same(query, cand["query"], llm_mode)
+                                jsp.update(output="SAME" if same else "DIFFERENT", cost_details={"total": jc},
+                                           metadata={"memoized": jc == 0})
+                            overhead["cache_judge"] = overhead.get("cache_judge", 0) + jc
+                            if not same:
+                                reason = "judge_rejected"
+                        seen["verdict"] = reason or "hit"
+                        if reason:
+                            rejections.append(reason)
+                            continue
+                        entry, sem_score, layer = cand, score, "semantic_cache"
                         break
-                    reason = None
-                    if cand.get("config_version") != CONFIG_VERSION:
-                        reason = "config_version_mismatch"
-                    elif not set(cand["depends_on"]) <= context_hashes:
-                        reason = "context_mismatch"
-                    else:
-                        for name, ok in GUARDS:
-                            if not ok(query, cand["query"]):
-                                reason = f"{name}_mismatch"
-                                break
-                    if reason is None:
-                        same, jc = self._judge_same(query, cand["query"], llm_mode)
-                        overhead["cache_judge"] = overhead.get("cache_judge", 0) + jc
-                        if not same:
-                            reason = "judge_rejected"
-                    if reason:
-                        rejections.append(reason)
-                        continue
-                    entry, sem_score, layer = cand, score, "semantic_cache"
-                    break
-            timings["semantic_cache"] = time.perf_counter() - t
+                timings["semantic_cache"] = time.perf_counter() - t
+                sp.update(output={"hit": bool(entry), "candidates": candidates})
 
         if entry:
             answer_text, served_from = entry["answer"], entry["query"]
             output_tokens = entry["output_tokens"]
         else:
             # 3. Context window.
-            t = time.perf_counter()
-            chunks = chunk_docs(docs, attachments)
-            full_tokens = approx_tokens(case_text) + sum(c["tokens"] for c in chunks)
-            windowed = full_tokens >= MIN_CONTEXT_TOKENS and len(chunks) > 1
-            if windowed:
-                boilerplate = self.corpus_boilerplate | repeated_sentences(docs)
-                chunks, _ = select_hybrid(chunks, qvec, self.embed(c["text"] for c in chunks), boilerplate,
-                                          budget=window_budget)
-            ctx_tokens = approx_tokens(case_text) + sum(c["tokens"] for c in chunks)
-            kept_docs = sorted({c["doc_id"] for c in chunks})
-            window_info = {"applied": windowed, "budget": window_budget, "tokens_before": full_tokens,
-                           "tokens_after": ctx_tokens, "docs_kept": kept_docs,
-                           "sections_kept": [c["id"] for c in chunks]}
-            timings["window"] = time.perf_counter() - t
+            with stage(root, "window", input={"budget": window_budget, "min_context_tokens": MIN_CONTEXT_TOKENS}) as sp:
+                t = time.perf_counter()
+                chunks = chunk_docs(docs, attachments)
+                all_sections = [c["id"] for c in chunks]
+                full_tokens = approx_tokens(case_text) + sum(c["tokens"] for c in chunks)
+                windowed = full_tokens >= MIN_CONTEXT_TOKENS and len(chunks) > 1
+                if windowed:
+                    boilerplate = self.corpus_boilerplate | repeated_sentences(docs)
+                    chunks, _ = select_hybrid(chunks, qvec, self.embed(c["text"] for c in chunks), boilerplate,
+                                              budget=window_budget)
+                ctx_tokens = approx_tokens(case_text) + sum(c["tokens"] for c in chunks)
+                kept_docs = sorted({c["doc_id"] for c in chunks})
+                window_info = {"applied": windowed, "budget": window_budget, "tokens_before": full_tokens,
+                               "tokens_after": ctx_tokens, "docs_kept": kept_docs,
+                               "sections_kept": [c["id"] for c in chunks]}
+                timings["window"] = time.perf_counter() - t
+                kept = {c["id"] for c in chunks}
+                sp.update(output={**window_info, "sections_dropped": [s for s in all_sections if s not in kept],
+                                  "kept_text": {c["id"]: c["text"] for c in chunks}})
 
             # 4. Route.
-            t = time.perf_counter()
-            feats = [text_features(query, len(kept_docs), ctx_tokens)]
-            p_large = float(self.router.p_large(np.array([qvec]), np.array(feats, float))[0])
-            model = LARGE if p_large >= self.router.threshold else SMALL
-            router_info = {"p_large": round(p_large, 4), "threshold": self.router.threshold, "model": model}
-            timings["route"] = time.perf_counter() - t
+            with stage(root, "route") as sp:
+                t = time.perf_counter()
+                feats = [text_features(query, len(kept_docs), ctx_tokens)]
+                p_large = float(self.router.p_large(np.array([qvec]), np.array(feats, float))[0])
+                model = LARGE if p_large >= self.router.threshold else SMALL
+                router_info = {"p_large": round(p_large, 4), "threshold": self.router.threshold, "model": model}
+                timings["route"] = time.perf_counter() - t
+                sp.update(input={"features": dict(zip(
+                              ["words", "sentences", "questions", "numbers", "connectives", "ends_right_q",
+                               "docs_kept", "log_context_tokens"], (float(f) for f in feats[0])))},
+                          output=router_info)
 
             # 5. Answer.
-            t = time.perf_counter()
-            res = self._llm(model, ANSWER_SYSTEM, prompt(query, optimized_context(case_text, chunks)), mode=llm_mode)
-            timings["llm"] = time.perf_counter() - t
+            user = prompt(query, optimized_context(case_text, chunks))
+            with stage(root, "answer", "generation", model=model,
+                       input={"system": ANSWER_SYSTEM, "user": user}) as sp:
+                t = time.perf_counter()
+                res = self._llm(model, ANSWER_SYSTEM, user, mode=llm_mode)
+                timings["llm"] = time.perf_counter() - t
+                sp.update(output=res["text"], **llm_fields(model, res["input_tokens"], res["output_tokens"]))
             layer = "llm"
             answer_text, answer_cost = res["text"], res["cost_usd"]
             sent_input_tokens, output_tokens = res["input_tokens"], res["output_tokens"]
 
             # 6. Store (only real answers). The answer depends on the docs windowing kept and the case.
             if use_cache and res["stop_reason"] != "refusal" and answer_text:
-                depends_on = sorted({_sha(doc_texts[d]) for d in kept_docs if d in doc_texts} | case_hash)
-                new_entry = {"answer": answer_text, "query": query, "model": model, "depends_on": depends_on,
-                             "output_tokens": output_tokens, "config_version": CONFIG_VERSION,
-                             "created": int(time.time())}
-                self.store.exact_put(tenant, key, new_entry)
-                self.store.semantic_put(tenant, key, qvec, query, new_entry)
+                with stage(root, "cache_store") as sp:
+                    depends_on = sorted({_sha(doc_texts[d]) for d in kept_docs if d in doc_texts} | case_hash)
+                    new_entry = {"answer": answer_text, "query": query, "model": model, "depends_on": depends_on,
+                                 "output_tokens": output_tokens, "config_version": CONFIG_VERSION,
+                                 "created": int(time.time())}
+                    self.store.exact_put(tenant, key, new_entry)
+                    self.store.semantic_put(tenant, key, qvec, query, new_entry)
+                    sp.update(output={"key": key, "depends_on": depends_on})
 
         latency = time.perf_counter() - t_start
 
@@ -321,7 +384,11 @@ class Pipeline:
                 quality = self._offline_quality(query, window_budget)
             else:
                 overhead["shadow_baseline"] = baseline["cost_usd"]
-                quality = self._quality(query, full_context, baseline["text"], answer_text)
+                with stage(root, "quality_judge", "evaluator", model=QUALITY_MODEL,
+                           input={"baseline": baseline["text"], "optimized": answer_text}) as sp:
+                    quality = self._quality(query, full_context, baseline["text"], answer_text)
+                    sp.update(output={"verdict": quality["verdict"], "reason": quality["reason"]},
+                              **llm_fields(QUALITY_MODEL, quality["input_tokens"], quality["output_tokens"]))
                 overhead["quality_judge"] = quality["cost_usd"]
             timings["quality_judge"] = time.perf_counter() - t
             baseline_input, baseline_cost, baseline_source = baseline["input_tokens"], baseline["cost_usd"], "measured"

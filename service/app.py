@@ -92,6 +92,11 @@ def startup():
     print(f"CostGuard ready in {time.perf_counter() - t:.1f}s; router threshold {router.threshold}")
 
 
+@app.on_event("shutdown")
+def shutdown():
+    state["pipeline"].tracer.flush()  # send any buffered Langfuse spans
+
+
 @app.get("/")
 def index():
     return FileResponse(Path(__file__).parent / "static" / "index.html")

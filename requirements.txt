@@ -12,6 +12,7 @@ uvicorn[standard]==0.54.0
 pydantic==2.14.1
 redis==8.1.0
 prometheus_client==0.26.0
+langfuse==4.16.0
 httpx==0.28.1
 # compression experiments (optional)
 llmlingua==0.2.2

@@ -60,6 +60,7 @@
   <nav>
     <a href="http://localhost:3000" target="_blank">Grafana</a>
     <a href="http://localhost:9090" target="_blank">Prometheus</a>
+    <a href="http://localhost:3001" target="_blank">Langfuse</a>
     <a href="http://localhost:8001" target="_blank">RedisInsight</a>
     <a href="/metrics" target="_blank">/metrics</a>
   </nav>
@@ -234,6 +235,7 @@ function showResult(r) {
   const oh = Object.entries(r.overhead_usd).map(([k, v]) => `${k} ${usd(v)}`).join(", ");
   if (oh) rows.push(["Overhead (not in savings unless cache judge)", esc(oh)]);
   rows.push(["Stage timings", esc(Object.entries(r.timings).map(([k, v]) => `${k} ${v}s`).join(", "))]);
+  if (r.trace_url) rows.push(["Trace", `<a href="${esc(r.trace_url)}" target="_blank">open in Langfuse</a> (every stage: candidates, sections kept and dropped, exact prompt)`]);
   html += `<table style="margin-top:10px">${rows.map(([a, b]) => `<tr><th>${a}</th><td>${b}</td></tr>`).join("")}</table>`;
   if (w && w.sections_kept.length) html += `<details><summary>Sections sent (${w.sections_kept.length})</summary><p class="small">${esc(w.sections_kept.join(", "))}</p></details>`;
   if (r.baseline_answer != null) html += `<details><summary>Baseline answer (Sonnet 5.5, full context)</summary><div class="answer">${esc(r.baseline_answer)}</div></details>`;
