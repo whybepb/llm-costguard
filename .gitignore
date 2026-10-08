@@ -1,4 +1,13 @@
 __pycache__/
 *.pyc
 .DS_Store
-results/
+# results: keep evidence (CSVs, summaries, README) and the API memos CI replays from
+results/*
+!results/README.md
+!results/*.csv
+!results/*__summary.json
+!results/e2e__api_memo.json
+!results/judge_verdicts_haiku-4-5.json
+.venv/
+.env
+service_data/
