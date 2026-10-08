@@ -58,7 +58,7 @@ def build_context(rows, docs, cases):
         case_text = render_case(cases[r["case_id"]]) if r["case_id"] else None
         doc_texts = {a["doc_id"]: render_attachment(docs, a) for a in r["attachments"]}
         doc_hash = {d: sha(t) for d, t in doc_texts.items()}
-        case_hash = {"case:" + sha(case_text)} if case_text else set()
+        case_hash = {"case:" + sha(case_text)} if case_text else {"case:none"}
         missing = set(r["gold_doc_ids"]) - set(doc_hash)
         assert not missing, f"{r['id']}: gold docs not attached: {missing}"
         out.append({

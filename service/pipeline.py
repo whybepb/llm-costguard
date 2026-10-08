@@ -209,7 +209,8 @@ class Pipeline:
             case_text = (case or "").strip()
         doc_texts = {a["doc_id"]: render_attachment(docs, a) for a in attachments}
         full_context = "\n\n".join((["## Case\n" + case_text] if case_text else []) + list(doc_texts.values()))
-        case_hash = {"case:" + _sha(case_text)} if case_text else set()
+        # "case:none" marks a no-case answer, so it is never reused for a request that has a case.
+        case_hash = {"case:" + _sha(case_text)} if case_text else {"case:none"}
         context_hashes = {_sha(t) for t in doc_texts.values()} | case_hash
         # The config version is part of the key: a new answer prompt or model set starts a fresh cache.
         key = CONFIG_VERSION + ":" + cache_key(query, case_text or None, list(doc_texts.values()))

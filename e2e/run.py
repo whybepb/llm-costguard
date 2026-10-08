@@ -107,7 +107,7 @@ def main():
         case_text = render_case(cases[r["case_id"]]) if r["case_id"] else ""
         doc_texts = {a["doc_id"]: render_attachment(docs, a) for a in r["attachments"]}
         sha = lambda t: __import__("hashlib").sha256(t.encode()).hexdigest()
-        case_hash = {"case:" + sha(case_text)} if case_text else set()
+        case_hash = {"case:" + sha(case_text)} if case_text else {"case:none"}
         base.append({
             "row": r, "case_text": case_text,
             "full_context": assemble(docs, cases, r),

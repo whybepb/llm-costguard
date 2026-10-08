@@ -68,7 +68,7 @@ class AnswerRequest(BaseModel):
 def startup():
     t = time.perf_counter()
     corpus = load_corpus()
-    model = SentenceTransformer(EMBED_MODEL)
+    model = SentenceTransformer(EMBED_MODEL, device="cpu")  # the Mac GPU goes cold within seconds of idle
     cases = json.loads((ROOT / "demo_data" / "cases.json").read_text())
     store = CacheStore(os.environ.get("REDIS_URL", "redis://localhost:6379/0"))
     embed = lambda texts: list(model.encode(list(texts), normalize_embeddings=True))
